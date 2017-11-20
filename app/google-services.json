@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "76263512750",
+    "firebase_url": "https://pets-shelter.firebaseio.com",
+    "project_id": "pets-shelter",
+    "storage_bucket": "pets-shelter.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:76263512750:android:2bdf1cac5aeb8dec",
+        "android_client_info": {
+          "package_name": "eugene.petsshelter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "76263512750-s5atrj62eu45lem4sh14kl93g753qsub.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "eugene.petsshelter",
+            "certificate_hash": "a5d22da45de7d2e90be572596746791d4dd991a0"
+          }
+        },
+        {
+          "client_id": "76263512750-sbt94if2vush8dr0nlnqj9btiqmt20qq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD-Ny92PF4KUEjI03mr0XbIMkRdB3BVkWA"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "76263512750-sbt94if2vush8dr0nlnqj9btiqmt20qq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

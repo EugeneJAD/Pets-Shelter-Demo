@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">Pets Shelter</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="main_menu_fragment_title">Home</string>
+    <string name="dogs_fragment_title">Dogs</string>
+    <string name="cats_fragment_title">Cats</string>
+    <string name="shelters_fragment_title">Shelters</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="age">Age:</string>
+    <string name="breed">Breed:</string>
+    <string name="shelter">Shelter:</string>
+    <string name="button_food_text">Buy food</string>
+    <string name="adoption_button_text">Adoption</string>
+    <string name="looking_for_home">looking for home</string>
+</resources>
