@@ -31,7 +31,9 @@ public class FirebaseRepository {
     private DatabaseReference catsDatabaseRef;
 
     private MutableLiveData<List<Pet>> dogs;
+    private MutableLiveData<List<Pet>> cats;
     private List<Pet> allDogs;
+    private List<Pet> allCats;
 
     private ChildEventListener dogsEventListener = new ChildEventListener() {
         @Override
@@ -51,25 +53,35 @@ public class FirebaseRepository {
         @Override
         public void onDataChange(DataSnapshot dataSnapshot) {
 
-            Log.i(TAG, "ValueEventListener +++");
-
             for (DataSnapshot ds : dataSnapshot.getChildren()) {
-
                 if (ds.getValue(Pet.class) != null) {
                     Pet dog = ds.getValue(Pet.class);
                     dog.setId(ds.getKey());
                     allDogs.add(dog);
                 }
             }
-
             dogs.setValue(allDogs);
-
         }
+        @Override
+        public void onCancelled(DatabaseError databaseError) {}
+    };
+
+    private ValueEventListener catsListener = new ValueEventListener() {
 
         @Override
-        public void onCancelled(DatabaseError databaseError) {
+        public void onDataChange(DataSnapshot dataSnapshot) {
 
+            for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                if (ds.getValue(Pet.class) != null) {
+                    Pet cat = ds.getValue(Pet.class);
+                    cat.setId(ds.getKey());
+                    allCats.add(cat);
+                }
+            }
+            cats.setValue(allCats);
         }
+        @Override
+        public void onCancelled(DatabaseError databaseError) {}
     };
 
 
@@ -78,14 +90,18 @@ public class FirebaseRepository {
         Log.i(TAG, "FirebaseRepository() Constructor");
 
         allDogs = new ArrayList<>();
+        allCats = new ArrayList<>();
         dogs = new MutableLiveData<>();
+        cats = new MutableLiveData<>();
 
         mDatabase = FirebaseDatabase.getInstance();
         mDatabase.setPersistenceEnabled(true);
+
         dogsDatabaseRef = mDatabase.getReference().child(DOGS);
         catsDatabaseRef = mDatabase.getReference().child(CATS);
 
         dogsDatabaseRef.addListenerForSingleValueEvent(dogsListener);
+        catsDatabaseRef.addListenerForSingleValueEvent(catsListener);
     }
 
     public synchronized static FirebaseRepository getInstance() {
@@ -100,6 +116,10 @@ public class FirebaseRepository {
 
     public LiveData<List<Pet>> getDogs(){
         return dogs;
+    }
+
+    public LiveData<List<Pet>> getCats(){
+        return cats;
     }
 
 }

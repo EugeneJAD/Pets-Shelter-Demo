@@ -1,10 +1,10 @@
 package eugene.petsshelter.view.ui;
 
-import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.res.Configuration;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -14,14 +14,28 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import eugene.petsshelter.R;
-import eugene.petsshelter.model.models.Pet;
 import eugene.petsshelter.viewmodel.PetsViewModel;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private PetsListFragment petsListFragment;
+    public static final String TAG = MainActivity.class.getSimpleName();
+
+    public static final int TYPE_FRAGMENT_LIST = 1000;
+    public static final int TYPE_FRAGMENT_DETAILS = 1001;
+
+    public static final String FRAGMENT_TYPE_CATS = "cats";
+    public static final String FRAGMENT_TYPE_DOGS = "dogs";
+
+    private DrawerLayout drawer;
+    private ActionBarDrawerToggle toggle;
     private  Toolbar toolbar;
+
+    private PetsListFragment dogsListFragment;
+    private PetsListFragment catsListFragment;
+    private PetDetailsFragment petDetailsFragment;
+
+    private PetsViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,36 +45,47 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         // Drawer
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer = findViewById(R.id.drawer_layout);
+        toggle = new ActionBarDrawerToggle(
+                this, drawer, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
 
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        viewModel = ViewModelProviders.of(this).get(PetsViewModel.class);
+
         if(savedInstanceState==null){
 
-            //toolbar.setTitle(getString(R.string.dogs_fragment_title));
+            //initial fragment
+            viewModel.setFragmentType(FRAGMENT_TYPE_DOGS);
 
-            petsListFragment = new PetsListFragment();
+            dogsListFragment = new PetsListFragment();
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.fragment_container, petsListFragment)
+                    .replace(R.id.fragment_container, dogsListFragment)
+                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                     .commit();
+
         }
-
-        PetsViewModel viewModel = ViewModelProviders.of(this).get(PetsViewModel.class);
-
-        viewModel.getSelectedPet().observe(this, new Observer<Pet>() {
-            @Override
-            public void onChanged(@Nullable Pet pet) {
-                if(pet!=null)
-                    showDetails();
-            }
-        });
-
     }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        // Sync the toggle state after onRestoreInstanceState has occurred.
+        toggle.syncState();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        toggle.onConfigurationChanged(newConfig);
+    }
+
 
     @Override
     public void onBackPressed() {
@@ -74,7 +99,6 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
@@ -82,11 +106,17 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
+
+        if (toggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
+        } else if (id == android.R.id.home){
+            getSupportFragmentManager().popBackStack();
         }
 
         return super.onOptionsItemSelected(item);
@@ -100,7 +130,34 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_dogs) {
 
+            if(!viewModel.getFragmentType().getValue().equals(FRAGMENT_TYPE_DOGS)) {
+
+                viewModel.setFragmentType(FRAGMENT_TYPE_DOGS);
+
+                if (dogsListFragment == null)
+                    dogsListFragment = new PetsListFragment();
+
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, dogsListFragment)
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                        .commit();
+
+            }
+
         } else if (id == R.id.nav_cats) {
+
+            if(!viewModel.getFragmentType().getValue().equals(FRAGMENT_TYPE_CATS)) {
+
+                viewModel.setFragmentType(FRAGMENT_TYPE_CATS);
+
+                if (catsListFragment == null)
+                    catsListFragment = new PetsListFragment();
+
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, catsListFragment)
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                        .commit();
+            }
 
         } else if (id == R.id.nav_shelters) {
 
@@ -119,12 +176,33 @@ public class MainActivity extends AppCompatActivity
 
     public void showDetails(){
 
-        PetDetailsFragment detailsFragment = new PetDetailsFragment();
+        if(petDetailsFragment == null)
+            petDetailsFragment = new PetDetailsFragment();
 
         getSupportFragmentManager()
                 .beginTransaction()
-                .addToBackStack("pet_details")
-                .replace(R.id.fragment_container,
-                        detailsFragment, null).commit();
+                .replace(R.id.fragment_container, petDetailsFragment)
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                .addToBackStack(null).commit();
+
     }
+
+    public void setToolbarTitle(String toolbarTitle, int fragmentType) {
+
+        switch (fragmentType) {
+            case TYPE_FRAGMENT_LIST:
+                //Show toggle
+                toggle.setDrawerIndicatorEnabled(true);
+                drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+                break;
+            case TYPE_FRAGMENT_DETAILS:
+                //Hide caret and show toggle
+                toggle.setDrawerIndicatorEnabled(false);
+                drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+                break;
+        }
+
+        getSupportActionBar().setTitle(toolbarTitle);
+    }
+
 }

@@ -13,15 +13,19 @@ import eugene.petsshelter.model.models.Pet;
 public class PetsViewModel extends ViewModel{
 
     private FirebaseRepository firebaseRepository;
-    private final MutableLiveData<Pet> selectedPet;
+    private MutableLiveData<Pet> selectedPet = new MutableLiveData<>();;
+    private MutableLiveData<String> fragmentType = new MutableLiveData<>();
 
     public PetsViewModel(){
-        selectedPet = new MutableLiveData<>();
         firebaseRepository = FirebaseRepository.getInstance();
     }
 
     public LiveData<List<Pet>> getDogs(){
         return firebaseRepository.getDogs();
+    }
+
+    public LiveData<List<Pet>> getCats(){
+        return firebaseRepository.getCats();
     }
 
     public LiveData<Pet> getSelectedPet(){
@@ -32,4 +36,11 @@ public class PetsViewModel extends ViewModel{
         selectedPet.setValue(pet);
     }
 
+    public LiveData<String> getFragmentType() {
+        return fragmentType;
+    }
+
+    public void setFragmentType(String listType) {
+        fragmentType.setValue(listType);
+    }
 }

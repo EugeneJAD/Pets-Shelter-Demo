@@ -1,11 +1,14 @@
 package eugene.petsshelter.view.ui;
 
 
+import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +27,12 @@ import eugene.petsshelter.viewmodel.PetsViewModel;
  */
 public class PetDetailsFragment extends Fragment {
 
+    public static final String TAG = PetDetailsFragment.class.getSimpleName();
+
+    ImageView petImage;
+    TextView petName;
+    TextView ageView;
+    TextView shelterView;
 
     public PetDetailsFragment() {
         // Required empty public constructor
@@ -34,20 +43,39 @@ public class PetDetailsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        Log.i(TAG, "PetDetailsFragment onCreateView");
+
         View root = inflater.inflate(R.layout.fragment_pet_details, container, false);
 
-        ImageView petImage = root.findViewById(R.id.pet_image_details);
-        TextView petName = root.findViewById(R.id.pet_title_detail);
+        petImage = root.findViewById(R.id.pet_image_details);
+        petName = root.findViewById(R.id.pet_title_detail);
 
         //TODO description
 
-        TextView ageView = root.findViewById(R.id.age_details);
+        ageView = root.findViewById(R.id.age_details);
 //        TextView breedView = root.findViewById(R.id.breed_details);
-        TextView shelterView = root.findViewById(R.id.shelter_title_details);
+        shelterView = root.findViewById(R.id.shelter_title_details);
 
         PetsViewModel viewModel = ViewModelProviders.of(getActivity()).get(PetsViewModel.class);
 
-        Pet selectedPet = viewModel.getSelectedPet().getValue();
+        if(viewModel.getSelectedPet().getValue()!=null)
+            ((MainActivity)getActivity()).setToolbarTitle(viewModel.getSelectedPet().getValue().getName(),
+                    MainActivity.TYPE_FRAGMENT_DETAILS);
+
+        viewModel.getSelectedPet().observe(this, new Observer<Pet>() {
+            @Override
+            public void onChanged(@Nullable Pet pet) {
+                updateUI(pet);
+            }
+        });
+
+        return root;
+    }
+
+    private void updateUI(Pet selectedPet) {
+
+        if(selectedPet==null)
+            return;
 
         GlideApp.with(getContext()).load(selectedPet.getImageURL())
                 .centerCrop()
@@ -62,7 +90,6 @@ public class PetDetailsFragment extends Fragment {
 
         shelterView.setText(selectedPet.getShelter());
 
-        return root;
     }
 
 }
