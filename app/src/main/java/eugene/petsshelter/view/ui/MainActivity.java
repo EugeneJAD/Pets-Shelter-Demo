@@ -24,16 +24,19 @@ public class MainActivity extends AppCompatActivity
     public static final int TYPE_FRAGMENT_LIST = 1000;
     public static final int TYPE_FRAGMENT_DETAILS = 1001;
 
-    public static final String FRAGMENT_TYPE_CATS = "cats";
-    public static final String FRAGMENT_TYPE_DOGS = "dogs";
+    //pets list fragment types
+    public static final String FRAGMENT_LIST_TYPE_CATS = "cats";
+    public static final String FRAGMENT_LIST_TYPE_DOGS = "dogs";
+    public static final String FRAGMENT_LIST_TYPE_FAV = "favorites";
 
     private DrawerLayout drawer;
     private ActionBarDrawerToggle toggle;
-    private  Toolbar toolbar;
 
     private PetsListFragment dogsListFragment;
     private PetsListFragment catsListFragment;
     private PetDetailsFragment petDetailsFragment;
+    private SheltersListFragment sheltersListFragment;
+    private ShelterDetailsFragment shelterDetailsFragment;
 
     private PetsViewModel viewModel;
 
@@ -41,7 +44,8 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        toolbar = findViewById(R.id.toolbar);
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         // Drawer
@@ -62,7 +66,6 @@ public class MainActivity extends AppCompatActivity
         if(savedInstanceState==null){
 
             //initial fragment
-            viewModel.setFragmentType(FRAGMENT_TYPE_DOGS);
 
             dogsListFragment = new PetsListFragment();
             getSupportFragmentManager().beginTransaction()
@@ -130,36 +133,40 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_dogs) {
 
-            if(!viewModel.getFragmentType().getValue().equals(FRAGMENT_TYPE_DOGS)) {
+            viewModel.setPetsListFragmentType(FRAGMENT_LIST_TYPE_DOGS);
 
-                viewModel.setFragmentType(FRAGMENT_TYPE_DOGS);
+            if (dogsListFragment == null)
+                dogsListFragment = new PetsListFragment();
 
-                if (dogsListFragment == null)
-                    dogsListFragment = new PetsListFragment();
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, dogsListFragment)
+                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                    .commit();
 
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_container, dogsListFragment)
-                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                        .commit();
 
-            }
 
         } else if (id == R.id.nav_cats) {
 
-            if(!viewModel.getFragmentType().getValue().equals(FRAGMENT_TYPE_CATS)) {
+            viewModel.setPetsListFragmentType(FRAGMENT_LIST_TYPE_CATS);
 
-                viewModel.setFragmentType(FRAGMENT_TYPE_CATS);
+            if (catsListFragment == null)
+                catsListFragment = new PetsListFragment();
 
-                if (catsListFragment == null)
-                    catsListFragment = new PetsListFragment();
-
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_container, catsListFragment)
-                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                        .commit();
-            }
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, catsListFragment)
+                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                    .commit();
 
         } else if (id == R.id.nav_shelters) {
+
+            if(sheltersListFragment==null)
+                sheltersListFragment = new SheltersListFragment();
+
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, sheltersListFragment)
+                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                    .commit();
+
 
         } else if (id == R.id.nav_tools) {
 
@@ -174,7 +181,7 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    public void showDetails(){
+    public void showPetDetails(){
 
         if(petDetailsFragment == null)
             petDetailsFragment = new PetDetailsFragment();
@@ -182,6 +189,19 @@ public class MainActivity extends AppCompatActivity
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.fragment_container, petDetailsFragment)
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                .addToBackStack(null).commit();
+
+    }
+
+    public void showShelterDetails(){
+
+        if(shelterDetailsFragment == null)
+            shelterDetailsFragment = new ShelterDetailsFragment();
+
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_container, shelterDetailsFragment)
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                 .addToBackStack(null).commit();
 

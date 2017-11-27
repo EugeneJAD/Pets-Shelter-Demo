@@ -19,18 +19,18 @@ import java.util.List;
 import eugene.petsshelter.R;
 import eugene.petsshelter.model.models.Pet;
 import eugene.petsshelter.view.adapter.ItemClickCallback;
-import eugene.petsshelter.view.adapter.RecyclerAdapter;
+import eugene.petsshelter.view.adapter.PetsRecyclerAdapter;
 import eugene.petsshelter.viewmodel.PetsViewModel;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class PetsListFragment extends Fragment implements ItemClickCallback {
+public class PetsListFragment extends Fragment implements ItemClickCallback<Pet> {
 
     public static final String TAG = PetsListFragment.class.getSimpleName();
 
     private RecyclerView recyclerView;
-    private RecyclerAdapter adapter;
+    private PetsRecyclerAdapter adapter;
     private PetsViewModel viewModel;
 
     public PetsListFragment() {
@@ -56,7 +56,7 @@ public class PetsListFragment extends Fragment implements ItemClickCallback {
         recyclerView.setLayoutManager(layoutManager);
 
         recyclerView.setHasFixedSize(true);
-        adapter = new RecyclerAdapter(new ArrayList<Pet>(), this);
+        adapter = new PetsRecyclerAdapter(new ArrayList<Pet>(), this);
         recyclerView.setAdapter(adapter);
 
         viewModel = ViewModelProviders.of(getActivity()).get(PetsViewModel.class);
@@ -66,9 +66,8 @@ public class PetsListFragment extends Fragment implements ItemClickCallback {
             @Override
             public void onChanged(@Nullable List<Pet> pets) {
                 Log.i("ListFragment getDogs", "observer");
-                if(viewModel.getFragmentType().getValue().equals(MainActivity.FRAGMENT_TYPE_DOGS)) {
+                if(viewModel.getPetsListFragmentType().equals(MainActivity.FRAGMENT_LIST_TYPE_DOGS)) {
                     updateAdapter(pets);
-
                 }
             }
         });
@@ -78,23 +77,23 @@ public class PetsListFragment extends Fragment implements ItemClickCallback {
             @Override
             public void onChanged(@Nullable List<Pet> pets) {
                 Log.i("ListFragment getCats", "observer");
-                if(viewModel.getFragmentType().getValue().equals(MainActivity.FRAGMENT_TYPE_CATS)) {
+                if(viewModel.getPetsListFragmentType().equals(MainActivity.FRAGMENT_LIST_TYPE_CATS)) {
                     updateAdapter(pets);
                 }
             }
         });
 
-        if(viewModel.getFragmentType().getValue().equals(MainActivity.FRAGMENT_TYPE_DOGS))
+        if(viewModel.getPetsListFragmentType().equals(MainActivity.FRAGMENT_LIST_TYPE_DOGS))
             ((MainActivity)getActivity()).setToolbarTitle(getString(R.string.dogs_fragment_title), MainActivity.TYPE_FRAGMENT_LIST);
-        else if (viewModel.getFragmentType().getValue().equals(MainActivity.FRAGMENT_TYPE_CATS))
+        else if (viewModel.getPetsListFragmentType().equals(MainActivity.FRAGMENT_LIST_TYPE_CATS))
             ((MainActivity)getActivity()).setToolbarTitle(getString(R.string.cats_fragment_title), MainActivity.TYPE_FRAGMENT_LIST);
 
 
         return rootView;
     }
 
-    public void updateAdapter(List<Pet> pets) {
-        adapter.setResults(pets);
+    private void updateAdapter(List<Pet> data) {
+        adapter.setResults(data);
         adapter.notifyDataSetChanged();
     }
 
@@ -102,7 +101,7 @@ public class PetsListFragment extends Fragment implements ItemClickCallback {
     @Override
     public void onItemClick(Pet pet) {
         viewModel.setSelectedPet(pet);
-        ((MainActivity)getActivity()).showDetails();
+        ((MainActivity)getActivity()).showPetDetails();
     }
 
 

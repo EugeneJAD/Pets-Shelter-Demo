@@ -29,10 +29,11 @@ public class PetDetailsFragment extends Fragment {
 
     public static final String TAG = PetDetailsFragment.class.getSimpleName();
 
-    ImageView petImage;
-    TextView petName;
-    TextView ageView;
-    TextView shelterView;
+    private ImageView petImage;
+    private TextView ageView;
+    private TextView shelterView;
+    private TextView descriptionView;
+    private TextView breedView;
 
     public PetDetailsFragment() {
         // Required empty public constructor
@@ -48,12 +49,9 @@ public class PetDetailsFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_pet_details, container, false);
 
         petImage = root.findViewById(R.id.pet_image_details);
-        petName = root.findViewById(R.id.pet_title_detail);
-
-        //TODO description
-
+        descriptionView = root.findViewById(R.id.pet_description_details);
         ageView = root.findViewById(R.id.age_details);
-//        TextView breedView = root.findViewById(R.id.breed_details);
+        breedView = root.findViewById(R.id.breed_details);
         shelterView = root.findViewById(R.id.shelter_title_details);
 
         PetsViewModel viewModel = ViewModelProviders.of(getActivity()).get(PetsViewModel.class);
@@ -83,11 +81,9 @@ public class PetDetailsFragment extends Fragment {
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(petImage);
 
-        petName.setText(selectedPet.getName());
         ageView.setText(selectedPet.getAge());
-
-        //TODO breed
-
+        breedView.setText(selectedPet.getBreed());
+        descriptionView.setText(selectedPet.getDescription());
         shelterView.setText(selectedPet.getShelter());
 
     }

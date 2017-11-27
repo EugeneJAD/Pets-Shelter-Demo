@@ -18,4 +18,13 @@
     <string name="button_food_text">Buy food</string>
     <string name="adoption_button_text">Adoption</string>
     <string name="looking_for_home">looking for home</string>
+    <string name="address">Address:</string>
+    <string name="country">Country:</string>
+    <string name="open_map">map</string>
+    <string name="phone">Phone:</string>
+    <string name="web">Website:</string>
+    <string name="email">Email:</string>
+    <string name="adoption_hours">Adoption Hours:</string>
+    <string name="become_volunteer">Become volunteer</string>
+    <string name="donate">Donate</string>
 </resources>

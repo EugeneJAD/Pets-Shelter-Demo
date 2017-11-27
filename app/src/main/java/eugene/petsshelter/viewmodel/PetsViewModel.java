@@ -8,16 +8,20 @@ import java.util.List;
 
 import eugene.petsshelter.model.FirebaseRepository;
 import eugene.petsshelter.model.models.Pet;
+import eugene.petsshelter.view.ui.MainActivity;
 
 
 public class PetsViewModel extends ViewModel{
 
+    public static final String DEFAULT_FRAGMENT_TYPE = MainActivity.FRAGMENT_LIST_TYPE_DOGS;
+
     private FirebaseRepository firebaseRepository;
     private MutableLiveData<Pet> selectedPet = new MutableLiveData<>();;
-    private MutableLiveData<String> fragmentType = new MutableLiveData<>();
+    private String petsListFragmentType;
 
     public PetsViewModel(){
         firebaseRepository = FirebaseRepository.getInstance();
+        petsListFragmentType = DEFAULT_FRAGMENT_TYPE;
     }
 
     public LiveData<List<Pet>> getDogs(){
@@ -36,11 +40,11 @@ public class PetsViewModel extends ViewModel{
         selectedPet.setValue(pet);
     }
 
-    public LiveData<String> getFragmentType() {
-        return fragmentType;
+    public String getPetsListFragmentType() {
+        return petsListFragmentType;
     }
 
-    public void setFragmentType(String listType) {
-        fragmentType.setValue(listType);
+    public void setPetsListFragmentType(String listType) {
+        petsListFragmentType = listType;
     }
 }

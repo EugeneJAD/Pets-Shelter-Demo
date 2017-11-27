@@ -20,29 +20,32 @@ import eugene.petsshelter.model.api.GlideApp;
 import eugene.petsshelter.model.models.Pet;
 
 
-public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder>{
+public class PetsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
+
     private Context context;
     private List<Pet> pets;
 
-    private ItemClickCallback itemClickCallback;
+    private ItemClickCallback<Pet> itemClickCallback;
 
-    public RecyclerAdapter(ArrayList<Pet> pets, ItemClickCallback itemClick){
+    public PetsRecyclerAdapter(ArrayList<Pet> pets, ItemClickCallback<Pet> itemClick){
         itemClickCallback = itemClick;
         this.pets = pets;
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         context = parent.getContext();
 
-        View view = LayoutInflater.from(context).inflate(R.layout.pets_list_item,parent,false);
+        View petView = LayoutInflater.from(context).inflate(R.layout.pets_list_item,parent,false);
+        return new PetViewHolder(petView);
 
-        return new RecyclerAdapter.ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+
+        PetViewHolder petViewHolder = (PetViewHolder) holder;
 
         Pet pet = pets.get(position);
 
@@ -51,32 +54,34 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
                 .placeholder(new ColorDrawable(Color.LTGRAY))
                 .error(new ColorDrawable(Color.RED))
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .into(holder.image);
+                .into(petViewHolder.image);
 
-        holder.title.setText(pet.getName());
-        holder.shelter.setText(pet.getId());
+        petViewHolder.title.setText(pet.getName());
+        petViewHolder.shelter.setText(pet.getId());
 
     }
 
     @Override
-    public int getItemCount() { return pets==null? 0 : pets.size();}
+    public int getItemCount() { return pets ==null? 0 : pets.size();}
 
     public void setResults(List<Pet> data){
         pets = data;
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class PetViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         public ImageView image;
         public TextView title;
         public TextView shelter;
 
-        public ViewHolder(View itemView) {
+
+        public PetViewHolder(View itemView) {
             super(itemView);
 
             image = itemView.findViewById(R.id.pet_image);
             title = itemView.findViewById(R.id.pet_title);
             shelter = itemView.findViewById(R.id.shelter_title);
+
 
             itemView.setOnClickListener(this);
         }
@@ -87,4 +92,5 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
             itemClickCallback.onItemClick(pets.get(getAdapterPosition()));
         }
     }
+
 }

@@ -1,89 +1,33 @@
 package eugene.petsshelter.model.models;
 
-import com.google.firebase.database.IgnoreExtraProperties;
 
-@IgnoreExtraProperties
-public class Pet {
+public interface Pet {
 
-    private String _id;
-    private String name;
-    private String age;
-    private String description;
-    private String gender;
-    private String breed;
-    private String shelter;
-    private boolean adopted;
-    private String imageURL;
+    String getId();
+    void setId(String _id);
 
-    public Pet(){}
+    String getName();
+    void setName(String name);
 
-    public String getId() {
-        return _id;
-    }
+    String getAge();
+    void setAge(String age);
 
-    public void setId(String _id) {
-        this._id = _id;
-    }
+    String getGender();
+    void setGender(String gender);
 
-    public String getName() {
-        return name;
-    }
+    String getShelter();
+    void setShelter(String shelter);
 
-    public void setName(String name) {
-        this.name = name;
-    }
+    boolean isAdopted();
+    void setAdopted(boolean adopted);
 
-    public String getAge() {
-        return age;
-    }
+    String getImageURL();
+    void setImageURL(String imageURL);
 
-    public void setAge(String age) {this.age = age;}
+    String getDescription();
+    void setDescription(String description);
 
-    public String getGender() {
-        return gender;
-    }
+    String getBreed();
+    void setBreed(String breed);
 
-    public void setGender(String gender) {this.gender = gender;}
-
-    public String getShelter() {
-        return shelter;
-    }
-
-    public void setShelter(String shelter) {
-        this.shelter = shelter;
-    }
-
-    public boolean isAdopted() {
-        return adopted;
-    }
-
-    public void setAdopted(boolean adopted) {
-        this.adopted = adopted;
-    }
-
-    public String getImageURL() {
-        return imageURL;
-    }
-
-    public void setImageURL(String imageURL) {
-        this.imageURL = imageURL;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getBreed() {
-        return breed;
-    }
-
-    public void setBreed(String breed) {
-        this.breed = breed;
-    }
 }
-
-
