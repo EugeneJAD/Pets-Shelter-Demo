@@ -30,4 +30,7 @@ public interface Pet {
     String getBreed();
     void setBreed(String breed);
 
+    int getFoodCount();
+    void setFoodCount(int foodCount);
+
 }

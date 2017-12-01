@@ -1,7 +1,13 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable name="handler" type="eugene.petsshelter.view.ui.ButtonClickHandler"/>
+        <variable name="selectedPet" type="eugene.petsshelter.model.models.Pet"/>
+    </data>
+
 <LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -27,7 +33,7 @@
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/is_adopted_text"
-                tools:text="Dogs have long played an important role in the lives of humans. It's thought that dogs have been pets for thousands of years. Dogs are often called Man's Best Friend. This is because dogs help man out in so many ways."/>
+                android:text="@{selectedPet.description}"/>
 
             <TextView
                 android:id="@+id/textView4"
@@ -35,6 +41,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="24dp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 android:text="@string/age"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/pet_description_details"/>
@@ -46,6 +53,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
                 android:text="@string/breed"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView4"/>
 
@@ -66,13 +74,13 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
                 android:layout_marginStart="8dp"
-                android:maxLines="2"
+                android:maxLines="3"
                 android:textColor="#424242"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.333"
                 app:layout_constraintStart_toEndOf="@+id/textView7"
                 app:layout_constraintTop_toTopOf="@+id/textView7"
-                tools:text="New York Shelter"/>
+                android:text="@{selectedPet.shelter}"/>
 
             <TextView
                 android:id="@+id/textView7"
@@ -81,16 +89,18 @@
                 android:layout_marginEnd="140dp"
                 android:layout_marginTop="24dp"
                 android:text="@string/shelter"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/pet_description_details"/>
 
             <TextView
                 android:id="@+id/age_details"
-                android:layout_width="wrap_content"
+                android:layout_width="7dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="24dp"
-                android:textColor="#424242"
+                android:text="@{selectedPet.age}"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                 app:layout_constraintStart_toEndOf="@+id/textView4"
                 app:layout_constraintTop_toBottomOf="@+id/pet_description_details"
                 tools:text="4"/>
@@ -101,10 +111,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
-                android:textColor="#424242"
                 app:layout_constraintStart_toEndOf="@+id/textView5"
                 app:layout_constraintTop_toBottomOf="@+id/age_details"
-                tools:text="breed"/>
+                android:text="@{selectedPet.breed}"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                tools:text="unknown"/>
 
             <TextView
                 android:id="@+id/is_adopted_text"
@@ -112,9 +123,46 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
                 android:layout_marginTop="24dp"
-                android:text="@string/looking_for_home"
-                android:textColor="@android:color/holo_green_light"
+                android:text="@{selectedPet.adopted ? @string/adopted : @string/looking_for_home}"
+                tools:text="@string/looking_for_home"
+                android:textColor="@{selectedPet.adopted ? @android:color/holo_orange_light : @android:color/holo_green_light}"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/pet_image_details"/>
+
+            <TextView
+                android:id="@+id/textView14"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:text="@string/gender"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView5"/>
+
+            <TextView
+                android:id="@+id/textView15"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:text="@{selectedPet.gender}"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                app:layout_constraintStart_toEndOf="@+id/textView14"
+                app:layout_constraintTop_toBottomOf="@+id/textView5"
+                tools:text="male"/>
+
+            <TextView
+                android:id="@+id/pet_food_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="24dp"
+                android:text="@{String.valueOf(selectedPet.foodCount)}"
+                tools:text="2"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/pet_image_details"/>
 
 
@@ -136,7 +184,8 @@
             android:layout_marginTop="8dp"
             android:layout_alignParentStart="true"
             android:text="@string/button_food_text"
-            android:textColor="@android:color/holo_blue_dark"/>
+            android:textColor="@android:color/holo_blue_dark"
+            android:onClick="@{handler::onButtonClick}"/>
 
         <Button
             android:id="@+id/button_adoption"
@@ -153,3 +202,4 @@
     </RelativeLayout>
 
 </LinearLayout>
+</layout>

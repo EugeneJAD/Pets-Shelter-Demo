@@ -56,8 +56,8 @@ public class ShelterRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                 .into(shelterViewHolder.image);
 
         shelterViewHolder.title.setText(shelter.getTitle());
-        shelterViewHolder.city.setText(shelter.getCity());
-        shelterViewHolder.country.setText(shelter.getCountry());
+        shelterViewHolder.city.setText(shelter.getGeoLocation().getCity());
+        shelterViewHolder.country.setText(shelter.getGeoLocation().getCountry());
 
     }
 

@@ -19,7 +19,7 @@ import eugene.petsshelter.R;
 import eugene.petsshelter.model.models.Shelter;
 import eugene.petsshelter.view.adapter.ItemClickCallback;
 import eugene.petsshelter.view.adapter.ShelterRecyclerAdapter;
-import eugene.petsshelter.viewmodel.SheltersViewModel;
+import eugene.petsshelter.viewmodel.MainViewModel;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -28,7 +28,7 @@ public class SheltersListFragment extends Fragment implements ItemClickCallback<
 
     private RecyclerView recyclerView;
     private ShelterRecyclerAdapter adapter;
-    private SheltersViewModel viewModel;
+    private MainViewModel viewModel;
 
     public SheltersListFragment() {
         // Required empty public constructor
@@ -52,7 +52,7 @@ public class SheltersListFragment extends Fragment implements ItemClickCallback<
         adapter = new ShelterRecyclerAdapter(new ArrayList<Shelter>(), this);
         recyclerView.setAdapter(adapter);
 
-        viewModel = ViewModelProviders.of(getActivity()).get(SheltersViewModel.class);
+        viewModel = ViewModelProviders.of(getActivity()).get(MainViewModel.class);
 
         viewModel.getShelters().observe(this, new Observer<List<Shelter>>() {
             @Override

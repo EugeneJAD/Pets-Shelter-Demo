@@ -14,7 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import eugene.petsshelter.R;
-import eugene.petsshelter.viewmodel.PetsViewModel;
+import eugene.petsshelter.viewmodel.MainViewModel;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity
     private SheltersListFragment sheltersListFragment;
     private ShelterDetailsFragment shelterDetailsFragment;
 
-    private PetsViewModel viewModel;
+    private MainViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        viewModel = ViewModelProviders.of(this).get(PetsViewModel.class);
+        viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
 
         if(savedInstanceState==null){
 

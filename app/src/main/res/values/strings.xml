@@ -27,4 +27,7 @@
     <string name="adoption_hours">Adoption Hours:</string>
     <string name="become_volunteer">Become volunteer</string>
     <string name="donate">Donate</string>
+    <string name="gender">Gender</string>
+    <string name="adopted">Adopted!</string>
+    <string name="title_activity_maps">Map</string>
 </resources>

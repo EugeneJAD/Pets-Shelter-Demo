@@ -20,7 +20,7 @@ import eugene.petsshelter.R;
 import eugene.petsshelter.model.models.Pet;
 import eugene.petsshelter.view.adapter.ItemClickCallback;
 import eugene.petsshelter.view.adapter.PetsRecyclerAdapter;
-import eugene.petsshelter.viewmodel.PetsViewModel;
+import eugene.petsshelter.viewmodel.MainViewModel;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -31,7 +31,7 @@ public class PetsListFragment extends Fragment implements ItemClickCallback<Pet>
 
     private RecyclerView recyclerView;
     private PetsRecyclerAdapter adapter;
-    private PetsViewModel viewModel;
+    private MainViewModel viewModel;
 
     public PetsListFragment() {
         // Required empty public constructor
@@ -41,8 +41,6 @@ public class PetsListFragment extends Fragment implements ItemClickCallback<Pet>
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-        Log.i(TAG, "PetsListFragment onCreateView " );
 
         // Inflate the layout for this fragment
         View rootView =  inflater.inflate(R.layout.list_fragment, container, false);
@@ -59,13 +57,12 @@ public class PetsListFragment extends Fragment implements ItemClickCallback<Pet>
         adapter = new PetsRecyclerAdapter(new ArrayList<Pet>(), this);
         recyclerView.setAdapter(adapter);
 
-        viewModel = ViewModelProviders.of(getActivity()).get(PetsViewModel.class);
+        viewModel = ViewModelProviders.of(getActivity()).get(MainViewModel.class);
 
 
         viewModel.getDogs().observe(this, new Observer<List<Pet>>() {
             @Override
             public void onChanged(@Nullable List<Pet> pets) {
-                Log.i("ListFragment getDogs", "observer");
                 if(viewModel.getPetsListFragmentType().equals(MainActivity.FRAGMENT_LIST_TYPE_DOGS)) {
                     updateAdapter(pets);
                 }
@@ -76,12 +73,12 @@ public class PetsListFragment extends Fragment implements ItemClickCallback<Pet>
         viewModel.getCats().observe(this, new Observer<List<Pet>>() {
             @Override
             public void onChanged(@Nullable List<Pet> pets) {
-                Log.i("ListFragment getCats", "observer");
                 if(viewModel.getPetsListFragmentType().equals(MainActivity.FRAGMENT_LIST_TYPE_CATS)) {
                     updateAdapter(pets);
                 }
             }
         });
+
 
         if(viewModel.getPetsListFragmentType().equals(MainActivity.FRAGMENT_LIST_TYPE_DOGS))
             ((MainActivity)getActivity()).setToolbarTitle(getString(R.string.dogs_fragment_title), MainActivity.TYPE_FRAGMENT_LIST);
@@ -93,6 +90,7 @@ public class PetsListFragment extends Fragment implements ItemClickCallback<Pet>
     }
 
     private void updateAdapter(List<Pet> data) {
+        Log.i(TAG, "updateAdapter");
         adapter.setResults(data);
         adapter.notifyDataSetChanged();
     }

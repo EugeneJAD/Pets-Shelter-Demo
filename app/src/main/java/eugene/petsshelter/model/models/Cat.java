@@ -14,6 +14,7 @@ public class Cat implements Pet {
     private String shelter;
     private boolean adopted;
     private String imageURL;
+    private int foodCount;
 
     public String getId() {
         return _id;
@@ -82,4 +83,8 @@ public class Cat implements Pet {
     public void setBreed(String breed) {
         this.breed = breed;
     }
+
+    public int getFoodCount() {return foodCount;}
+
+    public void setFoodCount(int foodCount) {this.foodCount = foodCount;}
 }

@@ -1,18 +1,17 @@
 package eugene.petsshelter.model.models;
+import com.google.firebase.database.IgnoreExtraProperties;
 
-
+@IgnoreExtraProperties
 public class Shelter {
 
     private String _id;
     private String title;
-    private String address;
-    private String country;
-    private String city;
     private String phone;
     private String email;
     private String hours;
     private String imageURL;
     private String web;
+    private GeoLocation geoLocation;
 
     public String getId() {
         return _id;
@@ -28,14 +27,6 @@ public class Shelter {
 
     public void setTitle(String title) {
         this.title = title;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
     }
 
     public String getPhone() {
@@ -70,22 +61,6 @@ public class Shelter {
         this.imageURL = imageURL;
     }
 
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
     public String getWeb() {
         return web;
     }
@@ -93,5 +68,9 @@ public class Shelter {
     public void setWeb(String web) {
         this.web = web;
     }
+
+    public GeoLocation getGeoLocation() {return geoLocation;}
+
+    public void setGeoLocation(GeoLocation geoLocation) {this.geoLocation = geoLocation;}
 }
 

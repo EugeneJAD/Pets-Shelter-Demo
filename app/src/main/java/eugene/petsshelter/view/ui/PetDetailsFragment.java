@@ -3,6 +3,7 @@ package eugene.petsshelter.view.ui;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.databinding.DataBindingUtil;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -12,28 +13,25 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import eugene.petsshelter.R;
+import eugene.petsshelter.databinding.FragmentPetDetailsBinding;
 import eugene.petsshelter.model.api.GlideApp;
 import eugene.petsshelter.model.models.Pet;
-import eugene.petsshelter.viewmodel.PetsViewModel;
+import eugene.petsshelter.viewmodel.MainViewModel;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class PetDetailsFragment extends Fragment {
+public class PetDetailsFragment extends Fragment implements ButtonClickHandler {
 
     public static final String TAG = PetDetailsFragment.class.getSimpleName();
 
-    private ImageView petImage;
-    private TextView ageView;
-    private TextView shelterView;
-    private TextView descriptionView;
-    private TextView breedView;
+    private MainViewModel viewModel;
+
+    private FragmentPetDetailsBinding detailsBinding;
 
     public PetDetailsFragment() {
         // Required empty public constructor
@@ -44,17 +42,9 @@ public class PetDetailsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        Log.i(TAG, "PetDetailsFragment onCreateView");
+        detailsBinding = DataBindingUtil.inflate(inflater,R.layout.fragment_pet_details, container, false);
 
-        View root = inflater.inflate(R.layout.fragment_pet_details, container, false);
-
-        petImage = root.findViewById(R.id.pet_image_details);
-        descriptionView = root.findViewById(R.id.pet_description_details);
-        ageView = root.findViewById(R.id.age_details);
-        breedView = root.findViewById(R.id.breed_details);
-        shelterView = root.findViewById(R.id.shelter_title_details);
-
-        PetsViewModel viewModel = ViewModelProviders.of(getActivity()).get(PetsViewModel.class);
+        viewModel = ViewModelProviders.of(getActivity()).get(MainViewModel.class);
 
         if(viewModel.getSelectedPet().getValue()!=null)
             ((MainActivity)getActivity()).setToolbarTitle(viewModel.getSelectedPet().getValue().getName(),
@@ -67,25 +57,33 @@ public class PetDetailsFragment extends Fragment {
             }
         });
 
-        return root;
+        detailsBinding.setHandler(this);
+
+        return detailsBinding.getRoot();
     }
 
     private void updateUI(Pet selectedPet) {
 
-        if(selectedPet==null)
+        if(selectedPet==null) {
             return;
+        }
+
+        detailsBinding.setSelectedPet(selectedPet);
 
         GlideApp.with(getContext()).load(selectedPet.getImageURL())
-                .centerCrop()
-                .placeholder(new ColorDrawable(Color.LTGRAY))
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .into(petImage);
-
-        ageView.setText(selectedPet.getAge());
-        breedView.setText(selectedPet.getBreed());
-        descriptionView.setText(selectedPet.getDescription());
-        shelterView.setText(selectedPet.getShelter());
+        .centerCrop()
+        .placeholder(new ColorDrawable(Color.LTGRAY))
+        .diskCacheStrategy(DiskCacheStrategy.ALL)
+        .into(detailsBinding.petImageDetails);
 
     }
+
+    @Override
+    public void onButtonClick(View view) {
+
+        if(view.getId()==detailsBinding.buttonBuyFood.getId())
+            viewModel.buyFood();
+    }
+
 
 }
