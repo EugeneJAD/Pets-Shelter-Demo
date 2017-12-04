@@ -9,7 +9,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +17,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import eugene.petsshelter.R;
 import eugene.petsshelter.databinding.FragmentPetDetailsBinding;
+import eugene.petsshelter.di.Injectable;
 import eugene.petsshelter.model.api.GlideApp;
 import eugene.petsshelter.model.models.Pet;
 import eugene.petsshelter.viewmodel.MainViewModel;
@@ -25,7 +25,7 @@ import eugene.petsshelter.viewmodel.MainViewModel;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class PetDetailsFragment extends Fragment implements ButtonClickHandler {
+public class PetDetailsFragment extends Fragment implements ButtonClickHandler, Injectable {
 
     public static final String TAG = PetDetailsFragment.class.getSimpleName();
 

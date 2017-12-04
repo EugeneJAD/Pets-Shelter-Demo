@@ -7,6 +7,8 @@ import android.util.Log;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import eugene.petsshelter.model.FirebaseRepository;
 import eugene.petsshelter.model.models.Pet;
 import eugene.petsshelter.model.models.Shelter;
@@ -26,9 +28,9 @@ public class MainViewModel extends ViewModel{
 
     private String petsListFragmentType;
 
-
-    public MainViewModel(){
-        firebaseRepository = FirebaseRepository.getInstance();
+    @Inject
+    public MainViewModel(FirebaseRepository firebaseRepository){
+        this.firebaseRepository = firebaseRepository;
         firebaseRepository.attachFirebaseReadListeners();
         petsListFragmentType = DEFAULT_FRAGMENT_TYPE;
     }

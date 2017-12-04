@@ -15,17 +15,18 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import eugene.petsshelter.model.models.Cat;
 import eugene.petsshelter.model.models.Dog;
 import eugene.petsshelter.model.models.Pet;
 import eugene.petsshelter.model.models.Shelter;
 
-
-public class FirebaseRepository {
+@Singleton
+public class FirebaseRepository implements Repository {
 
     private static final String TAG = FirebaseDatabase.class.getSimpleName();
-
-    private static FirebaseRepository repository;
 
     public static final String DOGS = "dogs";
     public static final String CATS = "cats";
@@ -49,35 +50,33 @@ public class FirebaseRepository {
     private List<Pet> allCats = new ArrayList<>();
     private List<Shelter> allShelters = new ArrayList<>();
 
-    private FirebaseRepository(){
+    @Inject
+    public FirebaseRepository(FirebaseDatabase database){
 
-        mDatabase = FirebaseDatabase.getInstance();
-//        mDatabase.setPersistenceEnabled(true);
+        mDatabase = database;
+        mDatabase.setPersistenceEnabled(true);
 
         dogsDatabaseRef = mDatabase.getReference().child(DOGS);
         catsDatabaseRef = mDatabase.getReference().child(CATS);
         sheltersDatabaseRef = mDatabase.getReference().child(SHELTERS);
 
+        dogsDatabaseRef.keepSynced(true);
+        catsDatabaseRef.keepSynced(true);
+        sheltersDatabaseRef.keepSynced(true);
+
     }
 
-    public synchronized static FirebaseRepository getInstance() {
-
-        if (repository == null) {
-            repository = new FirebaseRepository();
-        }
-
-        return repository;
-    }
-
-
+    @Override
     public LiveData<List<Pet>> getDogs(){
         return dogs;
     }
 
+    @Override
     public LiveData<List<Pet>> getCats(){
         return cats;
     }
 
+    @Override
     public LiveData<List<Shelter>> getShelters() {return shelters;}
 
     public void attachFirebaseReadListeners(){
@@ -88,12 +87,10 @@ public class FirebaseRepository {
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     if(!allDogs.isEmpty())
                         allDogs.clear();
-                    Log.i(TAG, "dogsListener activated");
                     for (DataSnapshot ds : dataSnapshot.getChildren()) {
                         if (ds.getValue(Dog.class) != null) {
                             Dog dog = ds.getValue(Dog.class);
                             dog.setId(ds.getKey());
-                            Log.i(TAG, "ds.getKey() "+ds.getKey() +" food = " + dog.getFoodCount());
                             allDogs.add(dog);
                         }
                     }
@@ -138,7 +135,8 @@ public class FirebaseRepository {
 
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-
+                    if(!allShelters.isEmpty())
+                        allShelters.clear();
                     for (DataSnapshot ds : dataSnapshot.getChildren()) {
                         if (ds.getValue(Shelter.class) != null) {
                             Shelter shelter = ds.getValue(Shelter.class);

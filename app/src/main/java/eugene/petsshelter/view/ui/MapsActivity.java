@@ -1,7 +1,9 @@
 package eugene.petsshelter.view.ui;
 
+import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -12,11 +14,22 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import javax.inject.Inject;
+
+import dagger.android.AndroidInjector;
+import dagger.android.DispatchingAndroidInjector;
+import dagger.android.support.HasSupportFragmentInjector;
 import eugene.petsshelter.R;
 import eugene.petsshelter.model.models.Shelter;
 import eugene.petsshelter.viewmodel.MapViewModel;
 
-public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
+public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, HasSupportFragmentInjector {
+
+    @Inject
+    DispatchingAndroidInjector<Fragment> dispatchingAndroidInjector;
+
+    @Inject
+    ViewModelProvider.Factory viewModelFactory;
 
     public static final String KEY_SHELTER_ID = "shelter_id";
 
@@ -38,7 +51,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
-        MapViewModel viewModel = ViewModelProviders.of(this).get(MapViewModel.class);
+        MapViewModel viewModel = ViewModelProviders.of(this, viewModelFactory).get(MapViewModel.class);
         shelter = viewModel.getSelectedShelter(getIntent().getExtras().getString(KEY_SHELTER_ID));
 
         if(shelter!=null)
@@ -67,5 +80,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mMap.addMarker(new MarkerOptions().position(latLng).title(shelter.getTitle()));
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,DEFAULT_ZOOM));
 
+    }
+
+
+    @Override
+    public AndroidInjector<Fragment> supportFragmentInjector() {
+        return dispatchingAndroidInjector;
     }
 }

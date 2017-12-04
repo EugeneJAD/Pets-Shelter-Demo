@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import eugene.petsshelter.R;
+import eugene.petsshelter.di.Injectable;
 import eugene.petsshelter.model.models.Pet;
 import eugene.petsshelter.view.adapter.ItemClickCallback;
 import eugene.petsshelter.view.adapter.PetsRecyclerAdapter;
@@ -25,7 +26,7 @@ import eugene.petsshelter.viewmodel.MainViewModel;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class PetsListFragment extends Fragment implements ItemClickCallback<Pet> {
+public class PetsListFragment extends Fragment implements ItemClickCallback<Pet>, Injectable {
 
     public static final String TAG = PetsListFragment.class.getSimpleName();
 
