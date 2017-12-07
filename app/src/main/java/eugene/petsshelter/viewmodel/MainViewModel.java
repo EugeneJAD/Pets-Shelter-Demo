@@ -18,14 +18,10 @@ import eugene.petsshelter.view.ui.MainActivity;
 public class MainViewModel extends ViewModel{
 
     private static final String TAG = MainViewModel.class.getSimpleName();
-
     public static final String DEFAULT_FRAGMENT_TYPE = MainActivity.FRAGMENT_LIST_TYPE_DOGS;
-
     private FirebaseRepository firebaseRepository;
-
     private MutableLiveData<Pet> selectedPet = new MutableLiveData<>();
     private MutableLiveData<Shelter> selectedShelter = new MutableLiveData<>();
-
     private String petsListFragmentType;
 
     @Inject
@@ -36,10 +32,7 @@ public class MainViewModel extends ViewModel{
     }
 
     //Pets
-    public LiveData<List<Pet>> getDogs(){
-
-        return firebaseRepository.getDogs();
-    }
+    public LiveData<List<Pet>> getDogs(){return firebaseRepository.getDogs();}
 
     public LiveData<List<Pet>> getCats(){
         return firebaseRepository.getCats();
@@ -67,17 +60,13 @@ public class MainViewModel extends ViewModel{
 
     public LiveData<Shelter> getSelectedShelter() {return selectedShelter;}
 
-
     public void setSelectedShelter(Shelter shelter) {
         selectedShelter.setValue(shelter);
     }
 
-
-
     @Override
     protected void onCleared() {
 
-        Log.i(TAG, "onCleared()");
         firebaseRepository.detachFirebaseReadListeners();
         super.onCleared();
     }

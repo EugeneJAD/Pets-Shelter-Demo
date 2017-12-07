@@ -13,7 +13,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import eugene.petsshelter.R;
@@ -55,7 +54,7 @@ public class PetsListFragment extends Fragment implements ItemClickCallback<Pet>
         recyclerView.setLayoutManager(layoutManager);
 
         recyclerView.setHasFixedSize(true);
-        adapter = new PetsRecyclerAdapter(new ArrayList<Pet>(), this);
+        adapter = new PetsRecyclerAdapter(this);
         recyclerView.setAdapter(adapter);
 
         viewModel = ViewModelProviders.of(getActivity()).get(MainViewModel.class);

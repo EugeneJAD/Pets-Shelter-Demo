@@ -12,6 +12,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.transition.Fade;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -42,14 +43,15 @@ public class MainActivity extends AppCompatActivity
     public static final String FRAGMENT_LIST_TYPE_CATS = "cats";
     public static final String FRAGMENT_LIST_TYPE_DOGS = "dogs";
     public static final String FRAGMENT_LIST_TYPE_FAV = "favorites";
+    public static final String FRAGMENT_LIST_TYPE_SHELTERS = "shelters";
 
     private DrawerLayout drawer;
     private ActionBarDrawerToggle toggle;
 
     private PetsListFragment dogsListFragment;
     private PetsListFragment catsListFragment;
-    private PetDetailsFragment petDetailsFragment;
     private SheltersListFragment sheltersListFragment;
+    private PetDetailsFragment petDetailsFragment;
     private ShelterDetailsFragment shelterDetailsFragment;
 
     private MainViewModel viewModel;
@@ -78,15 +80,8 @@ public class MainActivity extends AppCompatActivity
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(MainViewModel.class);
 
         if(savedInstanceState==null){
-
             //initial fragment
-
-            dogsListFragment = new PetsListFragment();
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container, dogsListFragment)
-                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                    .commit();
-
+            listFragmentTransaction(FRAGMENT_LIST_TYPE_DOGS);
         }
     }
 
@@ -146,49 +141,14 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_dogs) {
-
-            viewModel.setPetsListFragmentType(FRAGMENT_LIST_TYPE_DOGS);
-
-            if (dogsListFragment == null)
-                dogsListFragment = new PetsListFragment();
-
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container, dogsListFragment)
-                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                    .commit();
-
-
-
+            listFragmentTransaction(FRAGMENT_LIST_TYPE_DOGS);
         } else if (id == R.id.nav_cats) {
-
-            viewModel.setPetsListFragmentType(FRAGMENT_LIST_TYPE_CATS);
-
-            if (catsListFragment == null)
-                catsListFragment = new PetsListFragment();
-
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container, catsListFragment)
-                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                    .commit();
-
+            listFragmentTransaction(FRAGMENT_LIST_TYPE_CATS);
         } else if (id == R.id.nav_shelters) {
-
-            if(sheltersListFragment==null)
-                sheltersListFragment = new SheltersListFragment();
-
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container, sheltersListFragment)
-                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                    .commit();
-
-
-        } else if (id == R.id.nav_tools) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
-        }
+            listFragmentTransaction(FRAGMENT_LIST_TYPE_SHELTERS);
+        } else if (id == R.id.nav_tools) {}
+        else if (id == R.id.nav_share) {}
+        else if (id == R.id.nav_send) {}
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -200,12 +160,13 @@ public class MainActivity extends AppCompatActivity
         if(petDetailsFragment == null)
             petDetailsFragment = new PetDetailsFragment();
 
-        getSupportFragmentManager()
-                .beginTransaction()
+        getSupportFragmentManager().beginTransaction()
+                .setCustomAnimations(R.anim.slide_top_anim,R.anim.fade_out_anim)
                 .replace(R.id.fragment_container, petDetailsFragment)
-                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                .addToBackStack(null).commit();
+                .addToBackStack(null)
+                .commit();
 
+        setTransitionAnimation(petDetailsFragment);
     }
 
     public void showShelterDetails(){
@@ -213,12 +174,12 @@ public class MainActivity extends AppCompatActivity
         if(shelterDetailsFragment == null)
             shelterDetailsFragment = new ShelterDetailsFragment();
 
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.fragment_container, shelterDetailsFragment)
-                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                .addToBackStack(null).commit();
+        setTransitionAnimation(shelterDetailsFragment);
 
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, shelterDetailsFragment)
+                .addToBackStack(null)
+                .commit();
     }
 
     public void setToolbarTitle(String toolbarTitle, int fragmentType) {
@@ -239,9 +200,49 @@ public class MainActivity extends AppCompatActivity
         getSupportActionBar().setTitle(toolbarTitle);
     }
 
-
     @Override
     public AndroidInjector<Fragment> supportFragmentInjector() {
         return dispatchingAndroidInjector;
     }
+
+    public void setTransitionAnimation(Fragment currentFragment){
+
+        Fragment previousFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+
+        Fade exitFade = new Fade();
+        exitFade.setDuration(getResources().getInteger(android.R.integer.config_shortAnimTime));
+        previousFragment.setExitTransition(exitFade);
+
+        Fade enterFade = new Fade();
+        enterFade.setDuration(getResources().getInteger(android.R.integer.config_shortAnimTime));
+        currentFragment.setEnterTransition(enterFade);
+
+    }
+
+    public void listFragmentTransaction(String listType){
+
+        Fragment fragment;
+        if(listType.equals(FRAGMENT_LIST_TYPE_SHELTERS)) {
+            if(sheltersListFragment==null)
+                sheltersListFragment=new SheltersListFragment();
+            fragment = sheltersListFragment;
+        } else {
+            viewModel.setPetsListFragmentType(listType);
+            if(listType.equals(FRAGMENT_LIST_TYPE_DOGS)) {
+                if(dogsListFragment==null)
+                    dogsListFragment = new PetsListFragment();
+                fragment = dogsListFragment;
+            } else {
+                if(catsListFragment==null)
+                    catsListFragment = new PetsListFragment();
+                fragment = catsListFragment;
+            }
+        }
+
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, fragment)
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                .commit();
+    }
+
 }

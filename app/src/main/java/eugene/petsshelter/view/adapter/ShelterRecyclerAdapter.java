@@ -1,6 +1,7 @@
 package eugene.petsshelter.view.adapter;
 
-import android.content.Context;
+import android.databinding.BindingAdapter;
+import android.databinding.DataBindingUtil;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v7.widget.RecyclerView;
@@ -8,57 +9,48 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import eugene.petsshelter.R;
+import eugene.petsshelter.databinding.ShelterListItemBinding;
 import eugene.petsshelter.model.api.GlideApp;
 import eugene.petsshelter.model.models.Shelter;
 
 
 public class ShelterRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
-    private Context context;
     private List<Shelter> shelters;
-
     private ItemClickCallback<Shelter> itemClickCallback;
 
-    public ShelterRecyclerAdapter(ArrayList<Shelter> shelters, ItemClickCallback<Shelter> itemClick){
+    public ShelterRecyclerAdapter(ItemClickCallback<Shelter> itemClick){
         itemClickCallback = itemClick;
-        this.shelters = shelters;
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        context = parent.getContext();
-
-        View shelterView = LayoutInflater.from(context).inflate(R.layout.shelter_list_item,parent,false);
-        return new ShelterViewHolder(shelterView);
+        ShelterListItemBinding shelterListItemBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()),
+                R.layout.shelter_list_item,parent,false);
+        return new ShelterViewHolder(shelterListItemBinding);
 
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        ((ShelterViewHolder)holder).bind(shelters.get(position));
+    }
 
-        ShelterViewHolder shelterViewHolder = (ShelterViewHolder)holder;
-        Shelter shelter = shelters.get(position);
-
-        GlideApp.with(context).load(shelter.getImageURL())
+    @BindingAdapter("bind:imageShelterUrl")
+    public static void loadImageIntoShelterListItem(ImageView imageView, String url) {
+        GlideApp.with(imageView.getContext()).load(url)
                 .centerCrop()
                 .placeholder(new ColorDrawable(Color.LTGRAY))
                 .error(new ColorDrawable(Color.RED))
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .into(shelterViewHolder.image);
-
-        shelterViewHolder.title.setText(shelter.getTitle());
-        shelterViewHolder.city.setText(shelter.getGeoLocation().getCity());
-        shelterViewHolder.country.setText(shelter.getGeoLocation().getCountry());
-
+                .into(imageView);
     }
 
 
@@ -71,25 +63,21 @@ public class ShelterRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
     public class ShelterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
-        public ImageView image;
-        public TextView title;
-        public TextView city;
-        public TextView country;
+        private ShelterListItemBinding binding;
 
-        public ShelterViewHolder(View itemView) {
-            super(itemView);
+        public ShelterViewHolder(ShelterListItemBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
+            binding.getRoot().setOnClickListener(this);
+        }
 
-            image = itemView.findViewById(R.id.shelter_image);
-            title = itemView.findViewById(R.id.shelter_title);
-            city = itemView.findViewById(R.id.shelter_city);
-            country = itemView.findViewById(R.id.shelter_country);
-
-            itemView.setOnClickListener(this);
+        public void bind(Shelter shelter){
+            binding.setShelter(shelter);
+            binding.executePendingBindings();
         }
 
         @Override
         public void onClick(View view) {
-
             itemClickCallback.onItemClick(shelters.get(getAdapterPosition()));
         }
     }

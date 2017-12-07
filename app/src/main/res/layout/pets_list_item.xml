@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable name="pet" type="eugene.petsshelter.model.models.Pet"/>
+        <variable name="handler" type="eugene.petsshelter.view.ui.ButtonClickHandler"/>
+    </data>
 <android.support.v7.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/card_view"
     style="@style/CardView.Light"
     android:layout_width="match_parent"
@@ -25,7 +28,8 @@
             card_view:layout_constraintEnd_toEndOf="parent"
             card_view:layout_constraintStart_toStartOf="parent"
             card_view:layout_constraintTop_toTopOf="parent"
-            tools:srcCompat="@drawable/ic_launcher_background"/>
+            tools:srcCompat="@drawable/ic_launcher_background"
+            app:imagePetUrl="@{pet.imageURL}"/>
 
 
         <View
@@ -52,7 +56,8 @@
             card_view:layout_constraintBottom_toBottomOf="@+id/pet_image"
             card_view:layout_constraintEnd_toEndOf="@+id/pet_image"
             card_view:layout_constraintStart_toStartOf="parent"
-            tools:text="TextView"/>
+            tools:text="TextView"
+            android:text="@{pet.name}"/>
 
         <TextView
             android:id="@+id/shelter_title"
@@ -64,8 +69,25 @@
             card_view:layout_constraintBottom_toBottomOf="parent"
             card_view:layout_constraintStart_toStartOf="parent"
             card_view:layout_constraintTop_toBottomOf="@+id/pet_image"
+            android:text="@{pet.adopted ? @string/adopted : @string/looking_for_home}"
+            android:textColor="@{pet.adopted ? @android:color/holo_orange_light : @android:color/holo_green_light}"
             tools:text="TextView"/>
+
+        <ImageView
+            android:id="@+id/add_fav_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:padding="8dp"
+            android:src="@drawable/ic_favorite_border_24dp"
+            android:tint="@color/colorAccent"
+            card_view:layout_constraintBottom_toBottomOf="parent"
+            card_view:layout_constraintEnd_toEndOf="parent"
+            card_view:layout_constraintTop_toBottomOf="@+id/view"
+            android:onClick="@{handler::onButtonClick}"/>
 
     </android.support.constraint.ConstraintLayout>
 
 </android.support.v7.widget.CardView>
+</layout>

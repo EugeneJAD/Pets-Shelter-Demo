@@ -15,12 +15,12 @@ abstract class ViewModelModule {
     @Binds
     @IntoMap
     @ViewModelKey(MainViewModel.class)
-    abstract ViewModel bindMainViewModel(MainViewModel userViewModel);
+    abstract ViewModel bindMainViewModel(MainViewModel mainViewModel);
 
     @Binds
     @IntoMap
     @ViewModelKey(MapViewModel.class)
-    abstract ViewModel bindMapViewModel(MapViewModel searchViewModel);
+    abstract ViewModel bindMapViewModel(MapViewModel mapViewModel);
 
     @Binds
     abstract ViewModelProvider.Factory bindViewModelFactory(PetsShelterViewModelFactory factory);

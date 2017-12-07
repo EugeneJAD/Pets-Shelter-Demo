@@ -22,7 +22,7 @@ import eugene.petsshelter.viewmodel.MainViewModel;
  */
 public class ShelterDetailsFragment extends Fragment implements ButtonClickHandler{
 
-    public static final String TAG = ShelterDetailsFragment.class.getSimpleName();
+    private static final String TAG = ShelterDetailsFragment.class.getSimpleName();
 
     private FragmentShelterDetailsBinding detailsBinding;
     private Shelter selectedShelter;

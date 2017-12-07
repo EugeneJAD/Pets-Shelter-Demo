@@ -95,7 +95,7 @@
 
             <TextView
                 android:id="@+id/age_details"
-                android:layout_width="7dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="24dp"
