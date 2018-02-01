@@ -1,11 +1,14 @@
 package eugene.petsshelter.di;
 
+import android.support.v4.app.FragmentActivity;
+
 import dagger.Module;
-import dagger.android.ContributesAndroidInjector;
-import eugene.petsshelter.view.ui.MainActivity;
+import dagger.Provides;
+import eugene.petsshelter.ui.main.MainActivity;
 
 @Module
-public abstract class MainActivityModule {
-    @ContributesAndroidInjector(modules = FragmentBuildersModule.class)
-    abstract MainActivity contributeMainActivity();
+public class MainActivityModule {
+
+    @Provides
+    FragmentActivity provideActivity(MainActivity activity) {return activity;}
 }

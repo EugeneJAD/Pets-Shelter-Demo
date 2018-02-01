@@ -9,6 +9,7 @@ import dagger.android.AndroidInjector;
 import dagger.android.DispatchingAndroidInjector;
 import dagger.android.HasActivityInjector;
 import eugene.petsshelter.di.AppInjector;
+import timber.log.Timber;
 
 
 public class PetsShelterApp extends Application implements HasActivityInjector {
@@ -19,6 +20,10 @@ public class PetsShelterApp extends Application implements HasActivityInjector {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        if (BuildConfig.DEBUG) {
+            Timber.plant(new Timber.DebugTree());
+        }
 
         AppInjector.init(this);
 

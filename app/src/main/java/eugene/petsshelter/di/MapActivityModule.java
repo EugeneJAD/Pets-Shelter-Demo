@@ -1,12 +1,15 @@
 package eugene.petsshelter.di;
 
+import android.support.v4.app.FragmentActivity;
+
 import dagger.Module;
-import dagger.android.ContributesAndroidInjector;
-import eugene.petsshelter.view.ui.MapsActivity;
+import dagger.Provides;
+import eugene.petsshelter.ui.map.MapsActivity;
 
 
 @Module
-public abstract class MapActivityModule {
-    @ContributesAndroidInjector(modules = FragmentBuildersModule.class)
-    abstract MapsActivity contributeMapsActivity();
+public class MapActivityModule {
+
+    @Provides
+    FragmentActivity provideActivity(MapsActivity activity) {return activity;}
 }

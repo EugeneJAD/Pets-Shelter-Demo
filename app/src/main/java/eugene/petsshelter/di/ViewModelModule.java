@@ -6,8 +6,11 @@ import android.arch.lifecycle.ViewModelProvider;
 import dagger.Binds;
 import dagger.Module;
 import dagger.multibindings.IntoMap;
-import eugene.petsshelter.viewmodel.MainViewModel;
-import eugene.petsshelter.viewmodel.MapViewModel;
+import eugene.petsshelter.ui.main.MainViewModel;
+import eugene.petsshelter.ui.main.PetDetailsViewModel;
+import eugene.petsshelter.ui.main.PetsViewModel;
+import eugene.petsshelter.ui.main.ShelterViewModel;
+import eugene.petsshelter.ui.map.MapViewModel;
 import eugene.petsshelter.viewmodel.PetsShelterViewModelFactory;
 
 @Module
@@ -21,6 +24,21 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(MapViewModel.class)
     abstract ViewModel bindMapViewModel(MapViewModel mapViewModel);
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(PetsViewModel.class)
+    abstract ViewModel bindPetsViewModel(PetsViewModel petsViewModel);
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(PetDetailsViewModel.class)
+    abstract ViewModel bindPetDetailsViewModel(PetDetailsViewModel petDetailsViewModel);
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(ShelterViewModel.class)
+    abstract ViewModel bindShelterViewModel(ShelterViewModel shelterViewModel);
 
     @Binds
     abstract ViewModelProvider.Factory bindViewModelFactory(PetsShelterViewModelFactory factory);

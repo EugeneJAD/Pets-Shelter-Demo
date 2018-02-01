@@ -4,4 +4,10 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="colorDarkGrey">#424242</color>
+
+    <color name="list_bg">#F5F5F5</color>
+
+    <color name="hex_black_50">#80000000</color>
+    <color name="hex_black_30">#4D000000</color>
+
 </resources>

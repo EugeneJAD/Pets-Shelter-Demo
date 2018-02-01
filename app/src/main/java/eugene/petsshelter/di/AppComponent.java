@@ -7,10 +7,14 @@ import javax.inject.Singleton;
 
 import dagger.BindsInstance;
 import dagger.Component;
+import dagger.android.AndroidInjectionModule;
 import eugene.petsshelter.PetsShelterApp;
 
-@Component(modules = {AppModule.class,MainActivityModule.class, MapActivityModule.class})
 @Singleton
+@Component(modules = {
+        AndroidInjectionModule.class,
+        AppModule.class,
+        ActivityBuildersModule.class})
 public interface AppComponent {
 
     @Component.Builder

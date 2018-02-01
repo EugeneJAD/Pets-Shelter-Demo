@@ -14,9 +14,9 @@
             android:icon="@drawable/ic_pets_24dp"
             android:title="@string/cats_fragment_title"/>
         <item
-            android:id="@+id/nav_shelters"
+            android:id="@+id/nav_shelter"
             android:icon="@drawable/ic_location_city_24dp"
-            android:title="@string/shelters_fragment_title"/>
+            android:title="@string/shelter_fragment_title"/>
         <item
             android:id="@+id/nav_tools"
             android:icon="@drawable/ic_menu_manage"
