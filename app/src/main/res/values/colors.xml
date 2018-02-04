@@ -10,4 +10,25 @@
     <color name="hex_black_50">#80000000</color>
     <color name="hex_black_30">#4D000000</color>
 
+    <color name="material_green_500">#4CAF50</color>
+    <color name="material_green_600">#43A047</color>
+    <color name="material_green_700">#388E3C</color>
+    <color name="material_green_800">#2E7D32</color>
+    <color name="material_green_900">#1B5E20</color>
+    <color name="material_green_a200">#69F0AE</color>
+    <color name="material_lime_a700">#AEEA00</color>
+    <color name="material_purple_a700">#AA00FF</color>
+
+
+    <color name="material_purple_400">#AB47BC</color>
+    <color name="material_purple_600">#8E24AA</color>
+    <color name="material_purple_800">#6A1B9A</color>
+
+    <color name="material_blue_a200">#448AFF</color>
+    <color name="material_blue_600">#1E88E5</color>
+    <color name="material_blue_700">#1976D2</color>
+    <color name="material_blue_900">#0D47A1</color>
+
+    <color name="material_pink_a700">#C51162</color>
+
 </resources>

@@ -5,6 +5,7 @@ import android.arch.lifecycle.LiveData;
 import java.util.List;
 
 import eugene.petsshelter.data.models.Pet;
+import eugene.petsshelter.data.models.Profile;
 import eugene.petsshelter.data.models.Shelter;
 
 /**
@@ -13,6 +14,7 @@ import eugene.petsshelter.data.models.Shelter;
 
 public interface Repository {
 
+    LiveData<Profile> getProfile(String email);
     LiveData<List<Pet>> getDogs();
     LiveData<List<Pet>> getCats();
     LiveData<Shelter> getShelter();

@@ -27,6 +27,7 @@ public class NavigationController implements Navigator{
         this.fragmentManager = activity.getSupportFragmentManager();
     }
 
+    public FragmentActivity getActivity(){return activity;}
 
     @Override
     public void finishActivity() {activity.finish();}
@@ -44,6 +45,11 @@ public class NavigationController implements Navigator{
     @Override
     public void startActivityForResult(@NonNull Class<? extends Activity> activityClass, int requestCode) {
         startActivityNavigation(activityClass, null, requestCode);
+    }
+
+    @Override
+    public void startActivityForResult(@NonNull Intent intent, int requestCode) {
+        activity.startActivityForResult(intent,requestCode);
     }
 
     @Override

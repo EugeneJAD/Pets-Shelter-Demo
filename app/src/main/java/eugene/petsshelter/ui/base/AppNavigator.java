@@ -3,9 +3,15 @@ package eugene.petsshelter.ui.base;
 
 import android.os.Bundle;
 
+import com.firebase.ui.auth.AuthUI;
+
+import java.util.Arrays;
+
 import javax.inject.Inject;
 
+import eugene.petsshelter.BuildConfig;
 import eugene.petsshelter.R;
+import eugene.petsshelter.ui.main.MainActivity;
 import eugene.petsshelter.ui.main.PetDetailsFragment;
 import eugene.petsshelter.ui.main.PetsListFragment;
 import eugene.petsshelter.ui.main.ShelterDetailsFragment;
@@ -13,6 +19,7 @@ import eugene.petsshelter.ui.map.MapsActivity;
 
 public class AppNavigator {
 
+    public static final int RC_SIGN_IN = 123;
     private final NavigationController navigation;
 
     @Inject
@@ -26,6 +33,11 @@ public class AppNavigator {
         Bundle args = new Bundle();
         args.putString(key,value);
         return args;
+    }
+
+    public void navigateToMain() {
+        navigation.startActivity(MainActivity.class);
+        navigation.finishActivity();
     }
 
     //Main Activity Navigation
@@ -51,4 +63,19 @@ public class AppNavigator {
     public void navigateToShelter() {navigation.replaceFragment(R.id.fragment_container, new ShelterDetailsFragment(),null);}
 
     public void navigateToMap(){navigation.startActivity(MapsActivity.class);}
+
+    public void navigateToLogin(){
+
+        navigation.startActivityForResult(
+            AuthUI.getInstance()
+                    .createSignInIntentBuilder()
+                    .setAvailableProviders(Arrays.asList(
+                            new AuthUI.IdpConfig.Builder(AuthUI.EMAIL_PROVIDER).build(),
+                            new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build()))
+                    .setTheme(R.style.AppTheme)
+                    .setLogo(R.drawable.ic_pet_logo_2)
+                    .setIsSmartLockEnabled(!BuildConfig.DEBUG, true)
+                    .build(),
+            RC_SIGN_IN);
+    }
 }

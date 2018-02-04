@@ -1,6 +1,8 @@
 package eugene.petsshelter.ui.main;
 
+import android.content.Intent;
 import android.content.res.Configuration;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -10,6 +12,12 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.firebase.ui.auth.AuthUI;
+import com.firebase.ui.auth.ErrorCodes;
+import com.firebase.ui.auth.IdpResponse;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 import javax.inject.Inject;
 
 import dagger.android.AndroidInjector;
@@ -17,8 +25,11 @@ import dagger.android.DispatchingAndroidInjector;
 import dagger.android.support.HasSupportFragmentInjector;
 import eugene.petsshelter.R;
 import eugene.petsshelter.databinding.ActivityMainBinding;
+import eugene.petsshelter.databinding.NavHeaderMainBinding;
 import eugene.petsshelter.ui.base.AppNavigator;
 import eugene.petsshelter.ui.base.BaseActivity;
+import eugene.petsshelter.utils.SnackbarUtils;
+import timber.log.Timber;
 
 public class MainActivity extends BaseActivity<ActivityMainBinding,MainViewModel>
         implements NavigationView.OnNavigationItemSelectedListener, HasSupportFragmentInjector {
@@ -36,10 +47,18 @@ public class MainActivity extends BaseActivity<ActivityMainBinding,MainViewModel
 
     private ActionBarDrawerToggle toggle;
 
+    private FirebaseAuth mFirebaseAuth;
+    private FirebaseAuth.AuthStateListener mAuthStateListener;
+    private FirebaseUser user;
+
+    NavHeaderMainBinding navHeaderBinding;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setAndBindContentView(R.layout.activity_main);
+
+        Timber.d("onCreate");
 
         if(getSupportActionBar()==null)
             setSupportActionBar(binding.toolbar);
@@ -49,20 +68,58 @@ public class MainActivity extends BaseActivity<ActivityMainBinding,MainViewModel
         binding.drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
+        binding.navView.setNavigationItemSelectedListener(this);
+        //Bind Navigation Header
+        navHeaderBinding = DataBindingUtil.inflate(this.getLayoutInflater(), R.layout.nav_header_main,binding.navView,false);
+        binding.navView.addHeaderView(navHeaderBinding.getRoot());
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
-        NavigationView navigationView = findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+        //Firebase Auth
+        mFirebaseAuth = FirebaseAuth.getInstance();
 
-        if(savedInstanceState==null){navigator.navigateToDogs();}
+        mAuthStateListener = firebaseAuth -> {
+            user = firebaseAuth.getCurrentUser();
+            if (user == null) {onSignedOutCleanup();
+            } else {onSignedInInitialize();}
+        };
+
+        if(savedInstanceState==null){
+            navigator.navigateToDogs();
+            if(user==null) navigator.navigateToLogin();
+        }
 
         observeViewModel();
     }
 
     private void observeViewModel() {
+        viewModel.getProfile().observe(this, profile ->navHeaderBinding.setProfile(profile));
+    }
+
+    private void onSignedInInitialize() {viewModel.reloadUserData(user.getEmail());}
+
+    private void onSignedOutCleanup() {viewModel.reloadUserData(null);}
+
+    private void signOut() {
+        AuthUI.getInstance()
+                .signOut(this)
+                .addOnCompleteListener(task ->{ if(task.isSuccessful()) SnackbarUtils.showSnackbar(binding.getRoot(), getString(R.string.signed_out));});
+    }
 
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mFirebaseAuth.addAuthStateListener(mAuthStateListener);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (mAuthStateListener != null) {
+            mFirebaseAuth.removeAuthStateListener(mAuthStateListener);
+        }
     }
 
     @Override
@@ -80,9 +137,8 @@ public class MainActivity extends BaseActivity<ActivityMainBinding,MainViewModel
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
+        if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            binding.drawerLayout.closeDrawer(GravityCompat.START);
         } else if(getSupportFragmentManager().findFragmentById(R.id.fragment_container)
                 instanceof ShelterDetailsFragment ) {
             navigator.navigateToDogs();
@@ -102,13 +158,18 @@ public class MainActivity extends BaseActivity<ActivityMainBinding,MainViewModel
 
         if (toggle.onOptionsItemSelected(item)) return true;
 
-        int id = item.getItemId();
-
-        if (id == R.id.action_settings) return true;
-        else if (id == android.R.id.home)navigator.popUpBackStack();
+        switch (item.getItemId()){
+            case R.id.action_sign_out:
+                signOut();
+                break;
+            case android.R.id.home:
+                navigator.popUpBackStack();
+                break;
+        }
 
         return super.onOptionsItemSelected(item);
     }
+
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -152,4 +213,33 @@ public class MainActivity extends BaseActivity<ActivityMainBinding,MainViewModel
 
     @Override
     public AndroidInjector<Fragment> supportFragmentInjector() {return dispatchingAndroidInjector;}
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == AppNavigator.RC_SIGN_IN) {
+            IdpResponse response = IdpResponse.fromResultIntent(data);
+
+            if (resultCode == RESULT_OK) {
+                SnackbarUtils.showSnackbar(binding.getRoot(),getString(R.string.sign_in_successful));
+                return;
+            } else {
+                if (response == null) {
+                    // User pressed back button
+                    SnackbarUtils.showSnackbar(binding.getRoot(),getString(R.string.sign_in_cancelled));
+                    return;
+                }
+                if (response.getErrorCode() == ErrorCodes.NO_NETWORK) {
+                    SnackbarUtils.showSnackbar(binding.getRoot(),getString(R.string.no_internet_connection));
+                    return;
+                }
+                if (response.getErrorCode() == ErrorCodes.UNKNOWN_ERROR) {
+                    SnackbarUtils.showSnackbar(binding.getRoot(),getString(R.string.sign_in_unknown_error));
+                    return;
+                }
+            }
+            SnackbarUtils.showSnackbar(binding.getRoot(),getString(R.string.sign_in_failed));
+        }
+    }
 }

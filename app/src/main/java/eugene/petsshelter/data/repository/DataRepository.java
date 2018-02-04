@@ -3,12 +3,16 @@ package eugene.petsshelter.data.repository;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import eugene.petsshelter.data.models.Pet;
+import eugene.petsshelter.data.models.Profile;
 import eugene.petsshelter.data.models.Shelter;
 import eugene.petsshelter.data.repository.remote.FirebaseRepository;
 import eugene.petsshelter.ui.main.PetsListFragment;
@@ -23,8 +27,17 @@ public class DataRepository implements Repository {
 
     @Inject FirebaseRepository remoteRepo;
 
+    private MutableLiveData<Profile> profile = new MutableLiveData<>();
+
     @Inject
     public DataRepository() {}
+
+    @Override
+    public LiveData<Profile> getProfile(String email) {
+        Timber.d("getProfile %s",email);
+        if (profile.getValue() != null && profile.getValue().getEmail().equals(email)) {return profile;}
+        else {return getUserProfile();}
+    }
 
     @Override
     public LiveData<List<Pet>> getDogs() {return remoteRepo.getDogs();}
@@ -43,11 +56,20 @@ public class DataRepository implements Repository {
     @Override
     public LiveData<Pet> getCatById(String id) {return findPetById(id, PetsListFragment.FRAGMENT_LIST_TYPE_CATS);}
 
-
     @Override
     public void detachFirebaseReadListeners() {
         Timber.d("detachFirebaseReadListeners");
         remoteRepo.detachFirebaseReadListeners();
+    }
+
+    private LiveData<Profile> getUserProfile() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        if(user==null){return AbsentLiveData.create();}
+
+        Profile p = new Profile(user.getDisplayName(),user.getPhoneNumber(),user.getEmail(),user.getPhotoUrl().toString());
+        profile.setValue(p);
+        return profile;
     }
 
     private LiveData<Pet> findPetById(String id, String type){
@@ -61,11 +83,13 @@ public class DataRepository implements Repository {
         if(pets==null || pets.isEmpty()) {return AbsentLiveData.create();}
 
         for(Pet p: pets) {
-            if (p.getId().equals(id)) pet.setValue(p);
+            if (p.getId().equals(id)) {
+                pet.setValue(p);
+                return pet;
+            }
         }
 
-        if(pet.getValue()==null){return AbsentLiveData.create();}
-        else return pet;
+        return AbsentLiveData.create();
     }
 
 }

@@ -1,6 +1,7 @@
 package eugene.petsshelter.ui.base;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.AnimRes;
 import android.support.annotation.IdRes;
@@ -17,6 +18,7 @@ public interface Navigator {
     void startActivity(@NonNull Class<? extends Activity> activityClass);
     void startActivity(@NonNull Class<? extends Activity> activityClass, Bundle args);
     void startActivityForResult(@NonNull Class<? extends Activity> activityClass, int requestCode);
+    void startActivityForResult(@NonNull Intent intent, int requestCode);
 
     void replaceFragment(@IdRes int containerId, @NonNull Fragment fragment, Bundle args);
     void replaceFragment(int containerId, @NonNull Fragment fragment, Bundle args, String fragmentTag);
