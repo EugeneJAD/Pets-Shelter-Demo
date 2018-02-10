@@ -4,19 +4,16 @@
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">@color/material_blue_700</item>
         <item name="colorPrimaryDark">@color/material_blue_900</item>
-        <item name="colorAccent">@color/material_pink_a700</item>
+        <item name="colorAccent">@color/colorAccent</item>
 
         <!--<item name="colorControlNormal">@color/material_green_500</item>-->
         <!--<item name="colorControlActivated">@color/material_lime_a700</item>-->
         <!--<item name="colorControlHighlight">@color/material_green_a200</item>-->
     </style>
 
-
-
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
-
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
@@ -39,6 +36,34 @@
         <item name="android:layout_height">match_parent</item>
     </style>
 
+    <!-- Radio Buttons -->
+    <style name="RadioButton" parent="WrappedView">
+        <item name="android:layout_weight">1</item>
+        <item name="android:theme">@style/WhiteRadioButton</item>
+        <item name="colorControlNormal">@color/white</item>
+        <item name="colorControlActivated">@color/white</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:paddingEnd">@dimen/screen_edge_standard_margin</item>
+    </style>
 
+    <style name="WhiteRadioButton" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorControlNormal">@android:color/white</item>
+        <item name="colorControlActivated">@android:color/white</item>
+    </style>
+
+    <!-- Progress Bar -->
+    <style name="PetsProgressBar" parent="Widget.AppCompat.ProgressBar">
+        <item name="android:layout_width">@dimen/progress_bar_size</item>
+        <item name="android:layout_height">@dimen/progress_bar_size</item>
+        <item name="android:indeterminateTint">@color/material_yellow_a200</item>
+        <item name="android:layout_centerInParent">true</item>
+    </style>
+
+    <!-- Buttons -->
+    <style name="DonateButton" parent="Widget.AppCompat.Button.Borderless">
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:background">@color/material_blue_600</item>
+        <item name="android:text">@string/donate</item>
+    </style>
 
 </resources>

@@ -11,6 +11,7 @@ import javax.inject.Inject;
 
 import eugene.petsshelter.BuildConfig;
 import eugene.petsshelter.R;
+import eugene.petsshelter.ui.donation.DonationActivity;
 import eugene.petsshelter.ui.main.MainActivity;
 import eugene.petsshelter.ui.main.PetDetailsFragment;
 import eugene.petsshelter.ui.main.PetsListFragment;
@@ -78,4 +79,6 @@ public class AppNavigator {
                     .build(),
             RC_SIGN_IN);
     }
+
+    public void navigateToDonation(){navigation.startActivity(DonationActivity.class);}
 }

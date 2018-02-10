@@ -3,6 +3,7 @@ package eugene.petsshelter.di;
 
 import dagger.Module;
 import dagger.android.ContributesAndroidInjector;
+import eugene.petsshelter.ui.donation.DonationActivity;
 import eugene.petsshelter.ui.main.MainActivity;
 import eugene.petsshelter.ui.map.MapsActivity;
 
@@ -18,6 +19,9 @@ public abstract class ActivityBuildersModule {
 
     @ContributesAndroidInjector(modules = {MapActivityModule.class, FragmentBuildersModule.class})
     abstract MapsActivity contributeMapsActivity();
+
+    @ContributesAndroidInjector(modules = {DonationActivityModule.class, FragmentBuildersModule.class})
+    abstract DonationActivity contributeDonationActivity();
 
 }
 

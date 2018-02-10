@@ -3,6 +3,7 @@ package eugene.petsshelter.data.repository;
 import android.arch.lifecycle.LiveData;
 
 import java.util.List;
+import java.util.Map;
 
 import eugene.petsshelter.data.models.Pet;
 import eugene.petsshelter.data.models.Profile;
@@ -20,5 +21,7 @@ public interface Repository {
     LiveData<Shelter> getShelter();
     LiveData<Pet> getDogById(String id);
     LiveData<Pet> getCatById(String id);
+    LiveData<String> getStripeChargeResponse();
+    void createCharge(Map<String,Object> fields);
     void detachFirebaseReadListeners();
 }

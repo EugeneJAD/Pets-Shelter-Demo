@@ -12,6 +12,7 @@ import eugene.petsshelter.data.repository.DataRepository;
 import eugene.petsshelter.data.repository.Repository;
 import eugene.petsshelter.data.repository.local.PrefsManager;
 import eugene.petsshelter.data.repository.remote.FirebaseRepository;
+import eugene.petsshelter.ui.donation.DonationActivityViewModel;
 import eugene.petsshelter.ui.main.MainViewModel;
 import eugene.petsshelter.ui.main.PetDetailsViewModel;
 import eugene.petsshelter.ui.main.PetsViewModel;
@@ -21,6 +22,7 @@ import eugene.petsshelter.ui.map.MapViewModel;
 
 @Module (includes = ViewModelModule.class)
 class AppModule {
+
 
     @Provides @Singleton
     PrefsManager providePrefsManager(Application application) {return new PrefsManager(application);}
@@ -52,4 +54,7 @@ class AppModule {
 
     @Provides
     Class<ShelterViewModel> provideShelterViewModel(){return ShelterViewModel.class;}
+
+    @Provides
+    Class<DonationActivityViewModel> provideDonationActivityViewModel(){return DonationActivityViewModel.class;}
 }

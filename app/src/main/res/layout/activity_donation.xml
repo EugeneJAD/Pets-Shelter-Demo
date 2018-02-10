@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <ScrollView
+        android:id="@+id/root"
+        style="@style/FullScreenView"
+        android:fillViewport="true">
+        <FrameLayout
+            style="@style/FullScreenView">
+
+            <android.support.constraint.ConstraintLayout
+                android:id="@+id/content_container"
+                style="@style/FullWidthView">
+
+                <TextView
+                    android:id="@+id/donation_title"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/screen_edge_standard_margin"
+                    android:layout_marginStart="@dimen/screen_edge_standard_margin"
+                    android:layout_marginTop="@dimen/screen_edge_standard_margin"
+                    android:text="@string/donation_title"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:textColor="@color/material_blue_700"
+                    android:textAlignment="center"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"/>
+
+
+                <TextView
+                    android:id="@+id/donation_text"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/screen_edge_standard_margin"
+                    android:layout_marginStart="@dimen/screen_edge_standard_margin"
+                    android:layout_marginTop="@dimen/screen_edge_standard_margin"
+                    android:text="@string/donation_text"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/donation_title"/>
+
+                <RadioGroup
+                    android:id="@+id/radio_group"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/screen_edge_standard_margin"
+                    android:layout_marginStart="@dimen/screen_edge_standard_margin"
+                    android:layout_marginTop="@dimen/screen_right_edge_icons_margin"
+                    android:orientation="horizontal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/donation_text">
+
+                    <RadioButton
+                        android:id="@+id/radioButton"
+                        style="@style/RadioButton"
+                        android:background="@color/material_purple_600"
+                        android:onClick="onAmountSelected"
+                        android:text="1$"/>
+
+                    <RadioButton
+                        android:id="@+id/radioButton2"
+                        style="@style/RadioButton"
+                        android:background="@color/material_green_700"
+                        android:onClick="onAmountSelected"
+                        android:text="2$"/>
+
+                    <RadioButton
+                        android:id="@+id/radioButton3"
+                        style="@style/RadioButton"
+                        android:background="@color/material_blue_700"
+                        android:onClick="onAmountSelected"
+                        android:text="3$"/>
+                </RadioGroup>
+
+                <com.stripe.android.view.CardInputWidget
+                    android:id="@+id/card_input_widget"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/screen_edge_standard_margin"
+                    android:layout_marginEnd="@dimen/screen_edge_standard_margin"
+                    android:layout_marginTop="@dimen/screen_right_edge_icons_margin"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/radio_group"/>
+
+                <Button
+                    android:id="@+id/donate_button"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    style="@style/DonateButton"
+                    android:layout_marginEnd="@dimen/screen_edge_standard_margin"
+                    android:layout_marginStart="@dimen/screen_edge_standard_margin"
+                    android:layout_marginTop="@dimen/screen_right_edge_icons_margin"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/card_input_widget"
+                    android:onClick="onApplyClick"/>
+
+            </android.support.constraint.ConstraintLayout>
+
+            <include
+                android:id="@+id/progress_view"
+                layout="@layout/progress_view"/>
+
+        </FrameLayout>
+    </ScrollView>
+</layout>

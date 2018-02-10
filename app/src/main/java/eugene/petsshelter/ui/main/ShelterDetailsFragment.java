@@ -51,7 +51,12 @@ public class ShelterDetailsFragment extends BaseFragment<FragmentShelterDetailsB
 
     @Override
     public void onButtonClick(View view) {
-        Timber.d("onButtonClick view = %s",view.getId());
-        if(view.getId()==binding.mapButton.getId()) navigator.navigateToMap();
+
+        int id = view.getId();
+
+        Timber.d("onButtonClick id = %s",id);
+        Timber.d("onButtonClick id donateButton = id %s",id==binding.donateButton.getId());
+        if(id==binding.mapButton.getId()) navigator.navigateToMap();
+        else if(id==binding.donateButton.getId()) navigator.navigateToDonation();
     }
 }

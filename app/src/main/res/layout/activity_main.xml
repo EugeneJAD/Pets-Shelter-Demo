@@ -6,8 +6,7 @@
 
 <android.support.v4.widget.DrawerLayout
     android:id="@+id/drawer_layout"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    style="@style/FullScreenView"
     android:fitsSystemWindows="true"
     tools:openDrawer="start">
 

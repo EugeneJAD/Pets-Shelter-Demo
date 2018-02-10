@@ -83,4 +83,12 @@ public class BindingAdapters {
         view.setVisibility(TextUtils.isEmpty(data) ? View.VISIBLE : View.GONE);
     }
 
+    @BindingAdapter("loadingVisibility")
+    public static void showHide(View view, Boolean isLoading) {
+        if(isLoading!=null)
+            view.setVisibility(isLoading ? View.VISIBLE : View.GONE);
+        else
+            view.setVisibility(View.GONE);
+    }
+
 }

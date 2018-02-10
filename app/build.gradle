@@ -72,8 +72,19 @@ dependencies {
 
     //Gson
     implementation 'com.google.code.gson:gson:2.8.2'
+
+    //Stripe
+    compile 'com.stripe:stripe-android:6.1.1'
+
+    //Retrofit
+    compile 'com.squareup.retrofit2:retrofit:2.3.0'
+
+    //Retrofit Gson Converter
+    compile 'com.squareup.retrofit2:converter-gson:2.3.0'
+
+    //OkHttpClient logging
+    compile 'com.squareup.okhttp3:logging-interceptor:3.9.0'
+
 }
-
-
 
 apply plugin: 'com.google.gms.google-services'

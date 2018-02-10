@@ -87,6 +87,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding,MainViewModel
 
         if(savedInstanceState==null){
             navigator.navigateToDogs();
+            user = mFirebaseAuth.getCurrentUser();
             if(user==null) navigator.navigateToLogin();
         }
 
@@ -102,11 +103,16 @@ public class MainActivity extends BaseActivity<ActivityMainBinding,MainViewModel
     private void onSignedOutCleanup() {viewModel.reloadUserData(null);}
 
     private void signOut() {
+
+        if(mFirebaseAuth.getCurrentUser()==null)
+            return;
+
         AuthUI.getInstance()
                 .signOut(this)
-                .addOnCompleteListener(task ->{ if(task.isSuccessful()) SnackbarUtils.showSnackbar(binding.getRoot(), getString(R.string.signed_out));});
+                .addOnCompleteListener(task ->{
+                    if(task.isSuccessful())
+                        SnackbarUtils.showSnackbar(binding.getRoot(), getString(R.string.signed_out), SnackbarUtils.TYPE_SUCCESS);});
     }
-
 
     @Override
     protected void onResume() {
@@ -222,24 +228,24 @@ public class MainActivity extends BaseActivity<ActivityMainBinding,MainViewModel
             IdpResponse response = IdpResponse.fromResultIntent(data);
 
             if (resultCode == RESULT_OK) {
-                SnackbarUtils.showSnackbar(binding.getRoot(),getString(R.string.sign_in_successful));
+                SnackbarUtils.showSnackbar(binding.getRoot(),getString(R.string.sign_in_successful), SnackbarUtils.TYPE_SUCCESS);
                 return;
             } else {
                 if (response == null) {
                     // User pressed back button
-                    SnackbarUtils.showSnackbar(binding.getRoot(),getString(R.string.sign_in_cancelled));
+                    SnackbarUtils.showSnackbar(binding.getRoot(),getString(R.string.sign_in_cancelled),SnackbarUtils.TYPE_INFO);
                     return;
                 }
                 if (response.getErrorCode() == ErrorCodes.NO_NETWORK) {
-                    SnackbarUtils.showSnackbar(binding.getRoot(),getString(R.string.no_internet_connection));
+                    SnackbarUtils.showSnackbar(binding.getRoot(),getString(R.string.no_internet_connection),SnackbarUtils.TYPE_ERROR);
                     return;
                 }
                 if (response.getErrorCode() == ErrorCodes.UNKNOWN_ERROR) {
-                    SnackbarUtils.showSnackbar(binding.getRoot(),getString(R.string.sign_in_unknown_error));
+                    SnackbarUtils.showSnackbar(binding.getRoot(),getString(R.string.sign_in_unknown_error),SnackbarUtils.TYPE_ERROR);
                     return;
                 }
             }
-            SnackbarUtils.showSnackbar(binding.getRoot(),getString(R.string.sign_in_failed));
+            SnackbarUtils.showSnackbar(binding.getRoot(),getString(R.string.sign_in_failed),SnackbarUtils.TYPE_ERROR);
         }
     }
 }

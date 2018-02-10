@@ -14,7 +14,9 @@ import eugene.petsshelter.PetsShelterApp;
 @Component(modules = {
         AndroidInjectionModule.class,
         AppModule.class,
-        ActivityBuildersModule.class})
+        ActivityBuildersModule.class,
+        RetrofitModule.class
+})
 public interface AppComponent {
 
     @Component.Builder

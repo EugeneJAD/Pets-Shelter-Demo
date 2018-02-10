@@ -4,12 +4,14 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
+    <!--Menu -->
     <string name="action_settings">Settings</string>
     <string name="main_menu_fragment_title">Home</string>
     <string name="dogs_fragment_title">Dogs</string>
     <string name="cats_fragment_title">Cats</string>
     <string name="shelter_fragment_title">Shelter</string>
 
+    <!--Pet details -->
     <string name="age">Age:</string>
     <string name="breed">Breed:</string>
     <string name="shelter">Shelter:</string>
@@ -20,6 +22,7 @@
     <string name="adopted">Adopted!</string>
     <string name="looking_for_home">looking for home</string>
 
+    <!--Shelter Info -->
     <string name="address">Address:</string>
     <string name="country">Country:</string>
     <string name="open_map">map</string>
@@ -31,7 +34,7 @@
     <string name="donate">Donate</string>
     <string name="title_activity_maps">Map</string>
 
-    //Firebase Auth
+    <!-- Firebase Auth -->
     <string name="sign_in_cancelled">Sign in cancelled</string>
     <string name="no_internet_connection">No internet connection</string>
     <string name="sign_in_unknown_error">Sign in unknown error</string>
@@ -39,6 +42,13 @@
     <string name="sign_in_successful">Sign in successful</string>
     <string name="signed_out">Signed out</string>
     <string name="sign_out">Sign out</string>
+    <string name="donation">Donation</string>
+
+    <!--Donation -->
+    <string name="donation_title">You can make a difference for Montreal\'s homeless animals!</string>
+    <string name="donation_text">As an all-volunteer organization, we rely on donations from foundations, local businesses, and individuals like you. Any help is vital to help these animals survive and find their own home.</string>
+    <string name="invalid_card">Invalid Card Data</string>
+    <string name="choose_amount">Choose an amount of your donation</string>
 
 
 </resources>
