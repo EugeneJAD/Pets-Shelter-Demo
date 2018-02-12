@@ -3,7 +3,7 @@
 <FrameLayout
     android:id="@+id/list_root"
     style="@style/FullScreenView"
-    android:background="@color/list_bg">
+    android:background="@color/light_bg">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view"

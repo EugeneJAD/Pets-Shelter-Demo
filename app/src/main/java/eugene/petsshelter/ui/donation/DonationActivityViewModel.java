@@ -16,6 +16,7 @@ import eugene.petsshelter.ui.base.BaseLoadingViewModel;
 public class DonationActivityViewModel extends BaseLoadingViewModel {
 
     @Inject Repository repository;
+    private int amount;
 
     @Inject
     public DonationActivityViewModel() {}
@@ -24,4 +25,6 @@ public class DonationActivityViewModel extends BaseLoadingViewModel {
 
     public LiveData<String> getChargeResponse(){return repository.getStripeChargeResponse();}
 
+    public int getAmount() {return amount;}
+    public void setAmount(int amount) {this.amount = amount;}
 }

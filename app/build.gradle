@@ -85,6 +85,9 @@ dependencies {
     //OkHttpClient logging
     compile 'com.squareup.okhttp3:logging-interceptor:3.9.0'
 
+    //ExpandableLayout
+    compile 'com.github.chuross:expandable-layout:1.0.5'
+
 }
 
 apply plugin: 'com.google.gms.google-services'

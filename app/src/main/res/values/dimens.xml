@@ -14,9 +14,15 @@
     <dimen name="screen_min_margin">4dp</dimen>
     <dimen name="screen_content_margin">8dp</dimen>
     <dimen name="screen_edge_standard_margin">16dp</dimen>
+    <dimen name="screen_medium_margin">24dp</dimen>
     <dimen name="screen_right_edge_icons_margin">32dp</dimen>
     <dimen name="screen_left_edge_content_margin">72dp</dimen>
 
     <!-- Progress bar -->
     <dimen name="progress_bar_size">80dp</dimen>
+
+    <!-- Radio Buttons -->
+    <dimen name="radio_button_height">32dp</dimen>
+
+
 </resources>

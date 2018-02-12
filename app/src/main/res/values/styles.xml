@@ -2,8 +2,8 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="colorPrimary">@color/material_blue_700</item>
-        <item name="colorPrimaryDark">@color/material_blue_900</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
 
         <!--<item name="colorControlNormal">@color/material_green_500</item>-->
@@ -36,20 +36,13 @@
         <item name="android:layout_height">match_parent</item>
     </style>
 
-    <!-- Radio Buttons -->
-    <style name="RadioButton" parent="WrappedView">
-        <item name="android:layout_weight">1</item>
-        <item name="android:theme">@style/WhiteRadioButton</item>
-        <item name="colorControlNormal">@color/white</item>
-        <item name="colorControlActivated">@color/white</item>
-        <item name="android:textColor">@color/white</item>
-        <item name="android:paddingEnd">@dimen/screen_edge_standard_margin</item>
-    </style>
-
-    <style name="WhiteRadioButton" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="colorControlNormal">@android:color/white</item>
-        <item name="colorControlActivated">@android:color/white</item>
-    </style>
+    <style name="Divider">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:layout_marginStart">@dimen/screen_edge_standard_margin</item>
+        <item name="android:layout_marginEnd">@dimen/screen_edge_standard_margin</item>
+        <item name="android:background">@color/divider_color</item>
+</style>
 
     <!-- Progress Bar -->
     <style name="PetsProgressBar" parent="Widget.AppCompat.ProgressBar">
@@ -65,5 +58,12 @@
         <item name="android:background">@color/material_blue_600</item>
         <item name="android:text">@string/donate</item>
     </style>
+
+    <style name="Button.Standard" parent="Widget.AppCompat.Button.Borderless">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@android:color/holo_blue_dark</item>
+    </style>
+
 
 </resources>

@@ -3,17 +3,33 @@
 
     <color name="white">#FFFFFF</color>
 
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorPrimary">#00AA8D</color>
+    <color name="colorPrimaryDark">#008975</color>
+    <color name="colorAccent">#00BF9A</color>
     <color name="colorDarkGrey">#424242</color>
 
-    <color name="list_bg">#F5F5F5</color>
+    <!-- White Text Color -->
+    <color name="textLightPrimary">@color/white</color> <!--%100 opacity-->
+    <color name="textLightSecondary">@android:color/secondary_text_dark</color> <!--%70 opacity-->
+    <color name="textLightDisabled">@android:color/secondary_text_dark_nodisable</color> <!-- %50 opacity-->
 
+    <!-- Dark Text Color -->
+    <color name="textDarkPrimary">@android:color/primary_text_light</color> <!--%87 opacity-->
+    <color name="textDarkSecondary">@android:color/secondary_text_light</color> <!--%54 opacity-->
+    <color name="textDarkDisabled">@android:color/secondary_text_light_nodisable</color> <!--%38 opacity-->
+
+    <!-- Background -->
+    <color name="light_bg">#F5F5F5</color>
+
+    <!-- Divider -->
+    <color name="divider_color">#1F000000</color> <!--%12 opacity-->
+
+    <!-- Hex -->
     <color name="hex_black_50">#80000000</color>
     <color name="hex_black_30">#4D000000</color>
     <color name="hex_black_20">#33000000</color>
 
+    <!-- Material -->
     <color name="material_green_500">#4CAF50</color>
     <color name="material_green_600">#43A047</color>
     <color name="material_green_700">#388E3C</color>
@@ -22,7 +38,6 @@
     <color name="material_green_a200">#69F0AE</color>
     <color name="material_lime_a700">#AEEA00</color>
     <color name="material_purple_a700">#AA00FF</color>
-
 
     <color name="material_purple_400">#AB47BC</color>
     <color name="material_purple_600">#8E24AA</color>
@@ -39,4 +54,8 @@
 
     <color name="material_yellow_500">#FFEB3B</color>
     <color name="material_yellow_a200">#FFFF00</color>
+
+    <color name="material_grey_400">#BDBDBD</color>
+    <color name="material_blue_500">#03A9F4</color>
+
 </resources>

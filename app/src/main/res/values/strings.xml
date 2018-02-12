@@ -42,13 +42,24 @@
     <string name="sign_in_successful">Sign in successful</string>
     <string name="signed_out">Signed out</string>
     <string name="sign_out">Sign out</string>
-    <string name="donation">Donation</string>
 
     <!--Donation -->
+    <string name="donation">Donation</string>
     <string name="donation_title">You can make a difference for Montreal\'s homeless animals!</string>
-    <string name="donation_text">As an all-volunteer organization, we rely on donations from foundations, local businesses, and individuals like you. Any help is vital to help these animals survive and find their own home.</string>
+    <string name="donation_text">Any help is vital to help these animals survive and find their own home.</string>
     <string name="invalid_card">Invalid Card Data</string>
     <string name="choose_amount">Choose an amount of your donation</string>
+    <string name="your_choice">Your Choice, $</string>
+    <string name="enter_amount">Enter amount</string>
+
+    <string name="error">Error</string>
+    <string name="card_not_valid">Card is not valid</string>
+    <string name="wrong_amount_format">Wrong amount format</string>
+
+    <string name="amount_donation">Amount of your donation</string>
+    <string name="minimum_donation">The minimum donation is $1</string>
+    <string name="card_information">Credit card information</string>
+    <string name="apply">Apply</string>
 
 
 </resources>
