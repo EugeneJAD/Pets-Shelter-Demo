@@ -1,0 +1,148 @@
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:stripe="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable name="handler" type="eugene.petsshelter.ui.adapter.ButtonClickHandler"/>
+        <variable name="vm" type="eugene.petsshelter.ui.donation.CardDonationViewModel"/>
+    </data>
+
+<android.support.design.widget.CoordinatorLayout
+    android:id="@+id/card_donation_root"
+    style="@style/FullScreenView">
+
+    <LinearLayout
+        style="@style/FullScreenView"
+        android:orientation="vertical">
+
+        <android.support.v7.widget.CardView
+            style="@style/CardViewDonation"
+            android:layout_marginTop="@dimen/screen_edge_standard_margin">
+
+            <LinearLayout
+                style="@style/FullWidthView"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/card_info_title"
+                    android:text = "@string/card_information"
+                    style="@style/CardTitleDonation"/>
+
+                <View style="@style/Divider"/>
+
+                <com.stripe.android.view.CardInputWidget
+                    android:id="@+id/card_input_widget"
+                    style="@style/FullWidthView"
+                    android:layout_margin="@dimen/screen_edge_standard_margin"
+                    stripe:cardTint="@android:color/holo_purple"/>
+
+
+                <android.support.v7.widget.AppCompatImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/screen_content_margin"
+                    app:srcCompat="@drawable/powered_by_stripe"
+                    android:layout_gravity="end"/>
+
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            style="@style/CardViewDonation">
+
+            <LinearLayout
+                style="@style/FullWidthView"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/amount_title"
+                    style="@style/CardTitleDonation"
+                    android:text = "@string/amount_donation"/>
+
+                <View style="@style/Divider"/>
+
+                <RadioGroup
+                    android:id="@+id/radio_group"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/screen_medium_margin"
+                    android:layout_marginEnd="@dimen/screen_edge_standard_margin"
+                    android:layout_marginStart="@dimen/screen_edge_standard_margin"
+
+                    android:orientation="horizontal">
+
+                    <RadioButton
+                        android:id="@+id/radioButton"
+                        style="@style/RadioButton"
+                        android:background="@color/material_deep_purple_400"
+                        android:onClick="@{handler::onButtonClick}"
+                        android:text="10$"/>
+
+                    <RadioButton
+                        android:id="@+id/radioButton2"
+                        style="@style/RadioButton"
+                        android:background="@color/material_blue_grey_500"
+                        android:onClick="@{handler::onButtonClick}"
+                        android:text="25$"/>
+
+                    <RadioButton
+                        android:id="@+id/radioButton3"
+                        style="@style/RadioButton"
+                        android:background="@color/material_indigo_400"
+                        android:onClick="@{handler::onButtonClick}"
+                        android:text="50$">
+                    </RadioButton>
+                </RadioGroup>
+
+                <com.github.chuross.library.ExpandableLayout
+                    android:id="@+id/choose_amount_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="1dp"
+                    android:layout_marginEnd="@dimen/screen_edge_standard_margin"
+                    android:layout_marginStart="@dimen/screen_edge_standard_margin"
+                    android:layout_marginBottom="@dimen/screen_medium_margin"
+                    app:layout_constraintTop_toBottomOf="@+id/radio_group"
+                    app:exl_collapseHeight = "@dimen/radio_button_height">
+
+                    <LinearLayout
+                        style="@style/FullWidthView"
+                        android:orientation="vertical">
+
+                        <RadioButton
+                            android:id="@+id/radioButton4"
+                            style="@style/RadioButton"
+                            android:layout_width="match_parent"
+                            android:background="@color/material_green_400"
+                            android:onClick="@{handler::onButtonClick}"
+                            android:text="@string/your_choice"/>
+
+                        <EditText
+                            android:id="@+id/amount_edit_text"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="numberDecimal"
+                            android:maxLength="5"
+                            android:hint="@string/enter_amount"
+                            android:text="@={vm.inputAmount}"/>
+
+                    </LinearLayout>
+                </com.github.chuross.library.ExpandableLayout>
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/donate_button"
+        style="@style/Button.Standard"
+        android:text="@string/apply"
+        android:layout_gravity="end|bottom"
+        android:layout_margin="@dimen/screen_edge_standard_margin"
+        android:onClick="@{handler::onButtonClick}"/>
+
+
+</android.support.design.widget.CoordinatorLayout>
+</layout>

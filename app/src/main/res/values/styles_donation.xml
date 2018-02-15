@@ -1,0 +1,54 @@
+<resources>
+
+    <!-- Card View -->
+    <style name="CardTitleDonation">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:layout_marginTop">@dimen/screen_edge_standard_margin</item>
+        <item name="android:layout_marginEnd">@dimen/screen_edge_standard_margin</item>
+        <item name="android:layout_marginStart">@dimen/screen_edge_standard_margin</item>
+        <item name="android:layout_marginBottom">@dimen/screen_content_margin</item>
+    </style>
+
+    <style name="CardViewDonation">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">@dimen/screen_content_margin</item>
+        <item name="android:layout_marginEnd">@dimen/screen_content_margin</item>
+        <item name="android:layout_marginBottom">@dimen/screen_content_margin</item>
+        <item name="android:layout_marginTop">@dimen/screen_content_margin</item>
+    </style>
+
+
+    <!-- Radio Buttons -->
+    <style name="RadioButton" parent="WrappedView">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:theme">@style/WhiteRadioButton</item>
+        <item name="colorControlNormal">@color/white</item>
+        <item name="colorControlActivated">@color/white</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:paddingEnd">@dimen/screen_edge_standard_margin</item>
+    </style>
+
+    <style name="WhiteRadioButton" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorControlNormal">@android:color/white</item>
+        <item name="colorControlActivated">@android:color/white</item>
+    </style>
+
+
+    <!-- Text -->
+
+    <style name="SummaryText">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginEnd">@dimen/screen_content_margin</item>
+        <item name="android:layout_marginStart">@dimen/screen_edge_standard_margin</item>
+        <item name="android:layout_marginTop">@dimen/screen_content_margin</item>
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Small</item>
+        <item name="android:textColor">@color/textDarkSecondary</item>
+        <item name="android:maxLines">1</item>
+    </style>
+
+</resources>

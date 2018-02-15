@@ -7,6 +7,7 @@ import dagger.Provides;
 import eugene.petsshelter.BuildConfig;
 import eugene.petsshelter.service.StripeService;
 import eugene.petsshelter.utils.AppConstants;
+import eugene.petsshelter.utils.LiveDataCallAdapterFactory;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
@@ -37,6 +38,7 @@ public class RetrofitModule {
     Retrofit provideHttpClient(OkHttpClient okHttpClient){
         return new Retrofit.Builder().baseUrl(AppConstants.GHARGE_SCRIPT_BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(new LiveDataCallAdapterFactory())
                 .client(okHttpClient)
                 .build();
     }

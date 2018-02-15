@@ -6,12 +6,14 @@ package eugene.petsshelter.data.models;
 
 public class LoadingState {
 
-    private final boolean running;
-    private final String errorMessage;
+    private boolean running;
+    private String message;
+    private String errorMessage;
 
-    public LoadingState(boolean running, String errorMessage) {
+    public LoadingState(boolean running, String message, String errorMessage) {
         this.running = running;
         this.errorMessage = errorMessage;
+        this.message = message;
     }
 
     public boolean isRunning() {return running;}
@@ -19,5 +21,7 @@ public class LoadingState {
     public String getErrorMessage() {
         return errorMessage;
     }
+
+    public String getMessage() {return message;}
 
 }

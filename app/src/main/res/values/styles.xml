@@ -42,13 +42,13 @@
         <item name="android:layout_marginStart">@dimen/screen_edge_standard_margin</item>
         <item name="android:layout_marginEnd">@dimen/screen_edge_standard_margin</item>
         <item name="android:background">@color/divider_color</item>
-</style>
+    </style>
 
     <!-- Progress Bar -->
     <style name="PetsProgressBar" parent="Widget.AppCompat.ProgressBar">
         <item name="android:layout_width">@dimen/progress_bar_size</item>
         <item name="android:layout_height">@dimen/progress_bar_size</item>
-        <item name="android:indeterminateTint">@color/material_yellow_a200</item>
+        <item name="android:indeterminateTint">@color/colorAccent</item>
         <item name="android:layout_centerInParent">true</item>
     </style>
 
@@ -63,6 +63,11 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">@android:color/holo_blue_dark</item>
+    </style>
+
+    <style name="Button.CardStandard" parent="FirebaseUI.Button.AccountChooser.GoogleButton">
+        <item name="android:layout_width">@dimen/button_card_width</item>
+        <item name="android:layout_height">wrap_content</item>
     </style>
 
 

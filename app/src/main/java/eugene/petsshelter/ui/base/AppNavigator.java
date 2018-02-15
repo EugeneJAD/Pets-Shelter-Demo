@@ -11,7 +11,10 @@ import javax.inject.Inject;
 
 import eugene.petsshelter.BuildConfig;
 import eugene.petsshelter.R;
+import eugene.petsshelter.ui.donation.CardDonationFragment;
 import eugene.petsshelter.ui.donation.DonationActivity;
+import eugene.petsshelter.ui.donation.PaymentMethodsFragment;
+import eugene.petsshelter.ui.donation.SummaryDonationFragment;
 import eugene.petsshelter.ui.main.MainActivity;
 import eugene.petsshelter.ui.main.PetDetailsFragment;
 import eugene.petsshelter.ui.main.PetsListFragment;
@@ -81,4 +84,22 @@ public class AppNavigator {
     }
 
     public void navigateToDonation(){navigation.startActivity(DonationActivity.class);}
+
+    //Donation Activity Navigation
+
+    public void navigateToPaymentMethods() {
+        navigation.replaceFragment(R.id.donation_fragment_container, new PaymentMethodsFragment(),null);
+    }
+
+    public void navigateToCardDonation() {
+        navigation.replaceFragmentBackStack(R.id.donation_fragment_container,new CardDonationFragment(),
+                CardDonationFragment.class.getSimpleName(),null,null,R.anim.slide_from_right,
+                R.anim.slide_to_left,R.anim.slide_from_left,R.anim.slide_to_right);
+    }
+
+    public void navigateToSummury() {
+        navigation.replaceFragmentBackStack(R.id.donation_fragment_container,new SummaryDonationFragment(),
+                SummaryDonationFragment.class.getSimpleName(),null,null,R.anim.slide_from_right,
+                R.anim.slide_to_left,R.anim.slide_from_left,R.anim.slide_to_right);
+    }
 }

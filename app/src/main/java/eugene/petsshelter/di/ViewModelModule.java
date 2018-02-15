@@ -6,7 +6,10 @@ import android.arch.lifecycle.ViewModelProvider;
 import dagger.Binds;
 import dagger.Module;
 import dagger.multibindings.IntoMap;
+import eugene.petsshelter.ui.donation.CardDonationViewModel;
 import eugene.petsshelter.ui.donation.DonationActivityViewModel;
+import eugene.petsshelter.ui.donation.PaymentMethodsViewModel;
+import eugene.petsshelter.ui.donation.SummaryDonationViewModel;
 import eugene.petsshelter.ui.main.MainViewModel;
 import eugene.petsshelter.ui.main.PetDetailsViewModel;
 import eugene.petsshelter.ui.main.PetsViewModel;
@@ -45,6 +48,21 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(DonationActivityViewModel.class)
     abstract ViewModel bindDonationActivityViewModel(DonationActivityViewModel donationActivityViewModel);
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(PaymentMethodsViewModel.class)
+    abstract ViewModel bindPaymentMethodsViewModel(PaymentMethodsViewModel paymentMethodsViewModel);
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(CardDonationViewModel.class)
+    abstract ViewModel bindCardDonationViewModel(CardDonationViewModel cardDonationViewModel);
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(SummaryDonationViewModel.class)
+    abstract ViewModel bindSummaryDonationViewModel(SummaryDonationViewModel summaryDonationViewModel);
 
     @Binds
     abstract ViewModelProvider.Factory bindViewModelFactory(PetsShelterViewModelFactory factory);

@@ -56,10 +56,24 @@
     <string name="card_not_valid">Card is not valid</string>
     <string name="wrong_amount_format">Wrong amount format</string>
 
-    <string name="amount_donation">Amount of your donation</string>
+    <string name="amount_donation">Amount of your donation (CAD)</string>
     <string name="minimum_donation">The minimum donation is $1</string>
     <string name="card_information">Credit card information</string>
     <string name="apply">Apply</string>
+    <string name="donate_with_card">Donate with Card</string>
 
+    <string name="summary">SUMMARY</string>
+    <string name="card_number">Card number</string>
+    <string name="from">From</string>
+    <string name="for_title">For</string>
+    <string name="donation_successful">Donation successful. Thank you for your help!</string>
+    <string name="service_unavailable">Service is temporarily unavailable, please try again later.</string>
+    <string name="donation_failed">We\'re sorry, your donation failed to process. Please try again later or contact us.</string>
+
+    <!--Loading messages -->
+    <string name="donation_processing">Donation processing…</string>
+    <string name="card_validation">Card validation…</string>
+    <string name="anonimus">Anonimus</string>
+    <string name="cancelled">Cancelled</string>
 
 </resources>

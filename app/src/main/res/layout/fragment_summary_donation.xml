@@ -1,0 +1,129 @@
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable name="handler" type="eugene.petsshelter.ui.adapter.ButtonClickHandler"/>
+        <variable name="donation" type="eugene.petsshelter.data.models.Donation"/>
+        <variable name="amount" type="String"/>
+    </data>
+
+<android.support.design.widget.CoordinatorLayout
+    android:id="@+id/sum_root"
+    style="@style/FullScreenView">
+
+    <android.support.v7.widget.CardView
+        style="@style/FullWidthView"
+        android:layout_margin="@dimen/screen_content_margin">
+
+        <android.support.constraint.ConstraintLayout
+            style="@style/FullWidthView"
+            android:layout_marginBottom="@dimen/screen_right_edge_icons_margin">
+
+
+            <TextView
+                android:id="@+id/sum_page_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/screen_right_edge_icons_margin"
+                android:text="@string/summary"
+                android:textColor="@color/textDarkPrimary"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+            <TextView
+                android:id="@+id/sum_card_title"
+                style="@style/TitlesText"
+                android:textColor="@color/colorPrimary"
+                android:layout_marginStart="@dimen/screen_edge_standard_margin"
+                android:layout_marginTop="@dimen/screen_medium_margin"
+                android:text="@string/card_number"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/sum_page_title"/>
+
+            <TextView
+                android:id="@+id/sum_card_number"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/sum_card_title"
+                tools:text="**** **** **** 7856"
+                style="@style/SummaryText"
+                android:text="@{donation.cardLastNumbers}"
+                />
+
+            <TextView
+                android:id="@+id/sum_from_title"
+                style="@style/TitlesText"
+                android:layout_marginStart="@dimen/screen_edge_standard_margin"
+                android:layout_marginTop="16dp"
+                android:text="@string/from"
+                android:textColor="@color/colorPrimary"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/sum_amount"/>
+
+            <TextView
+                android:id="@+id/sum_from"
+                style="@style/SummaryText"
+                android:layout_marginEnd="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/sum_from_title"
+                tools:text="Anonimus"
+                android:text="@{donation.donator}"
+                />
+
+            <TextView
+                android:id="@+id/sum_for_title"
+                style="@style/TitlesText"
+                android:textColor="@color/colorPrimary"
+                android:layout_marginStart="@dimen/screen_edge_standard_margin"
+                android:layout_marginTop="@dimen/screen_medium_margin"
+                android:text="@string/for_title"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/sum_from"/>
+
+            <TextView
+                android:id="@+id/sum_for"
+                tools:text="Montreal Shelter"
+                style="@style/SummaryText"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/sum_for_title"
+                android:text="@{donation.donatory}"
+                />
+
+            <TextView
+                android:id="@+id/sum_amount_title"
+                style="@style/TitlesText"
+                android:textColor="@color/colorPrimary"
+                android:layout_marginStart="@dimen/screen_edge_standard_margin"
+                android:layout_marginTop="@dimen/screen_medium_margin"
+                android:text="@string/amount_donation"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/sum_card_number"/>
+
+            <TextView
+                android:id="@+id/sum_amount"
+                tools:text="50.00$"
+                style="@style/SummaryText"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/sum_amount_title"
+                android:text="@{amount}"/>
+
+        </android.support.constraint.ConstraintLayout>
+    </android.support.v7.widget.CardView>
+
+    <Button
+        android:id="@+id/donate_button"
+        style="@style/Button.Standard"
+        android:text="@string/donate"
+        android:layout_gravity="end|bottom"
+        android:layout_margin="@dimen/screen_edge_standard_margin"
+        android:onClick="@{handler::onButtonClick}"/>
+
+</android.support.design.widget.CoordinatorLayout>
+</layout>

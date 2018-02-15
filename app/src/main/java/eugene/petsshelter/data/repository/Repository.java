@@ -5,9 +5,11 @@ import android.arch.lifecycle.LiveData;
 import java.util.List;
 import java.util.Map;
 
+import eugene.petsshelter.data.models.ApiResponse;
 import eugene.petsshelter.data.models.Pet;
 import eugene.petsshelter.data.models.Profile;
 import eugene.petsshelter.data.models.Shelter;
+import okhttp3.ResponseBody;
 
 /**
  * Created by Администратор on 03.12.2017.
@@ -21,7 +23,7 @@ public interface Repository {
     LiveData<Shelter> getShelter();
     LiveData<Pet> getDogById(String id);
     LiveData<Pet> getCatById(String id);
-    LiveData<String> getStripeChargeResponse();
-    void createCharge(Map<String,Object> fields);
+//    LiveData<String> getStripeChargeResponse();
+    LiveData<ApiResponse<ResponseBody>> createCharge(Map<String,Object> fields);
     void detachFirebaseReadListeners();
 }

@@ -1,0 +1,48 @@
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable name="handler" type="eugene.petsshelter.ui.adapter.ButtonClickHandler"/>
+    </data>
+
+<android.support.design.widget.CoordinatorLayout
+    android:id="@+id/pay_root"
+    style="@style/FullScreenView">
+
+        <LinearLayout
+            style="@style/FullWidthView"
+            android:layout_gravity="center"
+            android:orientation="vertical">
+
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/pay_logo"
+                style="@style/WrappedView"
+                android:layout_marginTop="@dimen/screen_edge_standard_margin"
+                app:srcCompat="@drawable/pet_logo"
+                android:layout_gravity="center_horizontal"/>
+
+            <TextView
+                android:id="@+id/pay_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/screen_right_edge_icons_margin"
+                android:layout_marginStart="@dimen/screen_right_edge_icons_margin"
+                android:layout_marginTop="@dimen/screen_medium_margin"
+                android:text="@string/donation_text"
+                android:textAlignment="center"
+                android:textColor="@color/colorPrimary"
+                android:layout_gravity="center_horizontal"/>
+
+            <Button
+                android:id="@+id/button_pay_card"
+                android:text="@string/donate_with_card"
+                style="@style/Button.CardStandard"
+                android:drawableStart="@drawable/ic_pets_green_24dp"
+                android:onClick="@{handler::onButtonClick}"
+                android:layout_marginTop="@dimen/screen_left_edge_content_margin"
+                android:layout_gravity="center_horizontal"/>
+
+        </LinearLayout>
+</android.support.design.widget.CoordinatorLayout>
+</layout>

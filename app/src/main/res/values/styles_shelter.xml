@@ -1,0 +1,26 @@
+<resources>
+
+    <style name="TitlesText">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Small</item>
+    </style>
+
+    <style name="ShelterDataText">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginEnd">@dimen/screen_content_margin</item>
+        <item name="android:layout_marginStart">@dimen/screen_content_margin</item>
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Body1</item>
+        <item name="android:textColor">@color/textDarkSecondary</item>
+    </style>
+
+    <style name="ShelterImageButton" parent="android:Widget.DeviceDefault.Button.Borderless.Small">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginEnd">@dimen/screen_edge_standard_margin</item>
+        <item name="android:layout_marginTop">@dimen/screen_edge_standard_margin</item>
+        <item name="android:tint">@color/colorAccent</item>
+    </style>
+
+
+</resources>

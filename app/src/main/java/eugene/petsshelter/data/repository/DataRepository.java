@@ -12,6 +12,7 @@ import java.util.Map;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import eugene.petsshelter.data.models.ApiResponse;
 import eugene.petsshelter.data.models.Pet;
 import eugene.petsshelter.data.models.Profile;
 import eugene.petsshelter.data.models.Shelter;
@@ -19,9 +20,7 @@ import eugene.petsshelter.data.repository.remote.FirebaseRepository;
 import eugene.petsshelter.service.StripeService;
 import eugene.petsshelter.ui.main.PetsListFragment;
 import eugene.petsshelter.utils.AbsentLiveData;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import okhttp3.ResponseBody;
 import timber.log.Timber;
 
 /**
@@ -40,7 +39,7 @@ public class DataRepository implements Repository {
     private MutableLiveData<Profile> profile = new MutableLiveData<>();
 
     //notify user
-    private MutableLiveData<String> apiResponse = new MutableLiveData<>();
+//    private MutableLiveData<String> apiResponse = new MutableLiveData<>();
 
     @Inject
     public DataRepository() {}
@@ -68,26 +67,32 @@ public class DataRepository implements Repository {
     @Override
     public LiveData<Pet> getCatById(String id) {return findPetById(id, PetsListFragment.FRAGMENT_LIST_TYPE_CATS);}
 
-    @Override
-    public LiveData<String> getStripeChargeResponse() {return apiResponse;}
+//    @Override
+//    public LiveData<String> getStripeChargeResponse() {return apiResponse;}
 
     @Override
-    public void createCharge(Map<String,Object> fields) {
-
-        stripeService.chargeDonation(fields).enqueue(new Callback<Void>() {
-            @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
-                if(response.isSuccessful()){notifyUser(PAYMENT_DONE);}
-                else {notifyUser(PAYMENT_FAILED);}
-            }
-            @Override
-            public void onFailure(Call<Void> call, Throwable t) {notifyUser(PAYMENT_FAILED);}
-        });
+    public LiveData<ApiResponse<ResponseBody>> createCharge(Map<String, Object> fields) {
+        return stripeService.chargeDonation(fields);
     }
 
-    private void notifyUser(String message) {
-        apiResponse.setValue(message);
-        apiResponse.setValue(null);}
+
+//    @Override
+//    public void createCharge(Map<String,Object> fields) {
+//
+//        stripeService.chargeDonation(fields).enqueue(new Callback<Void>() {
+//            @Override
+//            public void onResponse(Call<Void> call, Response<Void> response) {
+//                if(response.isSuccessful()){notifyUser(PAYMENT_DONE);}
+//                else {notifyUser(PAYMENT_FAILED);}
+//            }
+//            @Override
+//            public void onFailure(Call<Void> call, Throwable t) {notifyUser(PAYMENT_FAILED);}
+//        });
+//    }
+
+//    private void notifyUser(String message) {
+//        apiResponse.setValue(message);
+//        apiResponse.setValue(null);}
 
 
     @Override

@@ -20,21 +20,29 @@ public abstract class BaseLoadingViewModel extends ViewModel{
 
     public LiveData<LoadingState> getLoadingState(){return loadingState;}
 
-    public void startLoading(){loadingState.setValue(new LoadingState(true,null));}
+    public void startLoading(){loadingState.setValue(new LoadingState(true,null, null));}
+
+    public void startLoading(String message){loadingState.setValue(new LoadingState(true,message,null));}
 
     public void startLoading(View buttonToDisable){
-        loadingState.setValue(new LoadingState(true,null));
+        loadingState.setValue(new LoadingState(true,null,null));
         this.button=buttonToDisable;
         button.setClickable(false);
     }
 
-    public void onFailLoading(String message) {
-        loadingState.setValue(new LoadingState(false,message));
+    public void startLoading(String message, View buttonToDisable){
+        loadingState.setValue(new LoadingState(true,message,null));
+        this.button=buttonToDisable;
+        button.setClickable(false);
+    }
+
+    public void onFailLoading(String errorMessage) {
+        loadingState.setValue(new LoadingState(false,null,errorMessage));
         setClickable();
     }
 
     public void onCompleteLoading() {
-        loadingState.setValue(new LoadingState(false,null));
+        loadingState.setValue(new LoadingState(false,null,null));
         setClickable();
     }
 
