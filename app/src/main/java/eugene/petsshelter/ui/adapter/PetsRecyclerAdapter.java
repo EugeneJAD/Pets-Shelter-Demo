@@ -1,17 +1,20 @@
 package eugene.petsshelter.ui.adapter;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
-import android.animation.ValueAnimator;
 import android.databinding.DataBindingUtil;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
+import android.view.animation.DecelerateInterpolator;
+import android.view.animation.ScaleAnimation;
 import android.widget.ImageView;
+
+import com.google.firebase.auth.FirebaseAuth;
 
 import eugene.petsshelter.R;
 import eugene.petsshelter.data.models.Pet;
+import eugene.petsshelter.data.repository.Repository;
 import eugene.petsshelter.databinding.PetsListItemBinding;
 import eugene.petsshelter.ui.base.DataBoundListAdapter;
 import eugene.petsshelter.utils.Objects;
@@ -19,23 +22,34 @@ import eugene.petsshelter.utils.Objects;
 
 public class PetsRecyclerAdapter extends DataBoundListAdapter<Pet,PetsListItemBinding>{
 
+    private Repository repository;
+
     private OnItemClickListener<Pet> clickCallback;
 
-    public PetsRecyclerAdapter(OnItemClickListener<Pet> clickCallback) {
+    public PetsRecyclerAdapter(OnItemClickListener<Pet> clickCallback, Repository repository) {
         this.clickCallback = clickCallback;
+        this.repository = repository;
     }
 
     @Override
     protected PetsListItemBinding createBinding(ViewGroup parent) {
         PetsListItemBinding binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()),
                 R.layout.pets_list_item,parent,false);
-        binding.getRoot().setOnClickListener(view -> clickCallback.onItemClick(binding.getPet()));
+        binding.addFavButton.setOnClickListener(view -> {
+            if(FirebaseAuth.getInstance().getCurrentUser()!=null) {
+                animateFavButton((ImageView) view, binding.getPet());
+                clickCallback.onItemClick(binding.getPet(), view);
+            }
+        });
+        binding.getRoot().setOnClickListener(view -> clickCallback.onItemClick(binding.getPet(),view));
         return binding;
     }
 
     @Override
     protected void bind(PetsListItemBinding binding, Pet item) {
+        item.setFavorite(repository.isFavorite(item.getId()));
         binding.setPet(item);
+        binding.setIsUserLoggedIn(FirebaseAuth.getInstance().getCurrentUser()!=null);
     }
 
     @Override
@@ -44,34 +58,40 @@ public class PetsRecyclerAdapter extends DataBoundListAdapter<Pet,PetsListItemBi
     @Override
     protected boolean areContentsTheSame(Pet oldItem, Pet newItem) {return Objects.equals(oldItem.getName(),newItem.getName());}
 
-    private void viewRotateAnimation(final ImageView view){
 
-        //Property Animation
-        ValueAnimator fadeOutAnim = ObjectAnimator.ofFloat(view, "alpha", 1f, 0f);
-        fadeOutAnim.setDuration(150);
-        fadeOutAnim.addListener(new AnimatorListenerAdapter() {
+    private void animateFavButton(ImageView view, Pet pet){
+
+        ScaleAnimation scaleUpAnimation = new ScaleAnimation(1f,1.2f,1f,1.2f,ScaleAnimation.RELATIVE_TO_SELF, 0.5f,
+                ScaleAnimation.RELATIVE_TO_SELF, 0.5f);
+        scaleUpAnimation.setDuration(150);
+        scaleUpAnimation.setInterpolator(new DecelerateInterpolator());
+
+        scaleUpAnimation.setAnimationListener(new Animation.AnimationListener() {
             @Override
-            public void onAnimationEnd(Animator animation) {
-//                if(favorite)
-//                    view.setImageResource(R.drawable.ic_favorite_24dp);
-//                else
-//                    view.setImageResource(R.drawable.ic_favorite_border_24dp);
-//                super.onAnimationEnd(animation);
+            public void onAnimationStart(Animation animation) {}
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                if(pet.isFavorite()) {
+                    view.setImageResource(R.drawable.ic_favorite_border_24dp);
+                    pet.setFavorite(false);
+                }else {
+                    view.setImageResource(R.drawable.ic_favorite_24dp);
+                    pet.setFavorite(true);
+                }
             }
+            @Override
+            public void onAnimationRepeat(Animation animation) {}
         });
-        ValueAnimator fadeInAnim = ObjectAnimator.ofFloat(view, "alpha", 0f, 1f);
-        fadeInAnim.setDuration(150);
 
-        AnimatorSet animatorFadeSet = new AnimatorSet();
-        animatorFadeSet.play(fadeOutAnim).before(fadeInAnim);
+        ScaleAnimation scaleDownAnimation = new ScaleAnimation(1.2f,1f,1.2f,1f,ScaleAnimation.RELATIVE_TO_SELF, 0.5f,
+                ScaleAnimation.RELATIVE_TO_SELF, 0.5f);
+        scaleDownAnimation.setInterpolator(new AccelerateInterpolator());
+        scaleDownAnimation.setDuration(150);
+        scaleDownAnimation.setStartOffset(150);
 
-        ValueAnimator rotationAnim = ObjectAnimator.ofFloat(view,"rotation",0,360);
-        rotationAnim.setDuration(300);
-
-        AnimatorSet animatorSet = new AnimatorSet();
-        animatorSet.playTogether(rotationAnim,animatorFadeSet);
-        animatorSet.start();
-
+        AnimationSet set = new AnimationSet(false);
+        set.addAnimation(scaleUpAnimation);
+        set.addAnimation(scaleDownAnimation);
+        view.startAnimation(set);
     }
-
 }

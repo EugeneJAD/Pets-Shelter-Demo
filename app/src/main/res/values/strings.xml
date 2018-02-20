@@ -73,7 +73,7 @@
     <!--Loading messages -->
     <string name="donation_processing">Donation processing…</string>
     <string name="card_validation">Card validation…</string>
-    <string name="anonimus">Anonimus</string>
+    <string name="anonymous">Anonymous</string>
     <string name="cancelled">Cancelled</string>
 
 </resources>

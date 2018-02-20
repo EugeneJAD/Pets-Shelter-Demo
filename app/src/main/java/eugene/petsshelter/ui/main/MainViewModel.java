@@ -6,6 +6,8 @@ import android.arch.lifecycle.Transformations;
 import android.arch.lifecycle.ViewModel;
 import android.text.TextUtils;
 
+import java.util.HashMap;
+
 import javax.inject.Inject;
 
 import eugene.petsshelter.data.models.Profile;
@@ -18,27 +20,41 @@ public class MainViewModel extends ViewModel{
     @Inject Repository repository;
 
     private LiveData<Profile> profile;
-    private MutableLiveData<String> email = new MutableLiveData<>();
+    private LiveData<HashMap<String, Boolean>> favorites;
+    private MutableLiveData<String> userId = new MutableLiveData<>();
 
     @Inject
     public MainViewModel(){
 
-        profile = Transformations.switchMap(email, email ->{
-           if(TextUtils.isEmpty(email))
-               return AbsentLiveData.create();
-           else
-               return repository.getProfile(email);
+        profile = Transformations.switchMap(userId, id -> {
+            if (TextUtils.isEmpty(id)) {
+                return AbsentLiveData.create();
+            } else {
+                return repository.getProfile();
+            }
         });
+
+        favorites = Transformations.switchMap(profile, profile -> {
+            if (profile==null || TextUtils.isEmpty(profile.getUId())) {
+                repository.updateLocalFavoritePets(null);
+                return AbsentLiveData.create();
+            } else
+                return repository.getFavorites();
+        });
+
     }
 
     @Override
     protected void onCleared() {
+        repository.updateRemoteFavoritePets();
         repository.detachFirebaseReadListeners();
         super.onCleared();
     }
 
     public LiveData<Profile> getProfile() {return profile;}
 
-    public void reloadUserData(String email){this.email.setValue(email);}
+    public LiveData<HashMap<String, Boolean>> getFavorites() {return favorites;}
+
+    public void reloadUserData(String id){userId.setValue(id);}
 
 }

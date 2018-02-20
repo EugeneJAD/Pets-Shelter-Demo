@@ -6,6 +6,7 @@ import android.arch.lifecycle.MutableLiveData;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -21,7 +22,6 @@ import eugene.petsshelter.service.StripeService;
 import eugene.petsshelter.ui.main.PetsListFragment;
 import eugene.petsshelter.utils.AbsentLiveData;
 import okhttp3.ResponseBody;
-import timber.log.Timber;
 
 /**
  * Created by Eugene on 31.01.2018.
@@ -29,26 +29,17 @@ import timber.log.Timber;
 @Singleton
 public class DataRepository implements Repository {
 
-    public static final String PAYMENT_DONE = "Payment done!";
-    public static final String PAYMENT_FAILED = "Payment failed.";
-
-
     @Inject FirebaseRepository remoteRepo;
     @Inject StripeService stripeService;
 
     private MutableLiveData<Profile> profile = new MutableLiveData<>();
-
-    //notify user
-//    private MutableLiveData<String> apiResponse = new MutableLiveData<>();
+    private HashMap<String,Boolean> localFavPets = new HashMap<>();
 
     @Inject
     public DataRepository() {}
 
     @Override
-    public LiveData<Profile> getProfile(String email) {
-        if (profile.getValue() != null && profile.getValue().getEmail().equals(email)) {return profile;}
-        else {return getUserProfile();}
-    }
+    public LiveData<Profile> getProfile() {return getUserProfile();}
 
     @Override
     public LiveData<List<Pet>> getDogs() {return remoteRepo.getDogs();}
@@ -67,47 +58,54 @@ public class DataRepository implements Repository {
     @Override
     public LiveData<Pet> getCatById(String id) {return findPetById(id, PetsListFragment.FRAGMENT_LIST_TYPE_CATS);}
 
-//    @Override
-//    public LiveData<String> getStripeChargeResponse() {return apiResponse;}
 
     @Override
     public LiveData<ApiResponse<ResponseBody>> createCharge(Map<String, Object> fields) {
         return stripeService.chargeDonation(fields);
     }
 
-
-//    @Override
-//    public void createCharge(Map<String,Object> fields) {
-//
-//        stripeService.chargeDonation(fields).enqueue(new Callback<Void>() {
-//            @Override
-//            public void onResponse(Call<Void> call, Response<Void> response) {
-//                if(response.isSuccessful()){notifyUser(PAYMENT_DONE);}
-//                else {notifyUser(PAYMENT_FAILED);}
-//            }
-//            @Override
-//            public void onFailure(Call<Void> call, Throwable t) {notifyUser(PAYMENT_FAILED);}
-//        });
-//    }
-
-//    private void notifyUser(String message) {
-//        apiResponse.setValue(message);
-//        apiResponse.setValue(null);}
-
+    @Override
+    public LiveData<HashMap<String, Boolean>> getFavorites() {return remoteRepo.getUsersFavPets(localFavPets);}
 
     @Override
-    public void detachFirebaseReadListeners() {
-        Timber.d("detachFirebaseReadListeners");
-        remoteRepo.detachFirebaseReadListeners();
+    public void addToFavorites(String petId){
+        if(localFavPets.get(petId)==null) {localFavPets.put(petId,true);
+        } else {localFavPets.remove(petId);}
     }
+
+    @Override
+    public boolean isFavorite(String petId) {
+        return !(petId == null || localFavPets.isEmpty()) && localFavPets.containsKey(petId);
+    }
+
+    @Override
+    public void updateLocalFavoritePets(HashMap<String, Boolean> update) {
+        if(update==null) {
+            localFavPets.clear();
+        } else {
+            for (String key : update.keySet())
+                localFavPets.put(key, true);
+        }
+    }
+
+    @Override
+    public void updateRemoteFavoritePets() {remoteRepo.syncFavorites(localFavPets);}
+
+    @Override
+    public void detachFirebaseReadListeners() {remoteRepo.detachFirebaseReadListeners();}
 
     private LiveData<Profile> getUserProfile() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
         if(user==null){return AbsentLiveData.create();}
 
-        Profile p = new Profile(user.getDisplayName(),user.getPhoneNumber(),user.getEmail(),user.getPhotoUrl().toString());
+        String photoUrl = null;
+        if(user.getPhotoUrl()!=null)
+            photoUrl = user.getPhotoUrl().toString();
+
+        Profile p = new Profile(user.getUid(),user.getDisplayName(),user.getPhoneNumber(),user.getEmail(),photoUrl);
         profile.setValue(p);
+
         return profile;
     }
 
@@ -130,5 +128,9 @@ public class DataRepository implements Repository {
 
         return AbsentLiveData.create();
     }
+
+
+
+
 
 }

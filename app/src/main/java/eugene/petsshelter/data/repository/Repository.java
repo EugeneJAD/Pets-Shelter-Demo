@@ -2,6 +2,7 @@ package eugene.petsshelter.data.repository;
 
 import android.arch.lifecycle.LiveData;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -17,13 +18,17 @@ import okhttp3.ResponseBody;
 
 public interface Repository {
 
-    LiveData<Profile> getProfile(String email);
+    LiveData<Profile> getProfile();
     LiveData<List<Pet>> getDogs();
     LiveData<List<Pet>> getCats();
     LiveData<Shelter> getShelter();
     LiveData<Pet> getDogById(String id);
     LiveData<Pet> getCatById(String id);
-//    LiveData<String> getStripeChargeResponse();
+    LiveData<HashMap<String,Boolean>> getFavorites();
     LiveData<ApiResponse<ResponseBody>> createCharge(Map<String,Object> fields);
+    void addToFavorites(String petId);
+    boolean isFavorite(String petId);
+    void updateRemoteFavoritePets();
+    void updateLocalFavoritePets(HashMap<String, Boolean> favorites);
     void detachFirebaseReadListeners();
 }

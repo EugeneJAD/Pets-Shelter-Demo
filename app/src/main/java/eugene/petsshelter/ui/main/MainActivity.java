@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
@@ -32,7 +33,8 @@ import eugene.petsshelter.utils.SnackbarUtils;
 import timber.log.Timber;
 
 public class MainActivity extends BaseActivity<ActivityMainBinding,MainViewModel>
-        implements NavigationView.OnNavigationItemSelectedListener, HasSupportFragmentInjector {
+        implements NavigationView.OnNavigationItemSelectedListener, HasSupportFragmentInjector,
+        FirebaseAuth.AuthStateListener{
 
 
     @Inject
@@ -47,11 +49,9 @@ public class MainActivity extends BaseActivity<ActivityMainBinding,MainViewModel
 
     private ActionBarDrawerToggle toggle;
 
-    private FirebaseAuth mFirebaseAuth;
-    private FirebaseAuth.AuthStateListener mAuthStateListener;
     private FirebaseUser user;
 
-    NavHeaderMainBinding navHeaderBinding;
+    private NavHeaderMainBinding navHeaderBinding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,26 +76,21 @@ public class MainActivity extends BaseActivity<ActivityMainBinding,MainViewModel
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
-        //Firebase Auth
-        mFirebaseAuth = FirebaseAuth.getInstance();
-
-        mAuthStateListener = firebaseAuth -> {
-            user = firebaseAuth.getCurrentUser();
-            if (user == null) {onSignedOutCleanup();
-            } else {onSignedInInitialize();}
-        };
-
         if(savedInstanceState==null){
             navigator.navigateToDogs();
-            user = mFirebaseAuth.getCurrentUser();
+            user = FirebaseAuth.getInstance().getCurrentUser();
             if(user==null) navigator.navigateToLogin();
+            else viewModel.reloadUserData(user.getUid());
         }
 
         observeViewModel();
     }
 
     private void observeViewModel() {
-        viewModel.getProfile().observe(this, profile ->navHeaderBinding.setProfile(profile));
+
+        viewModel.getProfile().observe(this, profile -> navHeaderBinding.setProfile(profile));
+
+        viewModel.getFavorites().observe(this, favorites -> viewModel.repository.updateLocalFavoritePets(favorites));
     }
 
     private void onSignedInInitialize() {viewModel.reloadUserData(user.getEmail());}
@@ -104,8 +99,10 @@ public class MainActivity extends BaseActivity<ActivityMainBinding,MainViewModel
 
     private void signOut() {
 
-        if(mFirebaseAuth.getCurrentUser()==null)
+        if(FirebaseAuth.getInstance().getCurrentUser()==null)
             return;
+
+        viewModel.repository.updateRemoteFavoritePets();
 
         AuthUI.getInstance()
                 .signOut(this)
@@ -117,15 +114,13 @@ public class MainActivity extends BaseActivity<ActivityMainBinding,MainViewModel
     @Override
     protected void onResume() {
         super.onResume();
-        mFirebaseAuth.addAuthStateListener(mAuthStateListener);
+        FirebaseAuth.getInstance().addAuthStateListener(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        if (mAuthStateListener != null) {
-            mFirebaseAuth.removeAuthStateListener(mAuthStateListener);
-        }
+        FirebaseAuth.getInstance().removeAuthStateListener(this);
     }
 
     @Override
@@ -229,6 +224,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding,MainViewModel
 
             if (resultCode == RESULT_OK) {
                 SnackbarUtils.showSnackbar(binding.getRoot(),getString(R.string.sign_in_successful), SnackbarUtils.TYPE_SUCCESS);
+                viewModel.reloadUserData(FirebaseAuth.getInstance().getCurrentUser().getUid());
                 return;
             } else {
                 if (response == null) {
@@ -247,5 +243,12 @@ public class MainActivity extends BaseActivity<ActivityMainBinding,MainViewModel
             }
             SnackbarUtils.showSnackbar(binding.getRoot(),getString(R.string.sign_in_failed),SnackbarUtils.TYPE_ERROR);
         }
+    }
+
+    @Override
+    public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+        user = firebaseAuth.getCurrentUser();
+        if (user == null) {onSignedOutCleanup();
+        } else {onSignedInInitialize();}
     }
 }

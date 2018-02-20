@@ -85,7 +85,7 @@ public class DonationActivity extends BaseActivity<ActivityDonationBinding,Donat
 
     private String getCurrentUser() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        return user!=null? user.getDisplayName() : getString(R.string.anonimus);
+        return user!=null? user.getDisplayName() : getString(R.string.anonymous);
     }
 
     @Override
@@ -98,10 +98,8 @@ public class DonationActivity extends BaseActivity<ActivityDonationBinding,Donat
         if(binding.getLoadingState()!=null) {
             if (binding.getLoadingState().isRunning()){
                 if(currentFragment instanceof CardDonationFragment){
-                    if(viewModel.getDonation().getValue()!=null && !viewModel.getDonation().getValue().isConfirmed()) {
                         viewModel.onFailLoading(getString(R.string.cancelled));
                         SnackbarUtils.showSnackbar(binding.getRoot(), getString(R.string.cancelled), SnackbarUtils.TYPE_INFO);
-                    }
                 } else if(currentFragment instanceof SummaryDonationFragment){
                     return;
                 }

@@ -47,4 +47,6 @@ public class PetsViewModel extends ViewModel {
     public LiveData<String> getListType() {return listType;}
 
     public LiveData<List<Pet>> getPets() {return pets;}
+
+    public void addOrRemoveFavorite(String id) {repository.addToFavorites(id);}
 }

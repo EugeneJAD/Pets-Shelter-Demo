@@ -21,6 +21,9 @@ public interface Pet {
     boolean isAdopted();
     void setAdopted(boolean adopted);
 
+    boolean isFavorite();
+    void setFavorite(boolean favorite);
+
     String getImageURL();
     void setImageURL(String imageURL);
 

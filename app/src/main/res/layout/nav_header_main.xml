@@ -34,7 +34,7 @@
             android:id="@+id/user_name"
             style="@style/WrappedView"
             android:paddingTop="@dimen/nav_header_vertical_spacing"
-            android:text='@{profile.name ?? "Anonimus"}'
+            android:text="@{profile.name ?? @string/anonymous}"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
 
         <TextView

@@ -1,6 +1,7 @@
 package eugene.petsshelter.ui.main;
 
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -50,10 +51,13 @@ public class PetsListFragment extends BaseFragment<ListFragmentBinding,PetsViewM
         layoutManager.setStackFromEnd(true);
         binding.recyclerView.setLayoutManager(layoutManager);
         binding.recyclerView.setHasFixedSize(true);
-        adapter = new PetsRecyclerAdapter(this);
+        adapter = new PetsRecyclerAdapter(this, viewModel.repository);
         binding.recyclerView.setAdapter(adapter);
 
         observeViewModel();
+
+        observeActivityViewModel();
+
     }
 
     private void observeViewModel() {
@@ -70,11 +74,28 @@ public class PetsListFragment extends BaseFragment<ListFragmentBinding,PetsViewM
         viewModel.getPets().observe(this,pets -> adapter.replace(pets));
     }
 
+    private void observeActivityViewModel() {
+
+        MainViewModel activityViewModel = ViewModelProviders.of(getActivity()).get(MainViewModel.class);
+        activityViewModel.getFavorites().observe(this, favorites -> adapter.replace(viewModel.getPets().getValue()));
+    }
+
     @Override
-    public void onItemClick(Pet pet) {
-        if(viewModel.getListType().getValue().equals(FRAGMENT_LIST_TYPE_DOGS))
-            navigator.navigateToDogDetails(pet.getId());
-        else
-            navigator.navigateToCatDetails(pet.getId());
+    public void onItemClick(Pet pet, View view) {
+
+        if(view.getId()==R.id.add_fav_button){
+            viewModel.addOrRemoveFavorite(pet.getId());
+        } else {
+            if (viewModel.getListType().getValue().equals(FRAGMENT_LIST_TYPE_DOGS))
+                navigator.navigateToDogDetails(pet.getId());
+            else
+                navigator.navigateToCatDetails(pet.getId());
+        }
+    }
+
+    @Override
+    public void onPause() {
+        viewModel.repository.updateRemoteFavoritePets();
+        super.onPause();
     }
 }

@@ -3,15 +3,16 @@ package eugene.petsshelter.data.repository.remote;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.MutableData;
-import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -21,6 +22,7 @@ import eugene.petsshelter.data.models.Cat;
 import eugene.petsshelter.data.models.Dog;
 import eugene.petsshelter.data.models.Pet;
 import eugene.petsshelter.data.models.Shelter;
+import timber.log.Timber;
 
 @Singleton
 public class FirebaseRepository {
@@ -28,11 +30,14 @@ public class FirebaseRepository {
     public static final String DOGS = "dogs";
     public static final String CATS = "cats";
     public static final String SHELTERS = "shelters";
+    public static final String USERS = "users";
+    public static final String FAVORITES = "favorites";
 
     private FirebaseDatabase mDatabase;
     private DatabaseReference dogsDatabaseRef;
     private DatabaseReference catsDatabaseRef;
     private DatabaseReference sheltersDatabaseRef;
+    private DatabaseReference favoritesDatabaseRef;
 
     private ValueEventListener dogsListener;
     private ValueEventListener catsListener;
@@ -41,7 +46,7 @@ public class FirebaseRepository {
     private MutableLiveData<List<Pet>> dogs = new MutableLiveData<>();
     private MutableLiveData<List<Pet>> cats = new MutableLiveData<>();
     private MutableLiveData<Shelter> shelter = new MutableLiveData<>();
-
+    private MutableLiveData<HashMap<String,Boolean>> favorites = new MutableLiveData<>();
 
     private List<Pet> allDogs = new ArrayList<>();
     private List<Pet> allCats = new ArrayList<>();
@@ -56,10 +61,12 @@ public class FirebaseRepository {
         dogsDatabaseRef = mDatabase.getReference().child(DOGS);
         catsDatabaseRef = mDatabase.getReference().child(CATS);
         sheltersDatabaseRef = mDatabase.getReference().child(SHELTERS);
+        favoritesDatabaseRef = mDatabase.getReference().child(FAVORITES);
 
         dogsDatabaseRef.keepSynced(true);
         catsDatabaseRef.keepSynced(true);
         sheltersDatabaseRef.keepSynced(true);
+        favoritesDatabaseRef.keepSynced(true);
 
         attachFirebaseReadListeners();
     }
@@ -162,32 +169,58 @@ public class FirebaseRepository {
 
     }
 
-    public void incrementPetFoodCount(Pet pet){
+//    public void incrementPetFoodCount(Pet pet){
+//
+//        DatabaseReference foodCountRef;
+//        if(pet instanceof Dog)
+//            foodCountRef = dogsDatabaseRef.child(pet.getId()).child("foodCount");
+//        else
+//            foodCountRef = catsDatabaseRef.child(pet.getId()).child("foodCount");
+//
+//        foodCountRef.runTransaction(new Transaction.Handler() {
+//            @Override
+//            public Transaction.Result doTransaction(MutableData mutableData) {
+//
+//                if(mutableData.getValue(Integer.class)==null)
+//                    return Transaction.success(mutableData);
+//
+//                int foodCount = mutableData.getValue(Integer.class).intValue();
+//                mutableData.setValue(++foodCount);
+//                return Transaction.success(mutableData);
+//            }
+//
+//            @Override
+//            public void onComplete(DatabaseError databaseError, boolean b, DataSnapshot dataSnapshot) {
+//
+//            }
+//        });
+//
+//    }
 
-        DatabaseReference foodCountRef;
-        if(pet instanceof Dog)
-            foodCountRef = dogsDatabaseRef.child(pet.getId()).child("foodCount");
-        else
-            foodCountRef = catsDatabaseRef.child(pet.getId()).child("foodCount");
+    public LiveData<HashMap<String,Boolean>> getUsersFavPets(HashMap<String,Boolean> localFavPets) {
 
-        foodCountRef.runTransaction(new Transaction.Handler() {
-            @Override
-            public Transaction.Result doTransaction(MutableData mutableData) {
-
-                if(mutableData.getValue(Integer.class)==null)
-                    return Transaction.success(mutableData);
-
-                int foodCount = mutableData.getValue(Integer.class).intValue();
-                mutableData.setValue(++foodCount);
-                return Transaction.success(mutableData);
-            }
-
-            @Override
-            public void onComplete(DatabaseError databaseError, boolean b, DataSnapshot dataSnapshot) {
-
-            }
-        });
-
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            favoritesDatabaseRef.child(user.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        for (DataSnapshot ds : dataSnapshot.getChildren())
+                            localFavPets.put(ds.getKey(), true);
+                        favorites.setValue(localFavPets);
+                    }
+                }
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    Timber.d("getFavPets  DatabaseError = %s", databaseError.getMessage());
+                }
+            });
+        }
+        return favorites;
     }
 
+    public void syncFavorites(HashMap<String, Boolean> update) {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if(FirebaseAuth.getInstance().getCurrentUser()!=null) favoritesDatabaseRef.child(user.getUid()).setValue(update);
+    }
 }

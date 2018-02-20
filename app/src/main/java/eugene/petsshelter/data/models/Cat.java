@@ -35,6 +35,8 @@ public class Cat implements Pet{
 	@SerializedName("breed")
 	private String breed;
 
+	private boolean isFavorite;
+
 	public void setFoodCount(int foodCount){
 		this.foodCount = foodCount;
 	}
@@ -86,6 +88,12 @@ public class Cat implements Pet{
 	public void setAdopted(boolean adopted){
 		this.adopted = adopted;
 	}
+
+	@Override
+	public boolean isFavorite() {return isFavorite;}
+
+	@Override
+	public void setFavorite(boolean favorite) {isFavorite=favorite;}
 
 	public boolean isAdopted(){
 		return adopted;
