@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable name="newsItem" type="eugene.petsshelter.data.models.NewsItem"/>
+        <variable name="isUserLoggedIn" type="Boolean"/>
+    </data>
+
+<android.support.v7.widget.CardView
+    android:id="@+id/news_card_view"
+    style="@style/CardView.Light"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    card_view:cardCornerRadius="4dp">
+
+    <android.support.constraint.ConstraintLayout style="@style/FullWidthView">
+
+        <TextView
+            android:id="@+id/news_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/screen_content_margin"
+            android:layout_marginTop="@dimen/screen_content_margin"
+            tools:text="March 25, 2018"
+            android:textColor="@color/material_blue_grey_400"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:text="@{newsItem.date}"/>
+
+        <TextView
+            android:id="@+id/news_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/screen_content_margin"
+            android:layout_marginStart="@dimen/screen_content_margin"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+            android:textColor="@color/textDarkPrimary"
+            android:maxLines="2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/news_date"
+            tools:text="Does Your Dog Love You Back? Science Says Yes!"
+            android:text="@{newsItem.title}"
+            />
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/news_image"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/screen_content_margin"
+            app:layout_constraintDimensionRatio="H,16:9"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintTop_toBottomOf="@+id/news_title"
+            card_view:layout_constraintEnd_toEndOf="parent"
+            card_view:layout_constraintStart_toStartOf="parent"
+            tools:scaleType="centerCrop"
+            tools:srcCompat="@drawable/dogs_love_back"
+            app:imageUrlCC="@{newsItem.imageUrl}"
+            />
+
+        <TextView
+            android:id="@+id/image_credits"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:textColor="@color/white"
+            android:textSize="10sp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            tools:text="MEGAN ANN VIA FLICKR"
+            app:layout_constraintBottom_toBottomOf="@+id/news_image"
+            app:layout_constraintEnd_toEndOf="@+id/news_image"
+            android:text="@{newsItem.imageCredits}"/>
+
+        <TextView
+            android:id="@+id/news_author"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/screen_content_margin"
+            android:layout_marginStart="@dimen/screen_edge_standard_margin"
+            android:layout_marginTop="@dimen/screen_edge_standard_margin"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
+            android:textColor="@color/textDarkSecondary"
+            app:layout_constraintEnd_toStartOf="@+id/news_star_count"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/news_image"
+            tools:text="By Ashley O’Driscoll"
+            android:text="@{newsItem.author}"/>
+
+        <TextView
+            android:id="@+id/news_author_post"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/screen_edge_standard_margin"
+            android:layout_marginEnd="@dimen/screen_content_margin"
+            android:layout_marginStart="@dimen/screen_edge_standard_margin"
+            android:textColor="@color/material_grey_500"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/news_star_count"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/news_author"
+            app:layout_constraintVertical_bias="0.0"
+            tools:text="Pets.ca writer"
+            android:text="@{newsItem.authorPost}"/>
+
+        <ImageView
+            android:id="@+id/news_star_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/screen_edge_standard_margin"
+            android:layout_marginEnd="@dimen/screen_edge_standard_margin"
+            android:layout_marginTop="@dimen/screen_edge_standard_margin"
+            android:tint="@{isUserLoggedIn? @color/material_yellow_800 : @color/textLightDisabled}"
+            tools:tint="@color/material_yellow_800"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/news_image"
+            tools:src="@drawable/ic_star_36dp"
+            android:src="@{newsItem.isFavorite? @drawable/ic_star_36dp : @drawable/ic_star_border_36dp}"
+            />
+
+        <TextView
+            android:id="@+id/news_star_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/screen_content_margin"
+            tools:text="125"
+            android:textSize="12sp"
+            android:textColor="@{isUserLoggedIn? @color/material_blue_grey_400 : @color/textLightDisabled}"
+            tools:textColor="@color/material_blue_grey_400"
+            app:layout_constraintBottom_toBottomOf="@+id/news_star_button"
+            app:layout_constraintEnd_toStartOf="@+id/news_star_button"
+            app:layout_constraintTop_toTopOf="@+id/news_star_button"
+            android:text="@{String.valueOf(newsItem.starCount)}"/>
+
+    </android.support.constraint.ConstraintLayout>
+</android.support.v7.widget.CardView>
+</layout>

@@ -30,10 +30,9 @@ public class FirebaseRepository {
     public static final String DOGS = "dogs";
     public static final String CATS = "cats";
     public static final String SHELTERS = "shelters";
-    public static final String USERS = "users";
+    public static final String NEWS = "news";
     public static final String FAVORITES = "favorites";
 
-    private FirebaseDatabase mDatabase;
     private DatabaseReference dogsDatabaseRef;
     private DatabaseReference catsDatabaseRef;
     private DatabaseReference sheltersDatabaseRef;
@@ -55,13 +54,12 @@ public class FirebaseRepository {
     @Inject
     public FirebaseRepository(FirebaseDatabase database){
 
-        mDatabase = database;
-        mDatabase.setPersistenceEnabled(true);
+        database.setPersistenceEnabled(true);
 
-        dogsDatabaseRef = mDatabase.getReference().child(DOGS);
-        catsDatabaseRef = mDatabase.getReference().child(CATS);
-        sheltersDatabaseRef = mDatabase.getReference().child(SHELTERS);
-        favoritesDatabaseRef = mDatabase.getReference().child(FAVORITES);
+        dogsDatabaseRef = database.getReference().child(DOGS);
+        catsDatabaseRef = database.getReference().child(CATS);
+        sheltersDatabaseRef = database.getReference().child(SHELTERS);
+        favoritesDatabaseRef = database.getReference().child(FAVORITES);
 
         dogsDatabaseRef.keepSynced(true);
         catsDatabaseRef.keepSynced(true);
@@ -71,13 +69,9 @@ public class FirebaseRepository {
         attachFirebaseReadListeners();
     }
 
-    public LiveData<List<Pet>> getDogs(){
-        return dogs;
-    }
+    public LiveData<List<Pet>> getDogs(){return dogs;}
 
-    public LiveData<List<Pet>> getCats(){
-        return cats;
-    }
+    public LiveData<List<Pet>> getCats(){return cats;}
 
     public LiveData<Shelter> getShelter() {return shelter;}
 
@@ -100,12 +94,10 @@ public class FirebaseRepository {
                 }
 
                 @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
+                public void onCancelled(DatabaseError databaseError) {}
             };
 
-            dogsDatabaseRef.addValueEventListener(dogsListener);
+            dogsDatabaseRef.addListenerForSingleValueEvent(dogsListener);
         }
 
         if(catsListener==null) {
@@ -129,7 +121,7 @@ public class FirebaseRepository {
                 public void onCancelled(DatabaseError databaseError) {
                 }
             };
-            catsDatabaseRef.addValueEventListener(catsListener);
+            catsDatabaseRef.addListenerForSingleValueEvent(catsListener);
         }
 
         if(sheltersListener==null) {
@@ -146,56 +138,14 @@ public class FirebaseRepository {
                             allShelters.add(shelter);
                         }
                     }
-                    if(!allShelters.isEmpty())
-                        shelter.setValue(allShelters.get(0));
+                    if(!allShelters.isEmpty()) shelter.setValue(allShelters.get(0));
                 }
-
                 @Override
-                public void onCancelled(DatabaseError databaseError) {
-                }
+                public void onCancelled(DatabaseError databaseError) {}
             };
-            sheltersDatabaseRef.addValueEventListener(sheltersListener);
+            sheltersDatabaseRef.addListenerForSingleValueEvent(sheltersListener);
         }
     }
-
-    public void detachFirebaseReadListeners(){
-
-        if(dogsListener!=null)
-            dogsDatabaseRef.removeEventListener(dogsListener);
-        if(catsListener!=null)
-            catsDatabaseRef.removeEventListener(catsListener);
-        if(sheltersListener!=null)
-            sheltersDatabaseRef.removeEventListener(sheltersListener);
-
-    }
-
-//    public void incrementPetFoodCount(Pet pet){
-//
-//        DatabaseReference foodCountRef;
-//        if(pet instanceof Dog)
-//            foodCountRef = dogsDatabaseRef.child(pet.getId()).child("foodCount");
-//        else
-//            foodCountRef = catsDatabaseRef.child(pet.getId()).child("foodCount");
-//
-//        foodCountRef.runTransaction(new Transaction.Handler() {
-//            @Override
-//            public Transaction.Result doTransaction(MutableData mutableData) {
-//
-//                if(mutableData.getValue(Integer.class)==null)
-//                    return Transaction.success(mutableData);
-//
-//                int foodCount = mutableData.getValue(Integer.class).intValue();
-//                mutableData.setValue(++foodCount);
-//                return Transaction.success(mutableData);
-//            }
-//
-//            @Override
-//            public void onComplete(DatabaseError databaseError, boolean b, DataSnapshot dataSnapshot) {
-//
-//            }
-//        });
-//
-//    }
 
     public LiveData<HashMap<String,Boolean>> getUsersFavPets(HashMap<String,Boolean> localFavPets) {
 
@@ -211,9 +161,7 @@ public class FirebaseRepository {
                     }
                 }
                 @Override
-                public void onCancelled(DatabaseError databaseError) {
-                    Timber.d("getFavPets  DatabaseError = %s", databaseError.getMessage());
-                }
+                public void onCancelled(DatabaseError databaseError) {}
             });
         }
         return favorites;
@@ -221,6 +169,6 @@ public class FirebaseRepository {
 
     public void syncFavorites(HashMap<String, Boolean> update) {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if(FirebaseAuth.getInstance().getCurrentUser()!=null) favoritesDatabaseRef.child(user.getUid()).setValue(update);
+        if(user!=null) favoritesDatabaseRef.child(user.getUid()).setValue(update);
     }
 }

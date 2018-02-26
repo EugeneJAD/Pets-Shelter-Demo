@@ -26,9 +26,9 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintDimensionRatio="H,16:9"
-            card_view:layout_constraintEnd_toEndOf="parent"
-            card_view:layout_constraintStart_toStartOf="parent"
-            card_view:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             tools:srcCompat="@drawable/ic_launcher_background"
             app:imageUrlCC="@{pet.imageURL}"/>
 
@@ -48,17 +48,17 @@
             android:id="@+id/pet_title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:paddingTop="8dp"
+            android:paddingBottom="@dimen/screen_content_margin"
+            android:text="@{pet.name}"
             android:textAppearance="@style/TextAppearance.AppCompat.Headline"
             android:textColor="#FFFFFFFF"
-            card_view:layout_constraintBottom_toBottomOf="@+id/pet_image"
-            card_view:layout_constraintEnd_toEndOf="@+id/pet_image"
-            card_view:layout_constraintStart_toStartOf="parent"
-            tools:text="TextView"
-            android:text="@{pet.name}"/>
+            app:layout_constraintEnd_toEndOf="@+id/pet_image"
+            app:layout_constraintBottom_toBottomOf="@+id/pet_image"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:text="TextView"/>
 
         <TextView
             android:id="@+id/shelter_title"
@@ -67,26 +67,25 @@
             android:layout_marginBottom="24dp"
             android:layout_marginTop="16dp"
             android:layout_marginStart="16dp"
-            card_view:layout_constraintBottom_toBottomOf="parent"
-            card_view:layout_constraintStart_toStartOf="parent"
-            card_view:layout_constraintTop_toBottomOf="@+id/pet_image"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             tools:text="@string/looking_for_home"
             android:text="@{pet.adopted ? @string/adopted : @string/looking_for_home}"
             android:textColor="@{pet.adopted ? @android:color/holo_orange_light : @android:color/holo_green_light}"
-            />
+            app:layout_constraintTop_toBottomOf="@+id/pet_image" />
 
         <ImageView
             android:id="@+id/add_fav_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
+            android:layout_marginEnd="@dimen/screen_edge_standard_margin"
             android:padding="8dp"
             android:src="@{pet.isFavorite? @drawable/ic_favorite_24dp : @drawable/ic_favorite_border_24dp}"
             android:tint="@{isUserLoggedIn? @color/material_pink_400 : @color/textLightDisabled}"
-            card_view:layout_constraintBottom_toBottomOf="parent"
-            card_view:layout_constraintEnd_toEndOf="parent"
-            card_view:layout_constraintTop_toBottomOf="@+id/view"/>
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view"/>
 
     </android.support.constraint.ConstraintLayout>
 

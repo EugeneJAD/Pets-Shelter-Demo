@@ -46,6 +46,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding,MainViewModel
     public static final int TYPE_FRAGMENT_LIST_CATS= 1001;
     public static final int TYPE_FRAGMENT_DETAILS_PET = 1002;
     public static final int TYPE_FRAGMENT_SHELTER = 1003;
+    public static final int TYPE_FRAGMENT_NEWS_LIST= 1004;
 
     private ActionBarDrawerToggle toggle;
 
@@ -181,6 +182,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding,MainViewModel
         if (id == R.id.nav_dogs) navigator.navigateToDogs();
         else if (id == R.id.nav_cats) navigator.navigateToCats();
         else if (id == R.id.nav_shelter) navigator.navigateToShelter();
+        else if (id == R.id.nav_news) navigator.navigateToNews();
         else if (id == R.id.nav_tools) {}
         else if (id == R.id.nav_share) {}
         else if (id == R.id.nav_send) {}
@@ -197,6 +199,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding,MainViewModel
             case TYPE_FRAGMENT_LIST_DOGS:
             case TYPE_FRAGMENT_LIST_CATS:
             case TYPE_FRAGMENT_SHELTER:
+            case TYPE_FRAGMENT_NEWS_LIST:
                 //Show toggle
                 toggle.setDrawerIndicatorEnabled(true);
                 binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);

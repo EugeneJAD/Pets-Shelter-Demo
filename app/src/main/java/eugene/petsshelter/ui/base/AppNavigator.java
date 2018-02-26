@@ -16,6 +16,7 @@ import eugene.petsshelter.ui.donation.DonationActivity;
 import eugene.petsshelter.ui.donation.PaymentMethodsFragment;
 import eugene.petsshelter.ui.donation.SummaryDonationFragment;
 import eugene.petsshelter.ui.main.MainActivity;
+import eugene.petsshelter.ui.main.NewsListFragment;
 import eugene.petsshelter.ui.main.PetDetailsFragment;
 import eugene.petsshelter.ui.main.PetsListFragment;
 import eugene.petsshelter.ui.main.ShelterDetailsFragment;
@@ -83,7 +84,10 @@ public class AppNavigator {
             RC_SIGN_IN);
     }
 
+    public void navigateToNews() {navigation.replaceFragment(R.id.fragment_container, new NewsListFragment(), null);}
+
     public void navigateToDonation(){navigation.startActivity(DonationActivity.class);}
+
 
     //Donation Activity Navigation
 
@@ -102,4 +106,5 @@ public class AppNavigator {
                 SummaryDonationFragment.class.getSimpleName(),null,null,R.anim.slide_from_right,
                 R.anim.slide_to_left,R.anim.slide_from_left,R.anim.slide_to_right);
     }
+
 }

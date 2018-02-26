@@ -47,7 +47,6 @@ public class MainViewModel extends ViewModel{
     @Override
     protected void onCleared() {
         repository.updateRemoteFavoritePets();
-        repository.detachFirebaseReadListeners();
         super.onCleared();
     }
 

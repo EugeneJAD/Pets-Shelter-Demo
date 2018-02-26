@@ -94,6 +94,7 @@ public abstract class DataBoundListAdapter<T, V extends ViewDataBinding>
                     }
                     items = update;
                     diffResult.dispatchUpdatesTo(DataBoundListAdapter.this);
+
                     notifyDataSetChanged();
                 }
             }.execute();
@@ -105,6 +106,8 @@ public abstract class DataBoundListAdapter<T, V extends ViewDataBinding>
     protected abstract boolean areItemsTheSame(T oldItem, T newItem);
 
     protected abstract boolean areContentsTheSame(T oldItem, T newItem);
+
+    public final void setItems(@Nullable List<T> update) {items = update;}
 
     @Override
     public int getItemCount() {

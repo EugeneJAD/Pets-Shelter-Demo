@@ -11,6 +11,7 @@ import eugene.petsshelter.ui.donation.DonationActivityViewModel;
 import eugene.petsshelter.ui.donation.PaymentMethodsViewModel;
 import eugene.petsshelter.ui.donation.SummaryDonationViewModel;
 import eugene.petsshelter.ui.main.MainViewModel;
+import eugene.petsshelter.ui.main.NewsListViewModel;
 import eugene.petsshelter.ui.main.PetDetailsViewModel;
 import eugene.petsshelter.ui.main.PetsViewModel;
 import eugene.petsshelter.ui.main.ShelterViewModel;
@@ -63,6 +64,11 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(SummaryDonationViewModel.class)
     abstract ViewModel bindSummaryDonationViewModel(SummaryDonationViewModel summaryDonationViewModel);
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(NewsListViewModel.class)
+    abstract ViewModel bindNewsListViewModel(NewsListViewModel newsListViewModel);
 
     @Binds
     abstract ViewModelProvider.Factory bindViewModelFactory(PetsShelterViewModelFactory factory);

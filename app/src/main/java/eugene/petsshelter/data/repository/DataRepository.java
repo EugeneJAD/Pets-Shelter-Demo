@@ -91,9 +91,6 @@ public class DataRepository implements Repository {
     @Override
     public void updateRemoteFavoritePets() {remoteRepo.syncFavorites(localFavPets);}
 
-    @Override
-    public void detachFirebaseReadListeners() {remoteRepo.detachFirebaseReadListeners();}
-
     private LiveData<Profile> getUserProfile() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
