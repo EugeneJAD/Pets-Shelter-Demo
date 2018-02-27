@@ -4,6 +4,7 @@ import android.databinding.DataBindingUtil;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -40,7 +41,6 @@ public class NewsRecyclerAdapter extends DataBoundListAdapter<NewsItem, NewsList
     private ChildEventListener childEventListener;
 
     public NewsRecyclerAdapter(OnItemClickListener<NewsItem> clickCallback) {
-        Timber.d("Constructor");
         this.clickCallback = clickCallback;
         childEventListener = defineChildEventListener();
         newsRef = FirebaseDatabase.getInstance().getReference().child(FirebaseRepository.NEWS);
@@ -48,21 +48,14 @@ public class NewsRecyclerAdapter extends DataBoundListAdapter<NewsItem, NewsList
         startListening();
     }
 
-
     @Override
     protected NewsListItemBinding createBinding(ViewGroup parent) {
         NewsListItemBinding binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()),
                 R.layout.news_list_item,parent,false);
-
         binding.getRoot().setOnClickListener(v -> clickCallback.onItemClick(binding.getNewsItem(),v));
-
-        binding.newsStarButton.setOnClickListener(v1->{
-            String itemKey = binding.getNewsItem().key;
-            if(getUser()!=null && !TextUtils.isEmpty(itemKey)) onStarClicked(itemKey);});
-
+        binding.newsStarButton.setOnClickListener(v1->clickCallback.onItemClick(binding.getNewsItem(),v1));
         return binding;
     }
-
 
     @Override
     protected void bind(NewsListItemBinding binding, NewsItem item) {
@@ -80,54 +73,22 @@ public class NewsRecyclerAdapter extends DataBoundListAdapter<NewsItem, NewsList
     protected boolean areItemsTheSame(NewsItem oldItem, NewsItem newItem) {return Objects.equals(oldItem.key,newItem.key);}
 
     @Override
-    protected boolean areContentsTheSame(NewsItem oldItem, NewsItem newItem) {return Objects.equals(oldItem.starCount,newItem.starCount);}
-
-    private void onStarClicked(String itemKey) {
-
-        newsRef.child(itemKey).runTransaction(new Transaction.Handler() {
-            @Override
-            public Transaction.Result doTransaction(MutableData mutableData) {
-
-                NewsItem item = mutableData.getValue(NewsItem.class);
-                if (item == null) {
-                    return Transaction.success(mutableData);
-                }
-
-                if (item.stars.containsKey(getUser().getUid())) {
-                    // Unstar the post and remove self from stars
-                    item.starCount = item.starCount - 1;
-                    item.stars.remove(getUser().getUid());
-                } else {
-                    // Star the post and add self to stars
-                    item.starCount = item.starCount + 1;
-                    item.stars.put(getUser().getUid(), true);
-                }
-
-                // Set value and report transaction success
-                mutableData.setValue(item);
-                return Transaction.success(mutableData);
-            }
-
-            @Override
-            public void onComplete(DatabaseError databaseError, boolean b, DataSnapshot dataSnapshot) {
-                Timber.d("postTransaction:onComplete: %s", databaseError);
-            }
-        });
-    }
+    protected boolean areContentsTheSame(NewsItem oldItem, NewsItem newItem) {
+        return Objects.equals(oldItem.title,newItem.title) && Objects.equals(oldItem.starCount,newItem.starCount);}
 
     private ChildEventListener defineChildEventListener() {
 
         return new ChildEventListener(){
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                Timber.d("onChildAdded");
+
                 NewsItem newsItem = dataSnapshot.getValue(NewsItem.class);
                 if(newsItem!=null && !TextUtils.isEmpty(newsItem.title) && !newsItem.title.equals("title")) {
                     newsItem.key = dataSnapshot.getKey();
                     newsItemsIndexes.add(newsItem.key);
                     newsItems.add(newsItem);
+                    notifyItemInserted(newsItems.size()-1);
                 }
-                notifyItemInserted(newsItemsIndexes.indexOf(newsItem.key)-1);
             }
 
             @Override
@@ -150,13 +111,7 @@ public class NewsRecyclerAdapter extends DataBoundListAdapter<NewsItem, NewsList
 
     private FirebaseUser getUser(){return FirebaseAuth.getInstance().getCurrentUser(); }
 
-    public void startListening() {
-        Timber.d("startListening");
-        newsRef.addChildEventListener(childEventListener);}
+    private void startListening() {newsRef.addChildEventListener(childEventListener);}
 
-    public void stopListening() {
-        Timber.d("stopListening");
-        if (childEventListener != null) newsRef.removeEventListener(childEventListener);
-    }
-
+    public void stopListening() {if (childEventListener != null) newsRef.removeEventListener(childEventListener);}
 }

@@ -2,6 +2,7 @@ package eugene.petsshelter.data.repository.remote;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
+import android.text.TextUtils;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -9,6 +10,8 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.MutableData;
+import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -20,6 +23,7 @@ import javax.inject.Singleton;
 
 import eugene.petsshelter.data.models.Cat;
 import eugene.petsshelter.data.models.Dog;
+import eugene.petsshelter.data.models.NewsItem;
 import eugene.petsshelter.data.models.Pet;
 import eugene.petsshelter.data.models.Shelter;
 import timber.log.Timber;
@@ -37,6 +41,7 @@ public class FirebaseRepository {
     private DatabaseReference catsDatabaseRef;
     private DatabaseReference sheltersDatabaseRef;
     private DatabaseReference favoritesDatabaseRef;
+    private DatabaseReference newsDatabaseRef;
 
     private ValueEventListener dogsListener;
     private ValueEventListener catsListener;
@@ -60,6 +65,7 @@ public class FirebaseRepository {
         catsDatabaseRef = database.getReference().child(CATS);
         sheltersDatabaseRef = database.getReference().child(SHELTERS);
         favoritesDatabaseRef = database.getReference().child(FAVORITES);
+        newsDatabaseRef = database.getReference().child(NEWS);
 
         dogsDatabaseRef.keepSynced(true);
         catsDatabaseRef.keepSynced(true);
@@ -168,7 +174,44 @@ public class FirebaseRepository {
     }
 
     public void syncFavorites(HashMap<String, Boolean> update) {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if(user!=null) favoritesDatabaseRef.child(user.getUid()).setValue(update);
+        if(getUser()!=null) favoritesDatabaseRef.child(getUser().getUid()).setValue(update);
     }
+
+    public void starTransaction(String newsItemKey){
+
+        if(getUser()==null || TextUtils.isEmpty(newsItemKey))
+            return;
+
+        newsDatabaseRef.child(newsItemKey).runTransaction(new Transaction.Handler() {
+            @Override
+            public Transaction.Result doTransaction(MutableData mutableData) {
+
+                NewsItem item = mutableData.getValue(NewsItem.class);
+                if (item == null) {
+                    return Transaction.success(mutableData);
+                }
+
+                if (item.stars.containsKey(getUser().getUid())) {
+                    // Unstar the news and remove self from stars
+                    item.starCount = item.starCount - 1;
+                    item.stars.remove(getUser().getUid());
+                } else {
+                    // Star the news and add self to stars
+                    item.starCount = item.starCount + 1;
+                    item.stars.put(getUser().getUid(), true);
+                }
+
+                // Set value and report transaction success
+                mutableData.setValue(item);
+                return Transaction.success(mutableData);
+            }
+
+            @Override
+            public void onComplete(DatabaseError databaseError, boolean b, DataSnapshot dataSnapshot) {
+                Timber.d("newsTransaction:onComplete: %s", databaseError);
+            }
+        });
+    }
+
+    private FirebaseUser getUser(){return FirebaseAuth.getInstance().getCurrentUser(); }
 }

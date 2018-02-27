@@ -38,10 +38,11 @@ public class PetsRecyclerAdapter extends DataBoundListAdapter<Pet,PetsListItemBi
                 R.layout.pets_list_item,parent,false);
         binding.addFavButton.setOnClickListener(view -> {
             if(FirebaseAuth.getInstance().getCurrentUser()!=null) {
-                AnimationUtils.animateFavButton((ImageView) view, binding.getPet());
+                AnimationUtils.animateFavButton((ImageView) view, binding.getPet().isFavorite());
                 clickCallback.onItemClick(binding.getPet(), view);
             }
         });
+        binding.petItemDonateButton.setOnClickListener(v -> clickCallback.onItemClick(binding.getPet(), v));
         binding.getRoot().setOnClickListener(view -> clickCallback.onItemClick(binding.getPet(),view));
         return binding;
     }
@@ -59,5 +60,4 @@ public class PetsRecyclerAdapter extends DataBoundListAdapter<Pet,PetsListItemBi
     @Override
     protected boolean areContentsTheSame(Pet oldItem, Pet newItem) {
         return Objects.equals(oldItem.getName(),newItem.getName()) && Objects.equals(oldItem.isFavorite(),newItem.isFavorite());}
-
 }

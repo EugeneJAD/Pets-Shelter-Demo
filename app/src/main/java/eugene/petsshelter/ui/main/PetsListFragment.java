@@ -1,14 +1,15 @@
 package eugene.petsshelter.ui.main;
 
-
-import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.google.firebase.auth.FirebaseAuth;
 
 import javax.inject.Inject;
 
@@ -24,7 +25,8 @@ import eugene.petsshelter.ui.base.BaseFragment;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class PetsListFragment extends BaseFragment<ListFragmentBinding,PetsViewModel> implements OnItemClickListener<Pet>, Injectable {
+public class PetsListFragment extends BaseFragment<ListFragmentBinding,PetsViewModel>
+        implements OnItemClickListener<Pet>, Injectable, FirebaseAuth.AuthStateListener {
 
     @Inject AppNavigator navigator;
 
@@ -56,7 +58,7 @@ public class PetsListFragment extends BaseFragment<ListFragmentBinding,PetsViewM
 
         observeViewModel();
 
-        observeActivityViewModel();
+//        observeActivityViewModel();
 
     }
 
@@ -72,19 +74,24 @@ public class PetsListFragment extends BaseFragment<ListFragmentBinding,PetsViewM
         });
 
         viewModel.getPets().observe(this,pets -> adapter.replace(pets));
+
+        viewModel.getFavorites().observe(this, favorites -> adapter.replace(viewModel.getPets().getValue()));
     }
 
-    private void observeActivityViewModel() {
-
-        MainViewModel activityViewModel = ViewModelProviders.of(getActivity()).get(MainViewModel.class);
-        activityViewModel.getFavorites().observe(this, favorites -> adapter.replace(viewModel.getPets().getValue()));
-    }
+//    private void observeActivityViewModel() {
+//
+//        MainViewModel activityViewModel = ViewModelProviders.of(getActivity()).get(MainViewModel.class);
+//        activityViewModel.getFavorites().observe(this, favorites -> adapter.replace(viewModel.getPets().getValue()));
+//    }
 
     @Override
     public void onItemClick(Pet pet, View view) {
 
         if(view.getId()==R.id.add_fav_button){
             viewModel.addOrRemoveFavorite(pet.getId());
+            pet.setFavorite(!pet.isFavorite());
+        } else if(view.getId()==R.id.pet_item_donate_button) {
+            navigator.navigateToDonation();
         } else {
             if (viewModel.getListType().getValue().equals(FRAGMENT_LIST_TYPE_DOGS))
                 navigator.navigateToDogDetails(pet.getId());
@@ -94,8 +101,18 @@ public class PetsListFragment extends BaseFragment<ListFragmentBinding,PetsViewM
     }
 
     @Override
-    public void onPause() {
-        viewModel.repository.updateRemoteFavoritePets();
-        super.onPause();
+    public void onResume() {
+        super.onResume();
+        FirebaseAuth.getInstance().addAuthStateListener(this);
     }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        viewModel.repository.updateRemoteFavoritePets();
+        FirebaseAuth.getInstance().removeAuthStateListener(this);
+    }
+
+    @Override
+    public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {if(adapter!=null) adapter.refresh();}
 }

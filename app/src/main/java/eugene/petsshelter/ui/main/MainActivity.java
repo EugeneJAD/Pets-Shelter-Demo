@@ -59,8 +59,6 @@ public class MainActivity extends BaseActivity<ActivityMainBinding,MainViewModel
         super.onCreate(savedInstanceState);
         setAndBindContentView(R.layout.activity_main);
 
-        Timber.d("onCreate");
-
         if(getSupportActionBar()==null)
             setSupportActionBar(binding.toolbar);
 
@@ -109,7 +107,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding,MainViewModel
                 .signOut(this)
                 .addOnCompleteListener(task ->{
                     if(task.isSuccessful())
-                        SnackbarUtils.showSnackbar(binding.getRoot(), getString(R.string.signed_out), SnackbarUtils.TYPE_SUCCESS);});
+                        SnackbarUtils.showSnackbar(binding.getRoot(), getString(R.string.signed_out), SnackbarUtils.TYPE_INFO);});
     }
 
     @Override
@@ -226,7 +224,6 @@ public class MainActivity extends BaseActivity<ActivityMainBinding,MainViewModel
             IdpResponse response = IdpResponse.fromResultIntent(data);
 
             if (resultCode == RESULT_OK) {
-                SnackbarUtils.showSnackbar(binding.getRoot(),getString(R.string.sign_in_successful), SnackbarUtils.TYPE_SUCCESS);
                 viewModel.reloadUserData(FirebaseAuth.getInstance().getCurrentUser().getUid());
                 return;
             } else {

@@ -6,6 +6,7 @@ import android.arch.lifecycle.Transformations;
 import android.arch.lifecycle.ViewModel;
 import android.text.TextUtils;
 
+import java.util.HashMap;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -49,4 +50,6 @@ public class PetsViewModel extends ViewModel {
     public LiveData<List<Pet>> getPets() {return pets;}
 
     public void addOrRemoveFavorite(String id) {repository.addToFavorites(id);}
+
+    public LiveData<HashMap<String, Boolean>> getFavorites() {return repository.getFavorites();}
 }

@@ -16,7 +16,7 @@ import eugene.petsshelter.data.models.Pet;
 
 public class AnimationUtils {
 
-    public static void animateFavButton(ImageView view, Pet pet){
+    public static void animateFavButton(ImageView view, Boolean favorite){
 
         ScaleAnimation scaleUpAnimation = new ScaleAnimation(1f,1.1f,1f,1.1f,
                 ScaleAnimation.RELATIVE_TO_SELF, 0.5f,
@@ -29,12 +29,10 @@ public class AnimationUtils {
             public void onAnimationStart(Animation animation) {}
             @Override
             public void onAnimationEnd(Animation animation) {
-                if(pet.isFavorite()) {
+                if(favorite) {
                     view.setImageResource(R.drawable.ic_favorite_border_24dp);
-                    pet.setFavorite(false);
                 }else {
                     view.setImageResource(R.drawable.ic_favorite_24dp);
-                    pet.setFavorite(true);
                 }
             }
             @Override

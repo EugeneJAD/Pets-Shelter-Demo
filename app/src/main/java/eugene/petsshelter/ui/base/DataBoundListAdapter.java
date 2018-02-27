@@ -114,4 +114,6 @@ public abstract class DataBoundListAdapter<T, V extends ViewDataBinding>
         return items == null ? 0 : items.size();
     }
 
+    public final void refresh(){replace(items);}
+
 }

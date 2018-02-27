@@ -88,8 +88,12 @@ public class DataRepository implements Repository {
         }
     }
 
+
     @Override
     public void updateRemoteFavoritePets() {remoteRepo.syncFavorites(localFavPets);}
+
+    @Override
+    public void doStarTransaction(String newsItemKey) {remoteRepo.starTransaction(newsItemKey);}
 
     private LiveData<Profile> getUserProfile() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -125,6 +129,7 @@ public class DataRepository implements Repository {
 
         return AbsentLiveData.create();
     }
+
 
 
 

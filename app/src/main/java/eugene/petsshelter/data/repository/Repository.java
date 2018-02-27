@@ -30,4 +30,5 @@ public interface Repository {
     boolean isFavorite(String petId);
     void updateRemoteFavoritePets();
     void updateLocalFavoritePets(HashMap<String, Boolean> favorites);
+    void doStarTransaction(String newsItemKey);
 }

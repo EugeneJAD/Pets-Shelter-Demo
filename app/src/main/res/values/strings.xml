@@ -10,17 +10,18 @@
     <string name="dogs_fragment_title">Dogs</string>
     <string name="cats_fragment_title">Cats</string>
     <string name="shelter_fragment_title">Shelter</string>
+    <string name="news_fragment_title">News</string>
 
     <!--Pet details -->
     <string name="age">Age:</string>
     <string name="breed">Breed:</string>
     <string name="shelter">Shelter:</string>
-    <string name="gender">Gender</string>
+    <string name="gender">Gender:</string>
     <string name="shelter_info_title">Shelter Info</string>
     <string name="button_food_text">Buy food</string>
     <string name="adoption_button_text">Adoption</string>
     <string name="adopted">Adopted!</string>
-    <string name="looking_for_home">looking for home</string>
+    <string name="looking_for_home">Looking for home</string>
 
     <!--Shelter Info -->
     <string name="address">Address:</string>
@@ -76,8 +77,5 @@
     <string name="anonymous">Anonymous</string>
     <string name="cancelled">Cancelled</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="news_fragment_title">News</string>
 
 </resources>
