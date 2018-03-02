@@ -27,7 +27,7 @@ public class NewsItem {
     public Map<String, Boolean> stars = new HashMap<>();
 
     public NewsItem() {
-        // Default constructor required for calls to DataSnapshot.getValue(Post.class)
+        // Default constructor required for calls to DataSnapshot.getValue(NewsItem.class)
     }
 
     //for new items creating

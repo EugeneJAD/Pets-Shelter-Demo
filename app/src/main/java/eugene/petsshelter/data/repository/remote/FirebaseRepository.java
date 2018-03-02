@@ -6,6 +6,7 @@ import android.text.TextUtils;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -26,6 +27,7 @@ import eugene.petsshelter.data.models.Dog;
 import eugene.petsshelter.data.models.NewsItem;
 import eugene.petsshelter.data.models.Pet;
 import eugene.petsshelter.data.models.Shelter;
+import eugene.petsshelter.utils.AbsentLiveData;
 import timber.log.Timber;
 
 @Singleton
@@ -43,18 +45,21 @@ public class FirebaseRepository {
     private DatabaseReference favoritesDatabaseRef;
     private DatabaseReference newsDatabaseRef;
 
-    private ValueEventListener dogsListener;
-    private ValueEventListener catsListener;
-    private ValueEventListener sheltersListener;
+    private ValueEventListener newsItemListener;
+    private ChildEventListener newsChildEventListener;
 
     private MutableLiveData<List<Pet>> dogs = new MutableLiveData<>();
     private MutableLiveData<List<Pet>> cats = new MutableLiveData<>();
     private MutableLiveData<Shelter> shelter = new MutableLiveData<>();
     private MutableLiveData<HashMap<String,Boolean>> favorites = new MutableLiveData<>();
+    private MutableLiveData<List<NewsItem>> news = new MutableLiveData<>();
+    private MutableLiveData<NewsItem> selectedNewsItem = new MutableLiveData<>();
 
     private List<Pet> allDogs = new ArrayList<>();
     private List<Pet> allCats = new ArrayList<>();
     private List<Shelter> allShelters = new ArrayList<>();
+    private List<NewsItem> newsItems = new ArrayList<>();
+    private List<String> newsItemsIndexes = new ArrayList<>();
 
     @Inject
     public FirebaseRepository(FirebaseDatabase database){
@@ -71,6 +76,9 @@ public class FirebaseRepository {
         catsDatabaseRef.keepSynced(true);
         sheltersDatabaseRef.keepSynced(true);
         favoritesDatabaseRef.keepSynced(true);
+        newsDatabaseRef.keepSynced(true);
+
+        newsChildEventListener = getNewsChildEventListener();
 
         attachFirebaseReadListeners();
     }
@@ -81,76 +89,110 @@ public class FirebaseRepository {
 
     public LiveData<Shelter> getShelter() {return shelter;}
 
+    public LiveData<List<NewsItem>> getNews() {return news;}
+
+    public LiveData<NewsItem> getSelectedNewsItem() {return selectedNewsItem;}
+
     public void attachFirebaseReadListeners(){
 
-        if(dogsListener==null) {
-            dogsListener = new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    if(!allDogs.isEmpty())
-                        allDogs.clear();
-                    for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                        if (ds.getValue(Dog.class) != null) {
-                            Dog dog = ds.getValue(Dog.class);
-                            dog.setId(ds.getKey());
-                            allDogs.add(dog);
+        ValueEventListener dogsListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(!allDogs.isEmpty())
+                    allDogs.clear();
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                    if (ds.getValue(Dog.class) != null) {
+                        Dog dog = ds.getValue(Dog.class);
+                        dog.setId(ds.getKey());
+                        allDogs.add(dog);
+                    }
+                }
+                dogs.setValue(allDogs);
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {}
+        };
+        dogsDatabaseRef.addListenerForSingleValueEvent(dogsListener);
+
+        ValueEventListener catsListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(!allCats.isEmpty())
+                    allCats.clear();
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                    if (ds.getValue(Cat.class) != null) {
+                        Cat cat = ds.getValue(Cat.class);
+                        cat.setId(ds.getKey());
+                        allCats.add(cat);
+                    }
+                }
+                cats.setValue(allCats);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        };
+        catsDatabaseRef.addListenerForSingleValueEvent(catsListener);
+
+        ValueEventListener sheltersListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(!allShelters.isEmpty())
+                    allShelters.clear();
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                    if (ds.getValue(Shelter.class) != null) {
+                        Shelter shelter = ds.getValue(Shelter.class);
+                        shelter.setId(ds.getKey());
+                        allShelters.add(shelter);
+                    }
+                }
+                if(!allShelters.isEmpty()) shelter.setValue(allShelters.get(0));
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {}
+        };
+        sheltersDatabaseRef.addListenerForSingleValueEvent(sheltersListener);
+
+        ValueEventListener newsListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(!newsItems.isEmpty())
+                    newsItems.clear();
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                    if (ds.getValue(NewsItem.class) != null) {
+                        NewsItem newsItem = ds.getValue(NewsItem.class);
+                        if(newsItem!=null && !TextUtils.isEmpty(newsItem.title) && !newsItem.title.equals("title")) {
+                            newsItem.key = ds.getKey();
+                            newsItemsIndexes.add(newsItem.key);
+                            newsItems.add(newsItem);
                         }
                     }
-                    dogs.setValue(allDogs);
                 }
+                news.setValue(newsItems);
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {}
+        };
+        newsDatabaseRef.addListenerForSingleValueEvent(newsListener);
 
-                @Override
-                public void onCancelled(DatabaseError databaseError) {}
-            };
-
-            dogsDatabaseRef.addListenerForSingleValueEvent(dogsListener);
-        }
-
-        if(catsListener==null) {
-            catsListener = new ValueEventListener() {
-
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    if(!allCats.isEmpty())
-                        allCats.clear();
-                    for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                        if (ds.getValue(Cat.class) != null) {
-                            Cat cat = ds.getValue(Cat.class);
-                            cat.setId(ds.getKey());
-                            allCats.add(cat);
-                        }
+        newsItemListener = new ValueEventListener(){
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                NewsItem item = dataSnapshot.getValue(NewsItem.class);
+                if(item!=null) {
+                    item.key = dataSnapshot.getKey();
+                    int index = newsItemsIndexes.indexOf(item.key);
+                    if (index > -1) {
+                        newsItems.set(index, item);
+                        news.setValue(newsItems);
                     }
-                    cats.setValue(allCats);
                 }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                }
-            };
-            catsDatabaseRef.addListenerForSingleValueEvent(catsListener);
-        }
-
-        if(sheltersListener==null) {
-            sheltersListener = new ValueEventListener() {
-
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    if(!allShelters.isEmpty())
-                        allShelters.clear();
-                    for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                        if (ds.getValue(Shelter.class) != null) {
-                            Shelter shelter = ds.getValue(Shelter.class);
-                            shelter.setId(ds.getKey());
-                            allShelters.add(shelter);
-                        }
-                    }
-                    if(!allShelters.isEmpty()) shelter.setValue(allShelters.get(0));
-                }
-                @Override
-                public void onCancelled(DatabaseError databaseError) {}
-            };
-            sheltersDatabaseRef.addListenerForSingleValueEvent(sheltersListener);
-        }
+                selectedNewsItem.setValue(item);
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {}
+        };
     }
 
     public LiveData<HashMap<String,Boolean>> getUsersFavPets(HashMap<String,Boolean> localFavPets) {
@@ -212,6 +254,53 @@ public class FirebaseRepository {
             }
         });
     }
+
+    private ChildEventListener getNewsChildEventListener() {
+
+        return new ChildEventListener(){
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {}
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                NewsItem newsItem = dataSnapshot.getValue(NewsItem.class);
+                newsItem.key = dataSnapshot.getKey();
+                int index = newsItemsIndexes.indexOf(newsItem.key);
+                if(index>-1) {
+                    newsItems.set(index, newsItem);
+                    news.setValue(newsItems);
+                }
+            }
+            @Override public void onChildRemoved(DataSnapshot dataSnapshot) {}
+            @Override public void onChildMoved(DataSnapshot dataSnapshot, String s) {}
+            @Override public void onCancelled(DatabaseError databaseError) {}
+        };
+    }
+
+    public void startListeningNews() {newsDatabaseRef.addChildEventListener(newsChildEventListener);}
+    public void stopListeningNews() {if (newsChildEventListener != null) newsDatabaseRef.removeEventListener(newsChildEventListener);}
+
+    public void startListeningNewsItem(String key){
+        if(!TextUtils.isEmpty(key))
+            newsDatabaseRef.child(key).addValueEventListener(newsItemListener);}
+    public void stopListeningNewsItem(String key) {
+        if(!TextUtils.isEmpty(key)) {
+            if (newsItemListener != null) newsDatabaseRef.child(key).removeEventListener(newsItemListener);
+        }
+        selectedNewsItem.setValue(null);
+    }
+
+    public void clearData(){
+        allCats.clear();
+        allDogs.clear();
+        allShelters.clear();
+        cats.setValue(null);
+        dogs.setValue(null);
+        shelter.setValue(null);
+        newsItemsIndexes.clear();
+        newsItems.clear();
+        news.setValue(null);
+    }
+
 
     private FirebaseUser getUser(){return FirebaseAuth.getInstance().getCurrentUser(); }
 }

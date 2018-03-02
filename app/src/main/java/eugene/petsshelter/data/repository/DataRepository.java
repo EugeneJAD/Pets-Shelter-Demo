@@ -14,6 +14,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import eugene.petsshelter.data.models.ApiResponse;
+import eugene.petsshelter.data.models.NewsItem;
 import eugene.petsshelter.data.models.Pet;
 import eugene.petsshelter.data.models.Profile;
 import eugene.petsshelter.data.models.Shelter;
@@ -21,6 +22,7 @@ import eugene.petsshelter.data.repository.remote.FirebaseRepository;
 import eugene.petsshelter.service.StripeService;
 import eugene.petsshelter.ui.main.PetsListFragment;
 import eugene.petsshelter.utils.AbsentLiveData;
+import eugene.petsshelter.utils.Objects;
 import okhttp3.ResponseBody;
 
 /**
@@ -58,6 +60,8 @@ public class DataRepository implements Repository {
     @Override
     public LiveData<Pet> getCatById(String id) {return findPetById(id, PetsListFragment.FRAGMENT_LIST_TYPE_CATS);}
 
+    @Override
+    public LiveData<NewsItem> getSelectedNews() {return remoteRepo.getSelectedNewsItem();}
 
     @Override
     public LiveData<ApiResponse<ResponseBody>> createCharge(Map<String, Object> fields) {
@@ -66,6 +70,21 @@ public class DataRepository implements Repository {
 
     @Override
     public LiveData<HashMap<String, Boolean>> getFavorites() {return remoteRepo.getUsersFavPets(localFavPets);}
+
+    @Override
+    public LiveData<List<NewsItem>> getNews() {return remoteRepo.getNews();}
+
+    @Override
+    public void startListeningNews() {remoteRepo.startListeningNews();}
+
+    @Override
+    public void stopListeningNews() {remoteRepo.stopListeningNews();}
+
+    @Override
+    public void startListeningNewsItem(String key) {remoteRepo.startListeningNewsItem(key);}
+
+    @Override
+    public void stopListeningNewsItem(String key) {remoteRepo.stopListeningNewsItem(key);}
 
     @Override
     public void addToFavorites(String petId){

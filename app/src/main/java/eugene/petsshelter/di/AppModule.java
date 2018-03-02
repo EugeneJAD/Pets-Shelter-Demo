@@ -18,7 +18,7 @@ import eugene.petsshelter.ui.donation.DonationActivityViewModel;
 import eugene.petsshelter.ui.donation.PaymentMethodsViewModel;
 import eugene.petsshelter.ui.donation.SummaryDonationViewModel;
 import eugene.petsshelter.ui.main.MainViewModel;
-import eugene.petsshelter.ui.main.NewsListViewModel;
+import eugene.petsshelter.ui.main.NewsViewModel;
 import eugene.petsshelter.ui.main.PetDetailsViewModel;
 import eugene.petsshelter.ui.main.PetsViewModel;
 import eugene.petsshelter.ui.main.ShelterViewModel;
@@ -82,5 +82,5 @@ class AppModule {
     Class<SummaryDonationViewModel> provideSummaryDonationViewModel(){return SummaryDonationViewModel.class;}
 
     @Provides
-    Class<NewsListViewModel> provideNewsListViewModel(){return NewsListViewModel.class;}
+    Class<NewsViewModel> provideNewsViewModel(){return NewsViewModel.class;}
 }

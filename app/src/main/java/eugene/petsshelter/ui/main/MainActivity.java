@@ -5,6 +5,7 @@ import android.content.res.Configuration;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
@@ -12,12 +13,14 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.ErrorCodes;
 import com.firebase.ui.auth.IdpResponse;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+
 
 import javax.inject.Inject;
 
@@ -30,7 +33,6 @@ import eugene.petsshelter.databinding.NavHeaderMainBinding;
 import eugene.petsshelter.ui.base.AppNavigator;
 import eugene.petsshelter.ui.base.BaseActivity;
 import eugene.petsshelter.utils.SnackbarUtils;
-import timber.log.Timber;
 
 public class MainActivity extends BaseActivity<ActivityMainBinding,MainViewModel>
         implements NavigationView.OnNavigationItemSelectedListener, HasSupportFragmentInjector,
@@ -47,6 +49,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding,MainViewModel
     public static final int TYPE_FRAGMENT_DETAILS_PET = 1002;
     public static final int TYPE_FRAGMENT_SHELTER = 1003;
     public static final int TYPE_FRAGMENT_NEWS_LIST= 1004;
+    public static final int TYPE_FRAGMENT_NEWS_DETAILS= 1005;
 
     private ActionBarDrawerToggle toggle;
 
@@ -191,26 +194,45 @@ public class MainActivity extends BaseActivity<ActivityMainBinding,MainViewModel
     }
 
     //Call from Fragments
-    public void setToolbar(String toolbarTitle, int fragmentType) {
+    public void setToolbar(String toolbarTitle, String toolbarImageUrl, int fragmentType) {
 
         switch (fragmentType) {
             case TYPE_FRAGMENT_LIST_DOGS:
             case TYPE_FRAGMENT_LIST_CATS:
             case TYPE_FRAGMENT_SHELTER:
             case TYPE_FRAGMENT_NEWS_LIST:
-                //Show toggle
-                toggle.setDrawerIndicatorEnabled(true);
-                binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+                binding.mainBottomButtonsContainer.setVisibility(View.GONE);
+                setToolbarForMasterFragment();
                 break;
             case TYPE_FRAGMENT_DETAILS_PET:
-                //Hide toggle and show caret
-                toggle.setDrawerIndicatorEnabled(false);
-                binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+                binding.mainBottomButtonsContainer.setVisibility(View.VISIBLE);
+                setToolbarForDetailsFragment();
+                break;
+            case TYPE_FRAGMENT_NEWS_DETAILS:
+                binding.mainBottomButtonsContainer.setVisibility(View.GONE);
+                setToolbarForDetailsFragment();
                 break;
         }
 
+        binding.setImageUrl(toolbarImageUrl);
+        binding.collapsingToolbar.setTitle(toolbarTitle);
+
         if(getSupportActionBar()!=null)
             getSupportActionBar().setTitle(toolbarTitle);
+    }
+
+    private void setToolbarForDetailsFragment(){
+        //Hide toggle and show caret
+        toggle.setDrawerIndicatorEnabled(false);
+        binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+        binding.appBar.setExpanded(true,true);
+    }
+
+    private void setToolbarForMasterFragment() {
+        //Show toggle
+        toggle.setDrawerIndicatorEnabled(true);
+        binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+        binding.appBar.setExpanded(false,true);
     }
 
     @Override
@@ -251,4 +273,5 @@ public class MainActivity extends BaseActivity<ActivityMainBinding,MainViewModel
         if (user == null) {onSignedOutCleanup();
         } else {onSignedInInitialize();}
     }
+
 }

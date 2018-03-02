@@ -21,6 +21,7 @@ import eugene.petsshelter.ui.adapter.OnItemClickListener;
 import eugene.petsshelter.ui.adapter.PetsRecyclerAdapter;
 import eugene.petsshelter.ui.base.AppNavigator;
 import eugene.petsshelter.ui.base.BaseFragment;
+import timber.log.Timber;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -45,6 +46,8 @@ public class PetsListFragment extends BaseFragment<ListFragmentBinding,PetsViewM
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        Timber.d("onViewCreated");
+
         if(getArguments()!=null && getArguments().containsKey(KEY_LIST_TYPE))
             viewModel.setListType(getArguments().getString(KEY_LIST_TYPE,FRAGMENT_LIST_TYPE_DOGS));
 
@@ -55,11 +58,9 @@ public class PetsListFragment extends BaseFragment<ListFragmentBinding,PetsViewM
         binding.recyclerView.setHasFixedSize(true);
         adapter = new PetsRecyclerAdapter(this, viewModel.repository);
         binding.recyclerView.setAdapter(adapter);
+        binding.recyclerView.setNestedScrollingEnabled(false);
 
         observeViewModel();
-
-//        observeActivityViewModel();
-
     }
 
     private void observeViewModel() {
@@ -67,9 +68,9 @@ public class PetsListFragment extends BaseFragment<ListFragmentBinding,PetsViewM
         viewModel.getListType().observe(this, type -> {
             if(type!=null) {
                 if (type.equals(FRAGMENT_LIST_TYPE_DOGS))
-                    ((MainActivity) getActivity()).setToolbar(getString(R.string.dogs_fragment_title), MainActivity.TYPE_FRAGMENT_LIST_DOGS);
+                    ((MainActivity) getActivity()).setToolbar(getString(R.string.dogs_fragment_title), null, MainActivity.TYPE_FRAGMENT_LIST_DOGS);
                 else if (type.equals(FRAGMENT_LIST_TYPE_CATS))
-                    ((MainActivity) getActivity()).setToolbar(getString(R.string.cats_fragment_title), MainActivity.TYPE_FRAGMENT_LIST_CATS);
+                    ((MainActivity) getActivity()).setToolbar(getString(R.string.cats_fragment_title), null, MainActivity.TYPE_FRAGMENT_LIST_CATS);
             }
         });
 
@@ -77,12 +78,6 @@ public class PetsListFragment extends BaseFragment<ListFragmentBinding,PetsViewM
 
         viewModel.getFavorites().observe(this, favorites -> adapter.replace(viewModel.getPets().getValue()));
     }
-
-//    private void observeActivityViewModel() {
-//
-//        MainViewModel activityViewModel = ViewModelProviders.of(getActivity()).get(MainViewModel.class);
-//        activityViewModel.getFavorites().observe(this, favorites -> adapter.replace(viewModel.getPets().getValue()));
-//    }
 
     @Override
     public void onItemClick(Pet pet, View view) {

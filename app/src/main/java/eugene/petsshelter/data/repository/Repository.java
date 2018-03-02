@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import eugene.petsshelter.data.models.ApiResponse;
+import eugene.petsshelter.data.models.NewsItem;
 import eugene.petsshelter.data.models.Pet;
 import eugene.petsshelter.data.models.Profile;
 import eugene.petsshelter.data.models.Shelter;
@@ -25,6 +26,12 @@ public interface Repository {
     LiveData<Pet> getDogById(String id);
     LiveData<Pet> getCatById(String id);
     LiveData<HashMap<String,Boolean>> getFavorites();
+    LiveData<List<NewsItem>> getNews();
+    void startListeningNews();
+    void stopListeningNews();
+    void startListeningNewsItem(String key);
+    void stopListeningNewsItem(String key);
+    LiveData<NewsItem> getSelectedNews();
     LiveData<ApiResponse<ResponseBody>> createCharge(Map<String,Object> fields);
     void addToFavorites(String petId);
     boolean isFavorite(String petId);

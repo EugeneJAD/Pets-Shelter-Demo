@@ -7,209 +7,143 @@
         <variable name="pet" type="eugene.petsshelter.data.models.Pet"/>
     </data>
 
-<FrameLayout style="@style/FullScreenView">
 
-    <LinearLayout
-        android:id="@+id/content_container"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
+<android.support.v4.widget.NestedScrollView
+    android:id="@+id/pet_details_scroll"
+    style="@style/FullScreenView"
+    android:fillViewport="true"
+    android:layout_marginBottom="@dimen/main_bottom_buttons_container_height"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/pet_details_container"
+        style="@style/FullWidthView"
+        android:background="@color/white"
         app:fieldVisibility="@{pet.name}">
 
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1">
 
-            <android.support.constraint.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/pet_description_details"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/is_adopted_text"
+            tools:text="The domestic dog (Canis lupus familiaris or Canis familiaris) is a wolf-like canid in the genus Canis, and is the most numerous and widely distributed member of the order Carnivora. The dog and the extant gray wolf are sister taxa as modern wolves are not closely related to the wolves that were first domesticated, which implies that the direct ancestor of the dog is extinct."
+            android:text="@{pet.description}"/>
 
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="24dp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            android:text="@string/age"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/pet_description_details"/>
 
-                <TextView
-                    android:id="@+id/pet_description_details"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="16dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/is_adopted_text"
-                    android:text="@{pet.description}"/>
-
-                <TextView
-                    android:id="@+id/textView4"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="24dp"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                    android:text="@string/age"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/pet_description_details"/>
-
-                <TextView
-                    android:id="@+id/textView5"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="8dp"
-                    android:text="@string/breed"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView4"/>
-
-                <android.support.v7.widget.AppCompatImageView
-                    android:id="@+id/pet_image_details"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    app:layout_constraintDimensionRatio="H,16:9"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:srcCompat="@drawable/ic_launcher_background"
-                    app:imageUrlCC="@{pet.imageURL}"/>
-
-                <TextView
-                    android:id="@+id/shelter_title_details"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginStart="8dp"
-                    android:maxLines="3"
-                    android:textColor="#424242"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.333"
-                    app:layout_constraintStart_toEndOf="@+id/textView7"
-                    app:layout_constraintTop_toTopOf="@+id/textView7"
-                    android:text="@{pet.shelter}"/>
-
-                <TextView
-                    android:id="@+id/textView7"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="140dp"
-                    android:layout_marginTop="24dp"
-                    android:text="@string/shelter"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/pet_description_details"/>
-
-                <TextView
-                    android:id="@+id/age_details"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="24dp"
-                    android:text="@{pet.age}"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                    app:layout_constraintStart_toEndOf="@+id/textView4"
-                    app:layout_constraintTop_toBottomOf="@+id/pet_description_details"
-                    tools:text="4"/>
-
-                <TextView
-                    android:id="@+id/breed_details"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="8dp"
-                    app:layout_constraintStart_toEndOf="@+id/textView5"
-                    app:layout_constraintTop_toBottomOf="@+id/age_details"
-                    android:text="@{pet.breed}"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                    tools:text="unknown"/>
-
-                <TextView
-                    android:id="@+id/is_adopted_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginTop="24dp"
-                    android:text="@{pet.adopted ? @string/adopted : @string/looking_for_home}"
-                    tools:text="@string/looking_for_home"
-                    android:textColor="@{pet.adopted ? @android:color/holo_orange_light : @android:color/holo_green_light}"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/pet_image_details"/>
-
-                <TextView
-                    android:id="@+id/textView14"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="8dp"
-                    android:text="@string/gender"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView5"/>
-
-                <TextView
-                    android:id="@+id/textView15"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="8dp"
-                    android:text="@{pet.gender}"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                    app:layout_constraintStart_toEndOf="@+id/textView14"
-                    app:layout_constraintTop_toBottomOf="@+id/textView5"
-                    tools:text="male"/>
-
-                <TextView
-                    android:id="@+id/pet_food_count"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="24dp"
-                    android:text="@{String.valueOf(pet.foodCount)}"
-                    tools:text="2"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/pet_image_details"/>
+        <TextView
+            android:id="@+id/textView5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/breed"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView4"/>
 
 
-            </android.support.constraint.ConstraintLayout>
+        <TextView
+            android:id="@+id/shelter_title_details"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="8dp"
+            android:maxLines="3"
+            android:textColor="#424242"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.333"
+            app:layout_constraintStart_toEndOf="@+id/textView7"
+            app:layout_constraintTop_toTopOf="@+id/textView7"
+            android:text="@{pet.shelter}"/>
 
-        </ScrollView>
+        <TextView
+            android:id="@+id/textView7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="140dp"
+            android:layout_marginTop="24dp"
+            android:text="@string/shelter"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/pet_description_details"/>
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/age_details"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="24dp"
+            android:text="@{pet.age}"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            app:layout_constraintStart_toEndOf="@+id/textView4"
+            app:layout_constraintTop_toBottomOf="@+id/pet_description_details"
+            tools:text="4"/>
 
-            <Button
-                android:id="@+id/button_buy_food"
-                style="@style/Widget.AppCompat.Button.Borderless"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginBottom="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_alignParentStart="true"
-                android:text="@string/button_food_text"
-                android:textColor="@android:color/holo_blue_dark"
-                android:onClick="@{handler::onButtonClick}"/>
+        <TextView
+            android:id="@+id/breed_details"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintStart_toEndOf="@+id/textView5"
+            app:layout_constraintTop_toBottomOf="@+id/age_details"
+            android:text="@{pet.breed}"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            tools:text="unknown"/>
 
-            <Button
-                android:id="@+id/button_adoption"
-                style="@style/Widget.AppCompat.Button.Borderless"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_alignParentEnd="true"
-                android:textColor="@android:color/holo_blue_dark"
-                android:text="@string/adoption_button_text"/>
-        </RelativeLayout>
-    </LinearLayout>
+        <TextView
+            android:id="@+id/is_adopted_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="8dp"
+            android:text="@{pet.adopted ? @string/adopted : @string/looking_for_home}"
+            android:textColor="@{pet.adopted ? @android:color/holo_orange_light : @android:color/holo_green_light}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="@string/looking_for_home" />
 
-    <ProgressBar
-        style="@style/WrappedView"
-        android:layout_gravity="center"
-        app:progressBarVisibility="@{pet.name}"/>
+        <TextView
+            android:id="@+id/textView14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/gender"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView5"/>
 
-</FrameLayout>
+        <TextView
+            android:id="@+id/textView15"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="@{pet.gender}"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            app:layout_constraintStart_toEndOf="@+id/textView14"
+            app:layout_constraintTop_toBottomOf="@+id/textView5"
+            tools:text="male"/>
+
+    </android.support.constraint.ConstraintLayout>
+</android.support.v4.widget.NestedScrollView>
 </layout>

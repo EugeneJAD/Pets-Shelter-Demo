@@ -46,7 +46,7 @@ public class PetDetailsFragment extends BaseFragment<FragmentPetDetailsBinding,P
 
         viewModel.getPet().observe(this, pet -> {
             if(pet!=null){
-                ((MainActivity) getActivity()).setToolbar(pet.getName(), MainActivity.TYPE_FRAGMENT_DETAILS_PET);
+                ((MainActivity) getActivity()).setToolbar(pet.getName(), pet.getImageURL(), MainActivity.TYPE_FRAGMENT_DETAILS_PET);
                 updateUI(pet);
             }
         });
@@ -57,8 +57,7 @@ public class PetDetailsFragment extends BaseFragment<FragmentPetDetailsBinding,P
     @Override
     public void onButtonClick(View view) {
 
-//        if(view.getId()==detailsBinding.buttonBuyFood.getId())
-//            viewModel.buyFood();
+
     }
 
 

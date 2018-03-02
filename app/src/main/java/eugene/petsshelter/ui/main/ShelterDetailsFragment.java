@@ -36,7 +36,7 @@ public class ShelterDetailsFragment extends BaseFragment<FragmentShelterDetailsB
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        ((MainActivity) getActivity()).setToolbar(getString(R.string.shelter_info_title), MainActivity.TYPE_FRAGMENT_SHELTER);
+        ((MainActivity) getActivity()).setToolbar(getString(R.string.shelter_info_title), null, MainActivity.TYPE_FRAGMENT_SHELTER);
 
         binding.setHandler(this);
 

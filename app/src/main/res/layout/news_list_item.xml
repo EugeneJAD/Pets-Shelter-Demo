@@ -2,8 +2,7 @@
 <layout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto">
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
         <variable name="newsItem" type="eugene.petsshelter.data.models.NewsItem"/>
@@ -16,7 +15,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
-    card_view:cardCornerRadius="4dp">
+    app:cardCornerRadius="4dp">
 
     <android.support.constraint.ConstraintLayout style="@style/FullWidthView">
 
@@ -54,10 +53,9 @@
             android:layout_height="0dp"
             android:layout_marginTop="@dimen/screen_content_margin"
             app:layout_constraintDimensionRatio="H,16:9"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintTop_toBottomOf="@+id/news_title"
-            card_view:layout_constraintEnd_toEndOf="parent"
-            card_view:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             tools:scaleType="centerCrop"
             tools:srcCompat="@drawable/dogs_love_back"
             app:imageUrlCC="@{newsItem.imageUrl}"
@@ -75,7 +73,8 @@
             tools:text="MEGAN ANN VIA FLICKR"
             app:layout_constraintBottom_toBottomOf="@+id/news_image"
             app:layout_constraintEnd_toEndOf="@+id/news_image"
-            android:text="@{newsItem.imageCredits}"/>
+            android:text="@{newsItem.imageCredits}"
+            app:fieldVisibility="@{newsItem.imageCredits}"/>
 
         <TextView
             android:id="@+id/news_author"
@@ -117,8 +116,8 @@
             android:layout_marginBottom="@dimen/screen_edge_standard_margin"
             android:layout_marginEnd="@dimen/screen_edge_standard_margin"
             android:layout_marginTop="@dimen/screen_edge_standard_margin"
-            android:tint="@{isUserLoggedIn? @color/material_yellow_800 : @color/textLightDisabled}"
-            tools:tint="@color/material_yellow_800"
+            android:tint="@{isUserLoggedIn? @color/material_yellow_700 : @color/textLightDisabled}"
+            tools:tint="@color/material_yellow_700"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/news_image"

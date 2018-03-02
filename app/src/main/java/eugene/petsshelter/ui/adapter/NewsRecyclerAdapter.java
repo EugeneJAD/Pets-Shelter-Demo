@@ -35,17 +35,9 @@ import timber.log.Timber;
 public class NewsRecyclerAdapter extends DataBoundListAdapter<NewsItem, NewsListItemBinding> {
 
     private OnItemClickListener<NewsItem> clickCallback;
-    private DatabaseReference newsRef;
-    private List<NewsItem> newsItems = new ArrayList<>();
-    private List<String> newsItemsIndexes = new ArrayList<>();
-    private ChildEventListener childEventListener;
 
     public NewsRecyclerAdapter(OnItemClickListener<NewsItem> clickCallback) {
         this.clickCallback = clickCallback;
-        childEventListener = defineChildEventListener();
-        newsRef = FirebaseDatabase.getInstance().getReference().child(FirebaseRepository.NEWS);
-        setItems(newsItems);
-        startListening();
     }
 
     @Override
@@ -76,42 +68,6 @@ public class NewsRecyclerAdapter extends DataBoundListAdapter<NewsItem, NewsList
     protected boolean areContentsTheSame(NewsItem oldItem, NewsItem newItem) {
         return Objects.equals(oldItem.title,newItem.title) && Objects.equals(oldItem.starCount,newItem.starCount);}
 
-    private ChildEventListener defineChildEventListener() {
-
-        return new ChildEventListener(){
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-
-                NewsItem newsItem = dataSnapshot.getValue(NewsItem.class);
-                if(newsItem!=null && !TextUtils.isEmpty(newsItem.title) && !newsItem.title.equals("title")) {
-                    newsItem.key = dataSnapshot.getKey();
-                    newsItemsIndexes.add(newsItem.key);
-                    newsItems.add(newsItem);
-                    notifyItemInserted(newsItems.size()-1);
-                }
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-                NewsItem newsItem = dataSnapshot.getValue(NewsItem.class);
-                newsItem.key = dataSnapshot.getKey();
-                int index = newsItemsIndexes.indexOf(newsItem.key);
-                if(index>-1) {
-                    newsItems.set(index, newsItem);
-                    replace(newsItems);
-                }
-            }
-
-            @Override public void onChildRemoved(DataSnapshot dataSnapshot) {}
-            @Override public void onChildMoved(DataSnapshot dataSnapshot, String s) {}
-            @Override public void onCancelled(DatabaseError databaseError) {}
-        };
-    }
-
     private FirebaseUser getUser(){return FirebaseAuth.getInstance().getCurrentUser(); }
 
-    private void startListening() {newsRef.addChildEventListener(childEventListener);}
-
-    public void stopListening() {if (childEventListener != null) newsRef.removeEventListener(childEventListener);}
 }

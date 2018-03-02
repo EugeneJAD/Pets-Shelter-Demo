@@ -37,16 +37,13 @@
             android:name=".ui.map.MapsActivity"
             android:parentActivityName=".ui.main.MainActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
+
         <activity
             android:name=".ui.donation.DonationActivity"
             android:label="@string/donation"
-            android:parentActivityName=".ui.main.MainActivity"
             android:theme="@style/AppTheme"
-            android:windowSoftInputMode="stateAlwaysHidden"/>
-        <activity
-            android:name=".ui.NewsDetailsActivity"
             android:parentActivityName=".ui.main.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:windowSoftInputMode="stateAlwaysHidden"/>
 
         <meta-data
             android:name="com.google.android.gms.version"
