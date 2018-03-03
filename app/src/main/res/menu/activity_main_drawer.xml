@@ -7,7 +7,7 @@
 
         <item
             android:id="@+id/nav_news"
-            android:icon="@drawable/ic_mood_24dp"
+            android:icon="@drawable/ic_subject_24dp"
             android:title="@string/news_fragment_title"/>
         <item
             android:id="@+id/nav_dogs"

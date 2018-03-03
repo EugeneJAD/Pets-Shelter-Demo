@@ -10,6 +10,7 @@ import java.util.HashMap;
 
 import javax.inject.Inject;
 
+import eugene.petsshelter.data.models.Pet;
 import eugene.petsshelter.data.models.Profile;
 import eugene.petsshelter.data.repository.Repository;
 import eugene.petsshelter.utils.AbsentLiveData;
@@ -44,16 +45,18 @@ public class MainViewModel extends ViewModel{
 
     }
 
-    @Override
-    protected void onCleared() {
-        repository.updateRemoteFavoritePets();
-        super.onCleared();
-    }
-
     public LiveData<Profile> getProfile() {return profile;}
 
     public LiveData<HashMap<String, Boolean>> getFavorites() {return favorites;}
 
     public void reloadUserData(String id){userId.setValue(id);}
+
+    public String getSelectedPetId(){return repository.getSelectedPetId();}
+
+    @Override
+    protected void onCleared() {
+        super.onCleared();
+        repository.updateRemoteFavoritePets();
+    }
 
 }

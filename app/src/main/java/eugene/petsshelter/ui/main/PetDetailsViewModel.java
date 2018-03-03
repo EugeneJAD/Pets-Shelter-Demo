@@ -11,6 +11,7 @@ import javax.inject.Inject;
 import eugene.petsshelter.data.models.Pet;
 import eugene.petsshelter.data.repository.Repository;
 import eugene.petsshelter.utils.AbsentLiveData;
+import eugene.petsshelter.utils.AppConstants;
 
 /**
  * Created by Eugene on 01.02.2018.
@@ -30,7 +31,7 @@ public class PetDetailsViewModel extends ViewModel {
 
             if (TextUtils.isEmpty(values.id))
                 return AbsentLiveData.create();
-            else if(values.type.equals(PetDetailsFragment.PET_TYPE_CAT))
+            else if(values.type.equals(AppConstants.PET_TYPE_CAT))
                 return repository.getCatById(values.id);
             else
                 return repository.getDogById(values.id);
@@ -45,6 +46,8 @@ public class PetDetailsViewModel extends ViewModel {
     }
 
     public LiveData<Pet> getPet() {return pet;}
+
+    public void addOrRemoveFavorite(String id) {repository.addToFavorites(id);}
 
     static class PetId {
         public final String id;

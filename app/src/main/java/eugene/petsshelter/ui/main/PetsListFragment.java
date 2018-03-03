@@ -21,6 +21,7 @@ import eugene.petsshelter.ui.adapter.OnItemClickListener;
 import eugene.petsshelter.ui.adapter.PetsRecyclerAdapter;
 import eugene.petsshelter.ui.base.AppNavigator;
 import eugene.petsshelter.ui.base.BaseFragment;
+import eugene.petsshelter.utils.AppConstants;
 import timber.log.Timber;
 
 /**
@@ -30,10 +31,6 @@ public class PetsListFragment extends BaseFragment<ListFragmentBinding,PetsViewM
         implements OnItemClickListener<Pet>, Injectable, FirebaseAuth.AuthStateListener {
 
     @Inject AppNavigator navigator;
-
-    public static final String KEY_LIST_TYPE = "list_type";
-    public static final String FRAGMENT_LIST_TYPE_CATS = "cats";
-    public static final String FRAGMENT_LIST_TYPE_DOGS = "dogs";
 
     private PetsRecyclerAdapter adapter;
 
@@ -46,10 +43,8 @@ public class PetsListFragment extends BaseFragment<ListFragmentBinding,PetsViewM
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        Timber.d("onViewCreated");
-
-        if(getArguments()!=null && getArguments().containsKey(KEY_LIST_TYPE))
-            viewModel.setListType(getArguments().getString(KEY_LIST_TYPE,FRAGMENT_LIST_TYPE_DOGS));
+        if(getArguments()!=null && getArguments().containsKey(AppConstants.KEY_LIST_TYPE))
+            viewModel.setListType(getArguments().getString(AppConstants.KEY_LIST_TYPE,AppConstants.FRAGMENT_LIST_TYPE_DOGS));
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL,
                 true);
@@ -67,10 +62,11 @@ public class PetsListFragment extends BaseFragment<ListFragmentBinding,PetsViewM
 
         viewModel.getListType().observe(this, type -> {
             if(type!=null) {
-                if (type.equals(FRAGMENT_LIST_TYPE_DOGS))
+                if (type.equals(AppConstants.FRAGMENT_LIST_TYPE_DOGS)) {
                     ((MainActivity) getActivity()).setToolbar(getString(R.string.dogs_fragment_title), null, MainActivity.TYPE_FRAGMENT_LIST_DOGS);
-                else if (type.equals(FRAGMENT_LIST_TYPE_CATS))
+                } else if (type.equals(AppConstants.FRAGMENT_LIST_TYPE_CATS)) {
                     ((MainActivity) getActivity()).setToolbar(getString(R.string.cats_fragment_title), null, MainActivity.TYPE_FRAGMENT_LIST_CATS);
+                }
             }
         });
 
@@ -87,8 +83,12 @@ public class PetsListFragment extends BaseFragment<ListFragmentBinding,PetsViewM
             pet.setFavorite(!pet.isFavorite());
         } else if(view.getId()==R.id.pet_item_donate_button) {
             navigator.navigateToDonation();
+        } else if(view.getId()==R.id.pet_item_adopt_button){
+            Bundle args = new Bundle();
+            args.putString(AppConstants.KEY_PET_ID, pet.getId());
+            navigator.navigateToAdoption(args);
         } else {
-            if (viewModel.getListType().getValue().equals(FRAGMENT_LIST_TYPE_DOGS))
+            if (pet.getPetType().equals(AppConstants.PET_TYPE_DOG))
                 navigator.navigateToDogDetails(pet.getId());
             else
                 navigator.navigateToCatDetails(pet.getId());

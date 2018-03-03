@@ -2,6 +2,7 @@ package eugene.petsshelter.ui.base;
 
 
 import android.os.Bundle;
+import android.text.TextUtils;
 
 import com.firebase.ui.auth.AuthUI;
 
@@ -11,6 +12,8 @@ import javax.inject.Inject;
 
 import eugene.petsshelter.BuildConfig;
 import eugene.petsshelter.R;
+import eugene.petsshelter.ui.adoption.AdoptionActivity;
+import eugene.petsshelter.ui.adoption.AdoptionInfoFragment;
 import eugene.petsshelter.ui.donation.CardDonationFragment;
 import eugene.petsshelter.ui.donation.DonationActivity;
 import eugene.petsshelter.ui.donation.PaymentMethodsFragment;
@@ -22,6 +25,7 @@ import eugene.petsshelter.ui.main.PetDetailsFragment;
 import eugene.petsshelter.ui.main.PetsListFragment;
 import eugene.petsshelter.ui.main.ShelterDetailsFragment;
 import eugene.petsshelter.ui.map.MapsActivity;
+import eugene.petsshelter.utils.AppConstants;
 
 public class AppNavigator {
 
@@ -49,19 +53,19 @@ public class AppNavigator {
     //Main Activity Navigation
 
     public void navigateToDogs() {navigation.replaceFragment(R.id.fragment_container, new PetsListFragment(),
-            putStringToBundle(PetsListFragment.KEY_LIST_TYPE,PetsListFragment.FRAGMENT_LIST_TYPE_DOGS));}
+            putStringToBundle(AppConstants.KEY_LIST_TYPE,AppConstants.FRAGMENT_LIST_TYPE_DOGS));}
 
     public void navigateToCats() {navigation.replaceFragment(R.id.fragment_container, new PetsListFragment(),
-            putStringToBundle(PetsListFragment.KEY_LIST_TYPE,PetsListFragment.FRAGMENT_LIST_TYPE_CATS));}
+            putStringToBundle(AppConstants.KEY_LIST_TYPE,AppConstants.FRAGMENT_LIST_TYPE_CATS));}
 
-    public void navigateToCatDetails(String id) {navigateToPetDetails(id,PetDetailsFragment.PET_TYPE_CAT);}
+    public void navigateToCatDetails(String id) {navigateToPetDetails(id,AppConstants.PET_TYPE_CAT);}
 
-    public void navigateToDogDetails(String id) {navigateToPetDetails(id,PetDetailsFragment.PET_TYPE_DOG);}
+    public void navigateToDogDetails(String id) {navigateToPetDetails(id,AppConstants.PET_TYPE_DOG);}
 
     private void navigateToPetDetails(String id, String type){
         Bundle args = new Bundle();
-        args.putString(PetDetailsFragment.KEY_PET_ID,id);
-        args.putString(PetDetailsFragment.KEY_PET_TYPE, type);
+        args.putString(AppConstants.KEY_PET_ID,id);
+        args.putString(AppConstants.KEY_PET_TYPE, type);
         navigation.replaceFragmentBackStack(R.id.fragment_container,
                 new PetDetailsFragment(),PetDetailsFragment.class.getSimpleName(),args,null,
                 R.anim.slide_in_up_anim, R.anim.fade_out_anim,R.anim.fade_in_anim,R.anim.slide_out_down_anim);}
@@ -89,8 +93,8 @@ public class AppNavigator {
 
     public void navigateToNewsDetails(String key, String imageUrl) {
         Bundle args = new Bundle();
-        args.putString(NewsDetailsFragment.NEWS_ITEM_ID,key);
-        args.putString(NewsDetailsFragment.TOOLBAR_IMAGE_URL, imageUrl);
+        args.putString(AppConstants.NEWS_ITEM_ID_KEY,key);
+        args.putString(AppConstants.TOOLBAR_IMAGE_URL_KEY, imageUrl);
         navigation.replaceFragmentBackStack(R.id.fragment_container, new NewsDetailsFragment(),
             NewsDetailsFragment.class.getSimpleName(), args,null,
             R.anim.slide_in_up_anim, R.anim.fade_out_anim,R.anim.fade_in_anim,R.anim.slide_out_down_anim);
@@ -98,6 +102,7 @@ public class AppNavigator {
 
     public void navigateToDonation(){navigation.startActivity(DonationActivity.class);}
 
+    public void navigateToAdoption(Bundle args){navigation.startActivity(AdoptionActivity.class, args);}
 
     //Donation Activity Navigation
 
@@ -117,4 +122,10 @@ public class AppNavigator {
                 R.anim.slide_to_left,R.anim.slide_from_left,R.anim.slide_to_right);
     }
 
+
+    //Adoption Activity Navigation
+
+    public void navigateToAdoptionInfo(Bundle args) {
+        navigation.replaceFragment(R.id.adoption_fragment_container, new AdoptionInfoFragment(), args);
+    }
 }

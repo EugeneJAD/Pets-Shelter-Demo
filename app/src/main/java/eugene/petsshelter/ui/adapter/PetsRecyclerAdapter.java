@@ -43,6 +43,7 @@ public class PetsRecyclerAdapter extends DataBoundListAdapter<Pet,PetsListItemBi
             }
         });
         binding.petItemDonateButton.setOnClickListener(v -> clickCallback.onItemClick(binding.getPet(), v));
+        binding.petItemAdoptButton.setOnClickListener(v -> clickCallback.onItemClick(binding.getPet(), v));
         binding.getRoot().setOnClickListener(view -> clickCallback.onItemClick(binding.getPet(),view));
         return binding;
     }

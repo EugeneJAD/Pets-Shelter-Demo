@@ -14,6 +14,7 @@ import javax.inject.Inject;
 import eugene.petsshelter.data.models.Pet;
 import eugene.petsshelter.data.repository.Repository;
 import eugene.petsshelter.utils.AbsentLiveData;
+import eugene.petsshelter.utils.AppConstants;
 
 /**
  * Created by Eugene on 31.01.2018.
@@ -32,7 +33,7 @@ public class PetsViewModel extends ViewModel {
         pets = Transformations.switchMap(listType,type ->{
             if (TextUtils.isEmpty(type))
                 return AbsentLiveData.create();
-            else if(type.equals(PetsListFragment.FRAGMENT_LIST_TYPE_DOGS))
+            else if(type.equals(AppConstants.FRAGMENT_LIST_TYPE_DOGS))
                 return repository.getDogs();
             else
                 return repository.getCats();

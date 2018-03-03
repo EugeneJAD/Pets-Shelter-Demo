@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import eugene.petsshelter.data.models.AdoptionInfo;
 import eugene.petsshelter.data.models.ApiResponse;
 import eugene.petsshelter.data.models.NewsItem;
 import eugene.petsshelter.data.models.Pet;
@@ -27,6 +28,8 @@ public interface Repository {
     LiveData<Pet> getCatById(String id);
     LiveData<HashMap<String,Boolean>> getFavorites();
     LiveData<List<NewsItem>> getNews();
+    LiveData<AdoptionInfo> getAdoptionInfo();
+    String getSelectedPetId();
     void startListeningNews();
     void stopListeningNews();
     void startListeningNewsItem(String key);

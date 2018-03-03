@@ -22,28 +22,25 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import eugene.petsshelter.data.models.AdoptionInfo;
 import eugene.petsshelter.data.models.Cat;
 import eugene.petsshelter.data.models.Dog;
 import eugene.petsshelter.data.models.NewsItem;
 import eugene.petsshelter.data.models.Pet;
 import eugene.petsshelter.data.models.Shelter;
 import eugene.petsshelter.utils.AbsentLiveData;
+import eugene.petsshelter.utils.AppConstants;
 import timber.log.Timber;
 
 @Singleton
 public class FirebaseRepository {
-
-    public static final String DOGS = "dogs";
-    public static final String CATS = "cats";
-    public static final String SHELTERS = "shelters";
-    public static final String NEWS = "news";
-    public static final String FAVORITES = "favorites";
 
     private DatabaseReference dogsDatabaseRef;
     private DatabaseReference catsDatabaseRef;
     private DatabaseReference sheltersDatabaseRef;
     private DatabaseReference favoritesDatabaseRef;
     private DatabaseReference newsDatabaseRef;
+    private DatabaseReference adoptionInfoDatabaseRef;
 
     private ValueEventListener newsItemListener;
     private ChildEventListener newsChildEventListener;
@@ -54,6 +51,7 @@ public class FirebaseRepository {
     private MutableLiveData<HashMap<String,Boolean>> favorites = new MutableLiveData<>();
     private MutableLiveData<List<NewsItem>> news = new MutableLiveData<>();
     private MutableLiveData<NewsItem> selectedNewsItem = new MutableLiveData<>();
+    private MutableLiveData<AdoptionInfo> adoptionInfo = new MutableLiveData<>();
 
     private List<Pet> allDogs = new ArrayList<>();
     private List<Pet> allCats = new ArrayList<>();
@@ -66,17 +64,19 @@ public class FirebaseRepository {
 
         database.setPersistenceEnabled(true);
 
-        dogsDatabaseRef = database.getReference().child(DOGS);
-        catsDatabaseRef = database.getReference().child(CATS);
-        sheltersDatabaseRef = database.getReference().child(SHELTERS);
-        favoritesDatabaseRef = database.getReference().child(FAVORITES);
-        newsDatabaseRef = database.getReference().child(NEWS);
+        dogsDatabaseRef = database.getReference().child(AppConstants.DOGS);
+        catsDatabaseRef = database.getReference().child(AppConstants.CATS);
+        sheltersDatabaseRef = database.getReference().child(AppConstants.SHELTERS);
+        favoritesDatabaseRef = database.getReference().child(AppConstants.FAVORITES);
+        newsDatabaseRef = database.getReference().child(AppConstants.NEWS);
+        adoptionInfoDatabaseRef = database.getReference().child(AppConstants.ADOPTION).child("a1");
 
         dogsDatabaseRef.keepSynced(true);
         catsDatabaseRef.keepSynced(true);
         sheltersDatabaseRef.keepSynced(true);
         favoritesDatabaseRef.keepSynced(true);
         newsDatabaseRef.keepSynced(true);
+        adoptionInfoDatabaseRef.keepSynced(true);
 
         newsChildEventListener = getNewsChildEventListener();
 
@@ -93,6 +93,8 @@ public class FirebaseRepository {
 
     public LiveData<NewsItem> getSelectedNewsItem() {return selectedNewsItem;}
 
+    public LiveData<AdoptionInfo> getAdoptionInfo() {return adoptionInfo;}
+
     public void attachFirebaseReadListeners(){
 
         ValueEventListener dogsListener = new ValueEventListener() {
@@ -104,6 +106,7 @@ public class FirebaseRepository {
                     if (ds.getValue(Dog.class) != null) {
                         Dog dog = ds.getValue(Dog.class);
                         dog.setId(ds.getKey());
+                        dog.setPetType(AppConstants.PET_TYPE_DOG);
                         allDogs.add(dog);
                     }
                 }
@@ -123,6 +126,7 @@ public class FirebaseRepository {
                     if (ds.getValue(Cat.class) != null) {
                         Cat cat = ds.getValue(Cat.class);
                         cat.setId(ds.getKey());
+                        cat.setPetType(AppConstants.PET_TYPE_CAT);
                         allCats.add(cat);
                     }
                 }
@@ -193,6 +197,19 @@ public class FirebaseRepository {
             @Override
             public void onCancelled(DatabaseError databaseError) {}
         };
+
+        ValueEventListener adoptionInfoListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                AdoptionInfo ai = dataSnapshot.getValue(AdoptionInfo.class);
+                adoptionInfo.setValue(ai);
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Timber.d("onCancelled %s",databaseError);
+            }
+        };
+        adoptionInfoDatabaseRef.addListenerForSingleValueEvent(adoptionInfoListener);
     }
 
     public LiveData<HashMap<String,Boolean>> getUsersFavPets(HashMap<String,Boolean> localFavPets) {
@@ -288,19 +305,6 @@ public class FirebaseRepository {
         }
         selectedNewsItem.setValue(null);
     }
-
-    public void clearData(){
-        allCats.clear();
-        allDogs.clear();
-        allShelters.clear();
-        cats.setValue(null);
-        dogs.setValue(null);
-        shelter.setValue(null);
-        newsItemsIndexes.clear();
-        newsItems.clear();
-        news.setValue(null);
-    }
-
 
     private FirebaseUser getUser(){return FirebaseAuth.getInstance().getCurrentUser(); }
 }

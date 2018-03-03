@@ -13,6 +13,7 @@ import eugene.petsshelter.data.repository.DataRepository;
 import eugene.petsshelter.data.repository.Repository;
 import eugene.petsshelter.data.repository.local.PrefsManager;
 import eugene.petsshelter.data.repository.remote.FirebaseRepository;
+import eugene.petsshelter.ui.adoption.AdoptionInfoViewModel;
 import eugene.petsshelter.ui.donation.CardDonationViewModel;
 import eugene.petsshelter.ui.donation.DonationActivityViewModel;
 import eugene.petsshelter.ui.donation.PaymentMethodsViewModel;
@@ -83,4 +84,7 @@ class AppModule {
 
     @Provides
     Class<NewsViewModel> provideNewsViewModel(){return NewsViewModel.class;}
+
+    @Provides
+    Class<AdoptionInfoViewModel> provideAdoptionInfoViewModel(){return AdoptionInfoViewModel.class;}
 }

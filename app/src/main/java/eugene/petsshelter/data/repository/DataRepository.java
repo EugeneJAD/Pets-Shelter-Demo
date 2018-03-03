@@ -13,6 +13,7 @@ import java.util.Map;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import eugene.petsshelter.data.models.AdoptionInfo;
 import eugene.petsshelter.data.models.ApiResponse;
 import eugene.petsshelter.data.models.NewsItem;
 import eugene.petsshelter.data.models.Pet;
@@ -22,6 +23,7 @@ import eugene.petsshelter.data.repository.remote.FirebaseRepository;
 import eugene.petsshelter.service.StripeService;
 import eugene.petsshelter.ui.main.PetsListFragment;
 import eugene.petsshelter.utils.AbsentLiveData;
+import eugene.petsshelter.utils.AppConstants;
 import eugene.petsshelter.utils.Objects;
 import okhttp3.ResponseBody;
 
@@ -36,6 +38,8 @@ public class DataRepository implements Repository {
 
     private MutableLiveData<Profile> profile = new MutableLiveData<>();
     private HashMap<String,Boolean> localFavPets = new HashMap<>();
+
+    private String selectedPetId;
 
     @Inject
     public DataRepository() {}
@@ -55,10 +59,14 @@ public class DataRepository implements Repository {
     public LiveData<Shelter> getShelter() {return remoteRepo.getShelter();}
 
     @Override
-    public LiveData<Pet> getDogById(String id) {return findPetById(id, PetsListFragment.FRAGMENT_LIST_TYPE_DOGS);}
+    public LiveData<Pet> getDogById(String id) {
+        selectedPetId = id;
+        return findPetById(id, AppConstants.FRAGMENT_LIST_TYPE_DOGS);}
 
     @Override
-    public LiveData<Pet> getCatById(String id) {return findPetById(id, PetsListFragment.FRAGMENT_LIST_TYPE_CATS);}
+    public LiveData<Pet> getCatById(String id) {
+        selectedPetId = id;
+        return findPetById(id, AppConstants.FRAGMENT_LIST_TYPE_CATS);}
 
     @Override
     public LiveData<NewsItem> getSelectedNews() {return remoteRepo.getSelectedNewsItem();}
@@ -68,11 +76,16 @@ public class DataRepository implements Repository {
         return stripeService.chargeDonation(fields);
     }
 
+    public String getSelectedPetId() {return selectedPetId;}
+
     @Override
     public LiveData<HashMap<String, Boolean>> getFavorites() {return remoteRepo.getUsersFavPets(localFavPets);}
 
     @Override
     public LiveData<List<NewsItem>> getNews() {return remoteRepo.getNews();}
+
+    @Override
+    public LiveData<AdoptionInfo> getAdoptionInfo() {return remoteRepo.getAdoptionInfo();}
 
     @Override
     public void startListeningNews() {remoteRepo.startListeningNews();}
@@ -134,7 +147,7 @@ public class DataRepository implements Repository {
         MutableLiveData<Pet> pet = new MutableLiveData<>();
 
         List<Pet> pets;
-        if(type.equals(PetsListFragment.FRAGMENT_LIST_TYPE_DOGS)) pets = remoteRepo.getDogs().getValue();
+        if(type.equals(AppConstants.FRAGMENT_LIST_TYPE_DOGS)) pets = remoteRepo.getDogs().getValue();
         else pets = remoteRepo.getCats().getValue();
 
         if(pets==null || pets.isEmpty()) {return AbsentLiveData.create();}

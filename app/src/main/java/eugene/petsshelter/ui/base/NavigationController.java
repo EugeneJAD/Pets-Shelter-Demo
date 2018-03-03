@@ -14,6 +14,8 @@ import android.support.v4.app.FragmentTransaction;
 
 import javax.inject.Inject;
 
+import eugene.petsshelter.utils.AppConstants;
+
 public class NavigationController implements Navigator{
 
     public static final String FRAGMENT_TAG = "content";
@@ -99,7 +101,7 @@ public class NavigationController implements Navigator{
         Intent intent = new Intent(activity, activityClass);
 
         if(args!=null)
-            intent.putExtras(args);
+            intent.putExtra(AppConstants.EXTRA_BUNDLE_KEY, args);
 
         if(requestCode!=null)
             activity.startActivityForResult(intent,requestCode);

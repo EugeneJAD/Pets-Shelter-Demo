@@ -8,8 +8,7 @@ public class Dog implements Pet {
 
     private String _id;
 
-    @SerializedName("foodCount")
-    private int foodCount;
+    private String petType;
 
     @SerializedName("shelter")
     private String shelter;
@@ -36,14 +35,6 @@ public class Dog implements Pet {
     private String breed;
 
     private boolean isFavorite;
-
-    public void setFoodCount(int foodCount){
-        this.foodCount = foodCount;
-    }
-
-    public int getFoodCount(){
-        return foodCount;
-    }
 
     public void setShelter(String shelter){
         this.shelter = shelter;
@@ -89,10 +80,8 @@ public class Dog implements Pet {
         this.adopted = adopted;
     }
 
-    @Override
     public boolean isFavorite() {return isFavorite;}
 
-    @Override
     public void setFavorite(boolean favorite) {isFavorite=favorite;}
 
     public boolean isAdopted(){
@@ -122,6 +111,10 @@ public class Dog implements Pet {
     public void setId(String _id) {
         this._id = _id;
     }
+
+    public String getPetType() {return petType;}
+
+    public void setPetType(String petType) {this.petType = petType;}
 }
 
 

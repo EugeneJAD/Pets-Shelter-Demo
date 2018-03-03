@@ -2,29 +2,34 @@ package eugene.petsshelter.ui.main;
 
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.firebase.auth.FirebaseAuth;
+
+import javax.inject.Inject;
+
 import eugene.petsshelter.R;
 import eugene.petsshelter.data.models.Pet;
 import eugene.petsshelter.databinding.FragmentPetDetailsBinding;
 import eugene.petsshelter.di.Injectable;
 import eugene.petsshelter.ui.adapter.ButtonClickHandler;
+import eugene.petsshelter.ui.base.AppNavigator;
 import eugene.petsshelter.ui.base.BaseFragment;
+import eugene.petsshelter.utils.AppConstants;
+import timber.log.Timber;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class PetDetailsFragment extends BaseFragment<FragmentPetDetailsBinding,PetDetailsViewModel>
-        implements ButtonClickHandler, Injectable {
+        implements ButtonClickHandler, Injectable, FirebaseAuth.AuthStateListener {
 
-    public static final String KEY_PET_ID = "pet_id";
-    public static final String KEY_PET_TYPE = "pet_type";
-    public static final String PET_TYPE_CAT = "pet_cat";
-    public static final String PET_TYPE_DOG = "pet_dog";
+    @Inject AppNavigator navigator;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -35,9 +40,12 @@ public class PetDetailsFragment extends BaseFragment<FragmentPetDetailsBinding,P
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        if(getArguments()!=null && getArguments().containsKey(KEY_PET_ID)
-                && getArguments().containsKey(KEY_PET_TYPE))
-            viewModel.setPetId(getArguments().getString(KEY_PET_ID), getArguments().getString(KEY_PET_TYPE));
+        if(getArguments()!=null && getArguments().containsKey(AppConstants.KEY_PET_ID)
+                && getArguments().containsKey(AppConstants.KEY_PET_TYPE))
+            viewModel.setPetId(getArguments().getString(AppConstants.KEY_PET_ID), getArguments().getString(AppConstants.KEY_PET_TYPE));
+
+        binding.setIsUserLoggedIn(FirebaseAuth.getInstance().getCurrentUser()!=null);
+        binding.setHandler(this);
 
         observeViewModel();
     }
@@ -57,8 +65,29 @@ public class PetDetailsFragment extends BaseFragment<FragmentPetDetailsBinding,P
     @Override
     public void onButtonClick(View view) {
 
-
+        if(view.getId()==R.id.pet_d_fav_button) {
+            Pet pet = binding.getPet();
+            viewModel.addOrRemoveFavorite(pet.getId());
+            pet.setFavorite(!pet.isFavorite());
+            binding.setPet(pet);
+        }
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        FirebaseAuth.getInstance().addAuthStateListener(this);
+    }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        viewModel.repository.updateRemoteFavoritePets();
+        FirebaseAuth.getInstance().removeAuthStateListener(this);
+    }
+
+    @Override
+    public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+        binding.setIsUserLoggedIn(firebaseAuth.getCurrentUser()!=null);
+    }
 }

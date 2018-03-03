@@ -6,6 +6,7 @@
 
     <data>
         <variable name="imageUrl" type="String"/>
+        <variable name="handler" type="eugene.petsshelter.ui.adapter.ButtonClickHandler"/>
     </data>
 
 <android.support.v4.widget.DrawerLayout
@@ -74,7 +75,8 @@
                 android:layout_marginBottom="@dimen/screen_content_margin"
                 android:layout_marginTop="@dimen/screen_content_margin"
                 android:layout_alignParentStart="true"
-                android:text="@string/button_food_text"/>
+                android:text="@string/button_food_text"
+                android:onClick="@{handler::onButtonClick}"/>
 
             <Button
                 android:id="@+id/button_adoption"
@@ -83,7 +85,8 @@
                 android:layout_marginBottom="@dimen/screen_content_margin"
                 android:layout_marginTop="@dimen/screen_content_margin"
                 android:layout_alignParentEnd="true"
-                android:text="@string/adoption_button_text"/>
+                android:text="@string/adoption_button_text"
+                android:onClick="@{handler::onButtonClick}"/>
         </RelativeLayout>
 
 

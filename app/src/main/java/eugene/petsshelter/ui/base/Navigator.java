@@ -12,8 +12,6 @@ import android.support.v4.app.Fragment;
 
 public interface Navigator {
 
-    String KEY_EXTRA_ARG = "key_args";
-
     void finishActivity();
     void startActivity(@NonNull Class<? extends Activity> activityClass);
     void startActivity(@NonNull Class<? extends Activity> activityClass, Bundle args);

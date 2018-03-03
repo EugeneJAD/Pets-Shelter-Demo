@@ -1,0 +1,162 @@
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable name="adoptionInfo" type="eugene.petsshelter.data.models.AdoptionInfo"/>
+    </data>
+
+<android.support.design.widget.CoordinatorLayout
+    android:id="@+id/scroll_donation"
+    style="@style/FullScreenView">
+
+    <android.support.v4.widget.NestedScrollView
+        android:id="@+id/adoption_scroll_view"
+        style="@style/FullScreenView"
+        android:fillViewport="true">
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/ad_info_content_container"
+            style="@style/FullScreenView">
+
+
+            <TextView
+                android:id="@+id/ad_info_header_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/screen_edge_standard_margin"
+                android:layout_marginTop="@dimen/screen_edge_standard_margin"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+                android:textColor="@color/colorPrimary"
+                android:text="@string/adoption_service"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/ad_info_header_text"
+                style="@style/AdoptionBodyText"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ad_info_header_title"
+                tools:text="TextView"
+                android:text="@{adoptionInfo.intro}"/>
+
+
+            <View
+                android:id="@+id/view"
+                style="@style/Divider"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ad_info_header_text"/>
+
+            <TextView
+                android:id="@+id/ad_info_conditions_title"
+                style="@style/AdoptionTitleText"
+                android:text="@string/adoption_conditions_title"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/view" />
+
+            <TextView
+                android:id="@+id/ad_info_conditions_text"
+                style="@style/AdoptionBodyText"
+                tools:text="TextView"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ad_info_conditions_title"
+                android:text="@{adoptionInfo.checkList}"/>
+
+            <View
+                android:id="@+id/view2"
+                style="@style/Divider"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ad_info_conditions_text"/>
+
+            <TextView
+                android:id="@+id/ad_info_hours_title"
+                style="@style/AdoptionTitleText"
+                android:text="@string/adoption_hours_2"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/view2" />
+
+            <TextView
+                android:id="@+id/ad_info_hours_text"
+                style="@style/AdoptionBodyText"
+                tools:text="TextView"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ad_info_hours_title"
+                android:text="@{adoptionInfo.hours}"/>
+
+            <TextView
+                android:id="@+id/ad_info_hours_text_add"
+                style="@style/AdoptionBodyText"
+                tools:text="TextView"
+                android:textSize="12sp"
+                android:textColor="@color/material_blue_grey_500"
+                android:layout_marginTop="@dimen/screen_content_margin"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ad_info_hours_text"
+                android:text="@{adoptionInfo.hoursInfo}"/>
+
+            <View
+                android:id="@+id/view3"
+                style="@style/Divider"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ad_info_hours_text_add"/>
+
+
+            <TextView
+                android:id="@+id/ad_info_fees_title"
+                style="@style/AdoptionTitleText"
+                android:text="@string/adoption_fees"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/view3" />
+
+            <TextView
+                android:id="@+id/ad_info_fees_text"
+                style="@style/AdoptionBodyText"
+                tools:text="TextView"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ad_info_fees_title"
+                android:text="@{adoptionInfo.fees}"/>
+
+            <TextView
+                android:id="@+id/ad_info_fees_text_add"
+                style="@style/AdoptionBodyText"
+                android:layout_marginBottom="@dimen/screen_medium_margin"
+                android:layout_marginTop="@dimen/screen_content_margin"
+                android:text="@{adoptionInfo.feesExpl}"
+                android:textColor="@color/material_blue_grey_500"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ad_info_fees_text"
+                app:layout_constraintVertical_bias="0.0"
+                tools:text="TextView" />
+
+        </android.support.constraint.ConstraintLayout>
+    </android.support.v4.widget.NestedScrollView>
+
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        style="@style/WrappedView"
+        android:layout_gravity="center"
+        app:progressBarVisibility="@{adoptionInfo.intro}"/>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/adoption_fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/screen_edge_standard_margin"
+        android:layout_gravity="bottom|end"
+        android:src="@drawable/ic_create_24dp" />
+
+</android.support.design.widget.CoordinatorLayout>
+</layout>

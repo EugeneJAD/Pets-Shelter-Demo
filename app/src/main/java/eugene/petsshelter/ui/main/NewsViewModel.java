@@ -32,7 +32,7 @@ public class NewsViewModel extends ViewModel {
     public void stopListeningNews() {repository.stopListeningNews();}
 
     public void startListeningNewsItem(String key) {repository.startListeningNewsItem(key);}
-    public void stopListeningNewsItem(String key) {repository.startListeningNewsItem(key);}
+    public void stopListeningNewsItem(String key) {repository.stopListeningNewsItem(key);}
 
     public LiveData<NewsItem> getSelectedNews() {return repository.getSelectedNews();}
 

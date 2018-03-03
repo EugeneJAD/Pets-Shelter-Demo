@@ -2,6 +2,7 @@ package eugene.petsshelter.di;
 
 import dagger.Module;
 import dagger.android.ContributesAndroidInjector;
+import eugene.petsshelter.ui.adoption.AdoptionInfoFragment;
 import eugene.petsshelter.ui.donation.CardDonationFragment;
 import eugene.petsshelter.ui.donation.PaymentMethodsFragment;
 import eugene.petsshelter.ui.donation.SummaryDonationFragment;
@@ -37,4 +38,7 @@ public abstract class FragmentBuildersModule {
 
     @ContributesAndroidInjector
     abstract NewsDetailsFragment contributeNewsDetailsFragment();
+
+    @ContributesAndroidInjector
+    abstract AdoptionInfoFragment contributeAdoptionInfoFragment();
 }

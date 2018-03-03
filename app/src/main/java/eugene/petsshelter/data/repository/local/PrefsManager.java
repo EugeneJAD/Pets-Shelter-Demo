@@ -15,10 +15,6 @@ public class PrefsManager {
 
     protected SharedPreferences sharedPreferences;
     public static final String SP_NAME="user_data";
-    private static final String IS_LOGGED_IN ="is_logged_in";
-    public static final String USER_LOGIN="user_login";
-    public static final String USER_PASSWORD="user_password";
-    public static final String ANONYMOUS = "anonymous";
 
     @Inject
     public PrefsManager(Context context) {
@@ -74,13 +70,5 @@ public class PrefsManager {
         return sharedPreferences.getFloat(key, defValue);
     }
 
-    public void setIsLogedIn(Boolean b){saveBoolean(IS_LOGGED_IN,b);}
-    public Boolean isLogedIn(){return retrieveBoolean(IS_LOGGED_IN,false);}
-
-    public void setLogin(String login){saveString(USER_LOGIN,login);}
-    public String getLogin(){return retrieveString(USER_LOGIN,"");}
-
-    public void setPassword(String password){saveString(USER_PASSWORD,password);}
-    public String getPassword(){return retrieveString(USER_PASSWORD,"");}
 
 }

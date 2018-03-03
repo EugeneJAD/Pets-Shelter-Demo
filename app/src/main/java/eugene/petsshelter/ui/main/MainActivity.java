@@ -11,6 +11,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,13 +31,15 @@ import dagger.android.support.HasSupportFragmentInjector;
 import eugene.petsshelter.R;
 import eugene.petsshelter.databinding.ActivityMainBinding;
 import eugene.petsshelter.databinding.NavHeaderMainBinding;
+import eugene.petsshelter.ui.adapter.ButtonClickHandler;
 import eugene.petsshelter.ui.base.AppNavigator;
 import eugene.petsshelter.ui.base.BaseActivity;
+import eugene.petsshelter.utils.AppConstants;
 import eugene.petsshelter.utils.SnackbarUtils;
 
 public class MainActivity extends BaseActivity<ActivityMainBinding,MainViewModel>
         implements NavigationView.OnNavigationItemSelectedListener, HasSupportFragmentInjector,
-        FirebaseAuth.AuthStateListener{
+        FirebaseAuth.AuthStateListener, ButtonClickHandler{
 
 
     @Inject
@@ -74,6 +77,8 @@ public class MainActivity extends BaseActivity<ActivityMainBinding,MainViewModel
         //Bind Navigation Header
         navHeaderBinding = DataBindingUtil.inflate(this.getLayoutInflater(), R.layout.nav_header_main,binding.navView,false);
         binding.navView.addHeaderView(navHeaderBinding.getRoot());
+
+        binding.setHandler(this);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
@@ -272,6 +277,24 @@ public class MainActivity extends BaseActivity<ActivityMainBinding,MainViewModel
         user = firebaseAuth.getCurrentUser();
         if (user == null) {onSignedOutCleanup();
         } else {onSignedInInitialize();}
+    }
+
+
+    @Override
+    public void onButtonClick(View view) {
+
+        if(view.getId()==R.id.button_buy_food){
+            navigator.navigateToDonation();
+        } else if(view.getId()==R.id.button_adoption){
+            Bundle args;
+            if(TextUtils.isEmpty(viewModel.getSelectedPetId()))
+                args = null;
+            else {
+                args = new Bundle();
+                args.putString(AppConstants.KEY_PET_ID, viewModel.getSelectedPetId());
+            }
+            navigator.navigateToAdoption(args);
+        }
     }
 
 }

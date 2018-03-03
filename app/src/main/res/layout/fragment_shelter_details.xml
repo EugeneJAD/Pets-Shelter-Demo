@@ -9,15 +9,9 @@
     </data>
 
 
-    <RelativeLayout
+    <android.support.design.widget.CoordinatorLayout
         android:id="@+id/scroll_donation"
         style="@style/FullScreenView">
-
-        <ProgressBar
-            android:id="@+id/progress_bar"
-            style="@style/WrappedView"
-            android:layout_centerInParent="true"
-            app:progressBarVisibility="@{shelter.title}"/>
 
         <ScrollView style="@style/FullScreenView"
             android:fillViewport="true">
@@ -28,44 +22,28 @@
                 app:fieldVisibility="@{shelter.title}">
 
 
-                <ImageView
-                    android:id="@+id/shelter_title_details"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="16dp"
-                    android:contentDescription="@string/shelter"
-                    android:src="@drawable/ic_location_city_24dp"
-                    android:tint="@color/colorPrimaryDark"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    />
-
                 <TextView
                     android:id="@+id/shelter_title_detail"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="@dimen/screen_edge_standard_margin"
+                    android:layout_marginStart="@dimen/screen_edge_standard_margin"
+                    android:layout_marginTop="@dimen/screen_edge_standard_margin"
                     android:text="@{shelter.title}"
-                    android:textColor="@color/colorPrimaryDark"
-                    tools:text="Shelter"
                     android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                    app:layout_constraintBottom_toTopOf="@+id/view"
+                    android:textColor="@color/colorPrimaryDark"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/shelter_title_details"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.25"/>
+                    tools:text="Shelter" />
 
 
                 <View
                     android:id="@+id/view"
                     style="@style/Divider"
-                    android:layout_marginTop="24dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/shelter_title_details"/>
+                    app:layout_constraintTop_toBottomOf="@+id/shelter_title_detail"/>
 
                 <TextView
                     android:id="@+id/textView2"
@@ -117,7 +95,6 @@
                 <View
                     android:id="@+id/view2"
                     style="@style/Divider"
-                    android:layout_marginTop="24dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textView6"/>
@@ -198,9 +175,7 @@
                 <View
                     android:id="@+id/view3"
                     style="@style/Divider"
-                    android:layout_marginTop="24dp"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textView11"/>
 
@@ -256,5 +231,12 @@
 
             </android.support.constraint.ConstraintLayout>
         </ScrollView>
-    </RelativeLayout>
+
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            style="@style/WrappedView"
+            android:layout_gravity="center"
+            app:progressBarVisibility="@{shelter.title}"/>
+
+    </android.support.design.widget.CoordinatorLayout>
 </layout>

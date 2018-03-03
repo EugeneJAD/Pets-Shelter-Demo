@@ -35,24 +35,8 @@ public class NewsListFragment extends BaseFragment<ListFragmentBinding,NewsViewM
     private LinearLayoutManager layoutManager;
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-        Timber.d("onActivityCreated");
-
-//        layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL,
-//                true);
-//        layoutManager.setStackFromEnd(true);
-//        binding.recyclerView.setLayoutManager(layoutManager);
-//        adapter = new NewsRecyclerAdapter(this);
-//        binding.recyclerView.setAdapter(adapter);
-//        binding.recyclerView.setNestedScrollingEnabled(false);
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Timber.d("onCreateView");
         return setAndBindContentView(inflater,container,savedInstanceState,R.layout.list_fragment);
     }
 
@@ -82,7 +66,7 @@ public class NewsListFragment extends BaseFragment<ListFragmentBinding,NewsViewM
     @Override
     public void onItemClick(NewsItem item, View view) {
 
-        if(view.getId() == R.id.news_star_button){
+        if(view.getId() == R.id.news_star_button) {
             viewModel.doStarTransaction(item.key);
         } else {
             navigator.navigateToNewsDetails(item.key, item.imageUrl);

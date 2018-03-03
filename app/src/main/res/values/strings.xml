@@ -77,10 +77,16 @@
     <string name="anonymous">Anonymous</string>
     <string name="cancelled">Cancelled</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!--News -->
     <string name="image_credits">Image credits:</string>
     <string name="article">Article</string>
+
+    <!--Adoption -->
+    <string name="adoption_service">Adoption Service</string>
+    <string name="adoption_conditions_title">Before adopting, it is important to:</string>
+    <string name="adoption_hours_2">Adoption hours:</string>
+    <string name="adoption_fees">Adoption fees:</string>
+    <string name="adoption">Adoption</string>
 
 
 </resources>
