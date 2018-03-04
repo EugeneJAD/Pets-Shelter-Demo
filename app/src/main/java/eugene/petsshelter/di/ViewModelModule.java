@@ -17,6 +17,7 @@ import eugene.petsshelter.ui.main.PetDetailsViewModel;
 import eugene.petsshelter.ui.main.PetsViewModel;
 import eugene.petsshelter.ui.main.ShelterViewModel;
 import eugene.petsshelter.ui.map.MapViewModel;
+import eugene.petsshelter.ui.splash.SplashActivityViewModel;
 import eugene.petsshelter.viewmodel.PetsShelterViewModelFactory;
 
 @Module
@@ -75,6 +76,11 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(AdoptionInfoViewModel.class)
     abstract ViewModel bindAdoptionInfoViewModel(AdoptionInfoViewModel adoptionInfoViewModel);
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(SplashActivityViewModel.class)
+    abstract ViewModel bindSplashActivityViewModel(SplashActivityViewModel splashActivityViewModel);
 
     @Binds
     abstract ViewModelProvider.Factory bindViewModelFactory(PetsShelterViewModelFactory factory);

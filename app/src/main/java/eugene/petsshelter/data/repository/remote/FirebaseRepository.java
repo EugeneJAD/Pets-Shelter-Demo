@@ -27,6 +27,7 @@ import eugene.petsshelter.data.models.Cat;
 import eugene.petsshelter.data.models.Dog;
 import eugene.petsshelter.data.models.NewsItem;
 import eugene.petsshelter.data.models.Pet;
+import eugene.petsshelter.data.models.Resource;
 import eugene.petsshelter.data.models.Shelter;
 import eugene.petsshelter.utils.AbsentLiveData;
 import eugene.petsshelter.utils.AppConstants;
@@ -45,13 +46,15 @@ public class FirebaseRepository {
     private ValueEventListener newsItemListener;
     private ChildEventListener newsChildEventListener;
 
+    //TODO replace with MutableLiveData<Resource<T>>
     private MutableLiveData<List<Pet>> dogs = new MutableLiveData<>();
     private MutableLiveData<List<Pet>> cats = new MutableLiveData<>();
     private MutableLiveData<Shelter> shelter = new MutableLiveData<>();
     private MutableLiveData<HashMap<String,Boolean>> favorites = new MutableLiveData<>();
-    private MutableLiveData<List<NewsItem>> news = new MutableLiveData<>();
     private MutableLiveData<NewsItem> selectedNewsItem = new MutableLiveData<>();
     private MutableLiveData<AdoptionInfo> adoptionInfo = new MutableLiveData<>();
+
+    private MutableLiveData<Resource<List<NewsItem>>> news = new MutableLiveData<>();
 
     private List<Pet> allDogs = new ArrayList<>();
     private List<Pet> allCats = new ArrayList<>();
@@ -89,7 +92,7 @@ public class FirebaseRepository {
 
     public LiveData<Shelter> getShelter() {return shelter;}
 
-    public LiveData<List<NewsItem>> getNews() {return news;}
+    public LiveData<Resource<List<NewsItem>>> getNews() {return news;}
 
     public LiveData<NewsItem> getSelectedNewsItem() {return selectedNewsItem;}
 
@@ -158,6 +161,8 @@ public class FirebaseRepository {
         };
         sheltersDatabaseRef.addListenerForSingleValueEvent(sheltersListener);
 
+        news.setValue(Resource.loading(null));
+
         ValueEventListener newsListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -173,10 +178,12 @@ public class FirebaseRepository {
                         }
                     }
                 }
-                news.setValue(newsItems);
+                news.setValue(Resource.success(newsItems));
             }
             @Override
-            public void onCancelled(DatabaseError databaseError) {}
+            public void onCancelled(DatabaseError databaseError) {
+                news.setValue(Resource.error(databaseError.getMessage(), null));
+            }
         };
         newsDatabaseRef.addListenerForSingleValueEvent(newsListener);
 
@@ -189,7 +196,7 @@ public class FirebaseRepository {
                     int index = newsItemsIndexes.indexOf(item.key);
                     if (index > -1) {
                         newsItems.set(index, item);
-                        news.setValue(newsItems);
+                        news.setValue(Resource.success(newsItems));
                     }
                 }
                 selectedNewsItem.setValue(item);
@@ -205,9 +212,7 @@ public class FirebaseRepository {
                 adoptionInfo.setValue(ai);
             }
             @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Timber.d("onCancelled %s",databaseError);
-            }
+            public void onCancelled(DatabaseError databaseError) {}
         };
         adoptionInfoDatabaseRef.addListenerForSingleValueEvent(adoptionInfoListener);
     }
@@ -284,7 +289,7 @@ public class FirebaseRepository {
                 int index = newsItemsIndexes.indexOf(newsItem.key);
                 if(index>-1) {
                     newsItems.set(index, newsItem);
-                    news.setValue(newsItems);
+                    news.setValue(Resource.success(newsItems));
                 }
             }
             @Override public void onChildRemoved(DataSnapshot dataSnapshot) {}

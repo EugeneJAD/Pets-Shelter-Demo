@@ -13,8 +13,7 @@ public class NetworkUtils {
 
         ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         if (connectivityManager.getActiveNetworkInfo() != null
-                && connectivityManager.getActiveNetworkInfo().isAvailable()
-                && connectivityManager.getActiveNetworkInfo().isConnected()) {
+                && connectivityManager.getActiveNetworkInfo().isConnectedOrConnecting()) {
             return true;
         } else {
             return false;

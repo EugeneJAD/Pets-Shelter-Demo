@@ -16,13 +16,14 @@ import javax.inject.Inject;
 
 import eugene.petsshelter.R;
 import eugene.petsshelter.data.models.NewsItem;
+import eugene.petsshelter.data.models.Status;
 import eugene.petsshelter.databinding.ListFragmentBinding;
 import eugene.petsshelter.di.Injectable;
 import eugene.petsshelter.ui.adapter.NewsRecyclerAdapter;
 import eugene.petsshelter.ui.adapter.OnItemClickListener;
 import eugene.petsshelter.ui.base.AppNavigator;
 import eugene.petsshelter.ui.base.BaseFragment;
-import timber.log.Timber;
+import eugene.petsshelter.utils.SnackbarUtils;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -44,7 +45,7 @@ public class NewsListFragment extends BaseFragment<ListFragmentBinding,NewsViewM
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        ((MainActivity) getActivity()).setToolbar(getString(R.string.news_fragment_title), null, MainActivity.TYPE_FRAGMENT_NEWS_LIST);
+        ((MainActivity) getActivity()).setActivityView(getString(R.string.news_fragment_title), null, MainActivity.TYPE_FRAGMENT_NEWS_LIST);
 
         layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL,
                 true);
@@ -58,8 +59,12 @@ public class NewsListFragment extends BaseFragment<ListFragmentBinding,NewsViewM
     }
 
     private void observeViewModel() {
-        viewModel.getNews().observe(this, newsItems -> {
-                if(newsItems!=null) adapter.replace(newsItems);
+        viewModel.getNews().observe(this, newsResource -> {
+                if(newsResource!=null) {
+                    if(newsResource.status.equals(Status.ERROR))
+                        SnackbarUtils.showSnackbar(binding.getRoot(),newsResource.message,SnackbarUtils.TYPE_ERROR);
+                    adapter.replace(newsResource.data);
+                }
         });
     }
 

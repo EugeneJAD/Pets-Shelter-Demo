@@ -11,6 +11,7 @@ import eugene.petsshelter.data.models.ApiResponse;
 import eugene.petsshelter.data.models.NewsItem;
 import eugene.petsshelter.data.models.Pet;
 import eugene.petsshelter.data.models.Profile;
+import eugene.petsshelter.data.models.Resource;
 import eugene.petsshelter.data.models.Shelter;
 import okhttp3.ResponseBody;
 
@@ -27,7 +28,7 @@ public interface Repository {
     LiveData<Pet> getDogById(String id);
     LiveData<Pet> getCatById(String id);
     LiveData<HashMap<String,Boolean>> getFavorites();
-    LiveData<List<NewsItem>> getNews();
+    LiveData<Resource<List<NewsItem>>> getNews();
     LiveData<AdoptionInfo> getAdoptionInfo();
     String getSelectedPetId();
     void startListeningNews();

@@ -17,6 +17,8 @@ import eugene.petsshelter.di.Injectable;
 import eugene.petsshelter.ui.adapter.ButtonClickHandler;
 import eugene.petsshelter.ui.base.AppNavigator;
 import eugene.petsshelter.ui.base.BaseFragment;
+import eugene.petsshelter.utils.NetworkUtils;
+import eugene.petsshelter.utils.SnackbarUtils;
 import timber.log.Timber;
 
 /**
@@ -39,6 +41,10 @@ public class PaymentMethodsFragment extends BaseFragment<FragmentPaymentMethodsB
         super.onViewCreated(view, savedInstanceState);
 
         binding.setHandler(this);
+
+        if(!NetworkUtils.isConnected(getContext())){
+            SnackbarUtils.showSnackbar(binding.getRoot(),getString(R.string.no_internet_connection), SnackbarUtils.TYPE_ERROR);
+        }
 
         observeActivityViewModel();
     }

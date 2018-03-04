@@ -17,6 +17,8 @@ import eugene.petsshelter.databinding.FragmentSummaryDonationBinding;
 import eugene.petsshelter.di.Injectable;
 import eugene.petsshelter.ui.adapter.ButtonClickHandler;
 import eugene.petsshelter.ui.base.BaseFragment;
+import eugene.petsshelter.utils.NetworkUtils;
+import eugene.petsshelter.utils.SnackbarUtils;
 import timber.log.Timber;
 
 /**
@@ -57,10 +59,14 @@ public class SummaryDonationFragment extends BaseFragment<FragmentSummaryDonatio
     @Override
     public void onButtonClick(View view) {
         if(view.getId()==binding.donateButton.getId()) {
-            Timber.d("onButtonClick donateButton");
-            Donation donation = activityViewModel.getDonation().getValue();
-            donation.setConfirmed(true);
-            activityViewModel.setDonation(donation);
+
+            if(!NetworkUtils.isConnected(getContext())){
+                SnackbarUtils.showSnackbar(binding.getRoot(),getString(R.string.no_internet_connection), SnackbarUtils.TYPE_ERROR);
+            } else {
+                Donation donation = activityViewModel.getDonation().getValue();
+                donation.setConfirmed(true);
+                activityViewModel.setDonation(donation);
+            }
         }
     }
 

@@ -44,7 +44,7 @@ public class NewsDetailsFragment extends BaseFragment<FragmentNewsDetailsBinding
                 toolbarImageUrl = getArguments().getString(AppConstants.TOOLBAR_IMAGE_URL_KEY);
         }
 
-        ((MainActivity) getActivity()).setToolbar(null, toolbarImageUrl, MainActivity.TYPE_FRAGMENT_NEWS_DETAILS);
+        ((MainActivity) getActivity()).setActivityView(null, toolbarImageUrl, MainActivity.TYPE_FRAGMENT_NEWS_DETAILS);
 
         binding.newsDStarButton.setOnClickListener(v -> {
             if(binding.getNewsItem()!=null) {viewModel.doStarTransaction(binding.getNewsItem().key);}

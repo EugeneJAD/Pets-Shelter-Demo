@@ -22,7 +22,6 @@ import eugene.petsshelter.ui.adapter.PetsRecyclerAdapter;
 import eugene.petsshelter.ui.base.AppNavigator;
 import eugene.petsshelter.ui.base.BaseFragment;
 import eugene.petsshelter.utils.AppConstants;
-import timber.log.Timber;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -63,9 +62,9 @@ public class PetsListFragment extends BaseFragment<ListFragmentBinding,PetsViewM
         viewModel.getListType().observe(this, type -> {
             if(type!=null) {
                 if (type.equals(AppConstants.FRAGMENT_LIST_TYPE_DOGS)) {
-                    ((MainActivity) getActivity()).setToolbar(getString(R.string.dogs_fragment_title), null, MainActivity.TYPE_FRAGMENT_LIST_DOGS);
+                    ((MainActivity) getActivity()).setActivityView(getString(R.string.dogs_fragment_title), null, MainActivity.TYPE_FRAGMENT_LIST_DOGS);
                 } else if (type.equals(AppConstants.FRAGMENT_LIST_TYPE_CATS)) {
-                    ((MainActivity) getActivity()).setToolbar(getString(R.string.cats_fragment_title), null, MainActivity.TYPE_FRAGMENT_LIST_CATS);
+                    ((MainActivity) getActivity()).setActivityView(getString(R.string.cats_fragment_title), null, MainActivity.TYPE_FRAGMENT_LIST_CATS);
                 }
             }
         });

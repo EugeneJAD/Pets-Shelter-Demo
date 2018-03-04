@@ -25,6 +25,7 @@ import eugene.petsshelter.ui.adapter.ButtonClickHandler;
 import eugene.petsshelter.ui.base.AppNavigator;
 import eugene.petsshelter.ui.base.BaseFragment;
 import eugene.petsshelter.utils.AppConstants;
+import eugene.petsshelter.utils.NetworkUtils;
 import eugene.petsshelter.utils.SnackbarUtils;
 import timber.log.Timber;
 
@@ -57,6 +58,10 @@ public class CardDonationFragment extends BaseFragment<FragmentCardDonationBindi
 
         if(binding.radioButton4.isChecked())
             if (binding.chooseAmountContainer.isCollapsed()) binding.chooseAmountContainer.expand();
+
+        if(!NetworkUtils.isConnected(getContext())){
+            SnackbarUtils.showSnackbar(binding.getRoot(),getString(R.string.no_internet_connection), SnackbarUtils.TYPE_ERROR);
+        }
 
         observeViewModel();
     }
@@ -104,9 +109,6 @@ public class CardDonationFragment extends BaseFragment<FragmentCardDonationBindi
                 viewModel.setAmount((int)donationInCents);
             } else {viewModel.setAmount(0);}
         }
-
-        Timber.d("viewModel.getInputAmount() = %s", viewModel.getInputAmount());
-        Timber.d("amount = %s", viewModel.getAmount());
 
         if(viewModel.getAmount()==0) {
             SnackbarUtils.showSnackbar(binding.getRoot(), getString(R.string.choose_amount), SnackbarUtils.TYPE_INFO);

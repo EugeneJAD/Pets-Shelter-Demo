@@ -24,6 +24,7 @@ import eugene.petsshelter.ui.main.PetDetailsViewModel;
 import eugene.petsshelter.ui.main.PetsViewModel;
 import eugene.petsshelter.ui.main.ShelterViewModel;
 import eugene.petsshelter.ui.map.MapViewModel;
+import eugene.petsshelter.ui.splash.SplashActivityViewModel;
 
 
 @Module (includes = ViewModelModule.class)
@@ -87,4 +88,7 @@ class AppModule {
 
     @Provides
     Class<AdoptionInfoViewModel> provideAdoptionInfoViewModel(){return AdoptionInfoViewModel.class;}
+
+    @Provides
+    Class<SplashActivityViewModel> provideSplashActivityViewModel(){return SplashActivityViewModel.class;}
 }

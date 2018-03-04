@@ -21,7 +21,6 @@ import eugene.petsshelter.ui.adapter.ButtonClickHandler;
 import eugene.petsshelter.ui.base.AppNavigator;
 import eugene.petsshelter.ui.base.BaseFragment;
 import eugene.petsshelter.utils.AppConstants;
-import timber.log.Timber;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -54,7 +53,7 @@ public class PetDetailsFragment extends BaseFragment<FragmentPetDetailsBinding,P
 
         viewModel.getPet().observe(this, pet -> {
             if(pet!=null){
-                ((MainActivity) getActivity()).setToolbar(pet.getName(), pet.getImageURL(), MainActivity.TYPE_FRAGMENT_DETAILS_PET);
+                ((MainActivity) getActivity()).setActivityView(pet.getName(), pet.getImageURL(), MainActivity.TYPE_FRAGMENT_DETAILS_PET);
                 updateUI(pet);
             }
         });

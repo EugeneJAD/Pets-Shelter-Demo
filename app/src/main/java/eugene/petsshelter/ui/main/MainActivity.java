@@ -5,7 +5,6 @@ import android.content.res.Configuration;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
@@ -35,6 +34,7 @@ import eugene.petsshelter.ui.adapter.ButtonClickHandler;
 import eugene.petsshelter.ui.base.AppNavigator;
 import eugene.petsshelter.ui.base.BaseActivity;
 import eugene.petsshelter.utils.AppConstants;
+import eugene.petsshelter.utils.NetworkUtils;
 import eugene.petsshelter.utils.SnackbarUtils;
 
 public class MainActivity extends BaseActivity<ActivityMainBinding,MainViewModel>
@@ -84,10 +84,12 @@ public class MainActivity extends BaseActivity<ActivityMainBinding,MainViewModel
         getSupportActionBar().setHomeButtonEnabled(true);
 
         if(savedInstanceState==null){
-            navigator.navigateToDogs();
+            navigator.navigateToNews();
             user = FirebaseAuth.getInstance().getCurrentUser();
-            if(user==null) navigator.navigateToLogin();
-            else viewModel.reloadUserData(user.getUid());
+            if(user==null)
+                navigator.navigateToLogin();
+            else
+                viewModel.reloadUserData(user.getUid());
         }
 
         observeViewModel();
@@ -199,7 +201,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding,MainViewModel
     }
 
     //Call from Fragments
-    public void setToolbar(String toolbarTitle, String toolbarImageUrl, int fragmentType) {
+    public void setActivityView(String toolbarTitle, String toolbarImageUrl, int fragmentType) {
 
         switch (fragmentType) {
             case TYPE_FRAGMENT_LIST_DOGS:
@@ -208,6 +210,9 @@ public class MainActivity extends BaseActivity<ActivityMainBinding,MainViewModel
             case TYPE_FRAGMENT_NEWS_LIST:
                 binding.mainBottomButtonsContainer.setVisibility(View.GONE);
                 setToolbarForMasterFragment();
+                if(!NetworkUtils.isConnected(this)){
+                    SnackbarUtils.showSnackbar(binding.getRoot(),getString(R.string.no_internet_connection), SnackbarUtils.TYPE_ERROR);
+                }
                 break;
             case TYPE_FRAGMENT_DETAILS_PET:
                 binding.mainBottomButtonsContainer.setVisibility(View.VISIBLE);
@@ -224,6 +229,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding,MainViewModel
 
         if(getSupportActionBar()!=null)
             getSupportActionBar().setTitle(toolbarTitle);
+
     }
 
     private void setToolbarForDetailsFragment(){

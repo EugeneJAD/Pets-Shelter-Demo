@@ -8,7 +8,7 @@ import eugene.petsshelter.ui.adoption.AdoptionActivity;
 import eugene.petsshelter.ui.donation.DonationActivity;
 
 /**
- * Created by Admin on 3/2/2018.
+ * Created by Eugene on 3/2/2018.
  */
 
 @Module

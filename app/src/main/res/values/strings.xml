@@ -1,4 +1,5 @@
 <resources>
+
     <string name="app_name">Pets Shelter</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -46,7 +47,6 @@
 
     <!--Donation -->
     <string name="donation">Donation</string>
-    <string name="donation_title">You can make a difference for Montreal\'s homeless animals!</string>
     <string name="donation_text">Any help is vital to help these animals survive and find their own home.</string>
     <string name="invalid_card">Invalid Card Data</string>
     <string name="choose_amount">Choose an amount of your donation</string>
@@ -87,6 +87,9 @@
     <string name="adoption_hours_2">Adoption hours:</string>
     <string name="adoption_fees">Adoption fees:</string>
     <string name="adoption">Adoption</string>
+
+    <!--Splash -->
+    <string name="updating">Updating…</string>
 
 
 </resources>

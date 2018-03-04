@@ -9,6 +9,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import eugene.petsshelter.data.models.NewsItem;
+import eugene.petsshelter.data.models.Resource;
 import eugene.petsshelter.data.repository.Repository;
 
 /**
@@ -26,7 +27,7 @@ public class NewsViewModel extends ViewModel {
         repository.doStarTransaction(key);
     }
 
-    public LiveData<List<NewsItem>> getNews() {return repository.getNews();}
+    public LiveData<Resource<List<NewsItem>>> getNews() {return repository.getNews();}
 
     public void startListeningNews() {repository.startListeningNews();}
     public void stopListeningNews() {repository.stopListeningNews();}

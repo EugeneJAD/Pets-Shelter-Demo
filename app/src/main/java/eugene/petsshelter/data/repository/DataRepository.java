@@ -18,6 +18,7 @@ import eugene.petsshelter.data.models.ApiResponse;
 import eugene.petsshelter.data.models.NewsItem;
 import eugene.petsshelter.data.models.Pet;
 import eugene.petsshelter.data.models.Profile;
+import eugene.petsshelter.data.models.Resource;
 import eugene.petsshelter.data.models.Shelter;
 import eugene.petsshelter.data.repository.remote.FirebaseRepository;
 import eugene.petsshelter.service.StripeService;
@@ -82,7 +83,7 @@ public class DataRepository implements Repository {
     public LiveData<HashMap<String, Boolean>> getFavorites() {return remoteRepo.getUsersFavPets(localFavPets);}
 
     @Override
-    public LiveData<List<NewsItem>> getNews() {return remoteRepo.getNews();}
+    public LiveData<Resource<List<NewsItem>>>  getNews() {return remoteRepo.getNews();}
 
     @Override
     public LiveData<AdoptionInfo> getAdoptionInfo() {return remoteRepo.getAdoptionInfo();}

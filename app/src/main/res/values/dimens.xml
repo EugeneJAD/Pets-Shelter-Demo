@@ -9,7 +9,7 @@
 
     <!-- Images -->
     <dimen name="user_photo_size">70dp</dimen>
-    <dimen name="app_bar_image_height">250dp</dimen>
+    <dimen name="app_bar_image_height">230dp</dimen>
     <dimen name="shelter_details_title_image_size">40dp</dimen>
 
     <!-- Screen margins -->
