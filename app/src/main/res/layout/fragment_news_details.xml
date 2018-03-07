@@ -5,6 +5,9 @@
     <data>
         <variable name="newsItem" type="eugene.petsshelter.data.models.NewsItem"/>
         <variable name="isUserLoggedIn" type="Boolean"/>
+        <variable name="username" type="String"/>
+        <variable name="userPhotoUrl" type="String"/>
+
     </data>
 
 <android.support.v4.widget.NestedScrollView
@@ -50,7 +53,6 @@
                 app:fieldVisibility="@{newsItem.imageCredits}"/>
 
         </android.support.constraint.ConstraintLayout>
-
 
         <android.support.v7.widget.CardView
             android:id="@+id/news_d_card_view"
@@ -147,10 +149,94 @@
                     android:textColor="@{isUserLoggedIn? @color/material_blue_grey_400 : @color/textLightDisabled}"
                     android:text="@{String.valueOf(newsItem.starCount)}"
                     />
+            </android.support.constraint.ConstraintLayout>
+        </android.support.v7.widget.CardView>
 
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/news_d_comment_card_view"
+            style="@style/CardView.Light"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/screen_content_margin"
+            android:layout_marginStart="@dimen/screen_content_margin"
+            android:layout_marginEnd="@dimen/screen_content_margin"
+            app:cardCornerRadius="4dp"
+            app:fieldVisibility="@{username}">
+
+            <android.support.constraint.ConstraintLayout style="@style/FullWidthView">
+
+                <android.support.v7.widget.AppCompatImageView
+                    android:id="@+id/comment_d_user_image"
+                    android:layout_width="@dimen/comment_image_size"
+                    android:layout_height="@dimen/comment_image_size"
+                    android:layout_marginBottom="@dimen/screen_edge_standard_margin"
+                    android:layout_marginStart="@dimen/screen_edge_standard_margin"
+                    android:layout_marginTop="@dimen/screen_edge_standard_margin"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.0"
+                    tools:src="@drawable/ic_person_24dp"
+                    app:userImageUrl="@{userPhotoUrl}"
+                    app:placeholder="@{@drawable/ic_person_24dp}"
+                    />
+
+                <TextView
+                    android:id="@+id/comment_d_username"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/screen_content_margin"
+                    android:layout_marginStart="@dimen/screen_edge_standard_margin"
+                    android:layout_marginTop="@dimen/screen_edge_standard_margin"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                    android:textColor="@color/textDarkSecondary"
+                    android:textStyle="bold"
+                    android:maxLines="1"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toEndOf="@+id/comment_d_user_image"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:text="@{username}"
+                    tools:text="TextView" />
+
+                <EditText
+                    android:id="@+id/comment_d_body_edit"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/screen_edge_standard_margin"
+                    android:layout_marginEnd="@dimen/screen_edge_standard_margin"
+                    android:layout_marginStart="@dimen/screen_edge_standard_margin"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                    android:textColor="@color/textDarkSecondary"
+                    android:hint="@string/add_comment"
+                    android:maxLength="150"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toEndOf="@+id/comment_d_user_image"
+                    app:layout_constraintTop_toBottomOf="@+id/comment_d_username"/>
+
+                <Button
+                    android:id="@+id/post_comment_button"
+                    style="@style/Button.Standard"
+                    android:text="@string/comment"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:layout_marginEnd="@dimen/screen_content_margin"
+                    android:layout_marginBottom="@dimen/screen_content_margin"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/comment_d_body_edit" />
 
             </android.support.constraint.ConstraintLayout>
         </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/comments_list"
+            android:layout_marginTop="@dimen/screen_content_margin"
+            android:layout_marginBottom="@dimen/screen_edge_standard_margin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:nestedScrollingEnabled="false" />
     </LinearLayout>
 </android.support.v4.widget.NestedScrollView>
 </layout>

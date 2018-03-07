@@ -52,7 +52,6 @@ public class PetsListFragment extends BaseFragment<ListFragmentBinding,PetsViewM
         binding.recyclerView.setHasFixedSize(true);
         adapter = new PetsRecyclerAdapter(this, viewModel.repository);
         binding.recyclerView.setAdapter(adapter);
-        binding.recyclerView.setNestedScrollingEnabled(false);
 
         observeViewModel();
     }

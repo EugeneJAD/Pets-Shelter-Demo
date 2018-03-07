@@ -91,10 +91,11 @@ public class AppNavigator {
 
     public void navigateToNews() {navigation.replaceFragment(R.id.fragment_container, new NewsListFragment(), null);}
 
-    public void navigateToNewsDetails(String key, String imageUrl) {
+    public void navigateToNewsDetails(String key, String imageUrl, String toolbarTitle) {
         Bundle args = new Bundle();
         args.putString(AppConstants.NEWS_ITEM_ID_KEY,key);
         args.putString(AppConstants.TOOLBAR_IMAGE_URL_KEY, imageUrl);
+        args.putString(AppConstants.TOOLBAR_TITLE, toolbarTitle);
         navigation.replaceFragmentBackStack(R.id.fragment_container, new NewsDetailsFragment(),
             NewsDetailsFragment.class.getSimpleName(), args,null,
             R.anim.slide_in_up_anim, R.anim.fade_out_anim,R.anim.fade_in_anim,R.anim.slide_out_down_anim);

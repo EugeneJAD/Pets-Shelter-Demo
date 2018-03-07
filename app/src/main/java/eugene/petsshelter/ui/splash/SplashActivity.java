@@ -3,7 +3,6 @@ package eugene.petsshelter.ui.splash;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
@@ -16,6 +15,7 @@ import eugene.petsshelter.R;
 import eugene.petsshelter.databinding.ActivitySplashBinding;
 import eugene.petsshelter.ui.base.AppNavigator;
 import eugene.petsshelter.ui.base.BaseActivity;
+import eugene.petsshelter.utils.NetworkUtils;
 
 public class SplashActivity extends BaseActivity<ActivitySplashBinding,SplashActivityViewModel> implements HasSupportFragmentInjector {
 
@@ -28,9 +28,6 @@ public class SplashActivity extends BaseActivity<ActivitySplashBinding,SplashAct
         super.onCreate(savedInstanceState);
         setAndBindContentView(R.layout.activity_splash);
 
-//        getWindow().addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
-//        getWindow().addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN);
-
         if(savedInstanceState==null) {
             animateLogo();
         } else {
@@ -40,9 +37,15 @@ public class SplashActivity extends BaseActivity<ActivitySplashBinding,SplashAct
 
     private void observeViewModel() {
 
-        viewModel.getNews().observe(this, newsResource -> {
-            if(newsResource!=null){hideProgress();}
-        });
+        if(!NetworkUtils.isConnected(this)) {
+            navigateToMain();
+        } else {
+            viewModel.getNews().observe(this, newsResource -> {
+                if (newsResource != null) {
+                    navigateToMain();
+                }
+            });
+        }
     }
 
     private void animateLogo() {
@@ -64,17 +67,15 @@ public class SplashActivity extends BaseActivity<ActivitySplashBinding,SplashAct
     private void showProgress() {
 
         Animation rotationAnimation = AnimationUtils.loadAnimation(this, R.anim.splash_progress_rotation);
+        binding.splashProgress.setVisibility(View.VISIBLE);
+        binding.splashProgress.startAnimation(rotationAnimation);
 
         Animation updateMessageAnimation = AnimationUtils.loadAnimation(this, R.anim.splash_message_slide_up_anim);
         updateMessageAnimation.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {}
             @Override
-            public void onAnimationEnd(Animation animation) {
-                observeViewModel();
-                binding.splashProgress.setVisibility(View.VISIBLE);
-                binding.splashProgress.startAnimation(rotationAnimation);
-            }
+            public void onAnimationEnd(Animation animation) {observeViewModel();}
             @Override
             public void onAnimationRepeat(Animation animation) {}
         });
@@ -82,9 +83,7 @@ public class SplashActivity extends BaseActivity<ActivitySplashBinding,SplashAct
         binding.splashTextUpdate.startAnimation(updateMessageAnimation);
     }
 
-    private void hideProgress() {
-
-        binding.splashProgress.setVisibility(View.INVISIBLE);
+    private void navigateToMain() {
 
         Animation updateMessageAnimation = AnimationUtils.loadAnimation(this, R.anim.splash_message_slide_down_anim);
         updateMessageAnimation.setAnimationListener(new Animation.AnimationListener() {

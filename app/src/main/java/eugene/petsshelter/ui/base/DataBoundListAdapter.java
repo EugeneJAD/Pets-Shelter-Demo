@@ -107,8 +107,6 @@ public abstract class DataBoundListAdapter<T, V extends ViewDataBinding>
 
     protected abstract boolean areContentsTheSame(T oldItem, T newItem);
 
-    public final void setItems(@Nullable List<T> update) {items = update;}
-
     @Override
     public int getItemCount() {
         return items == null ? 0 : items.size();

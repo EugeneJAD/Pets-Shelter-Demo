@@ -53,7 +53,6 @@ public class NewsListFragment extends BaseFragment<ListFragmentBinding,NewsViewM
         binding.recyclerView.setLayoutManager(layoutManager);
         adapter = new NewsRecyclerAdapter(this);
         binding.recyclerView.setAdapter(adapter);
-        binding.recyclerView.setNestedScrollingEnabled(false);
 
         observeViewModel();
     }
@@ -74,7 +73,7 @@ public class NewsListFragment extends BaseFragment<ListFragmentBinding,NewsViewM
         if(view.getId() == R.id.news_star_button) {
             viewModel.doStarTransaction(item.key);
         } else {
-            navigator.navigateToNewsDetails(item.key, item.imageUrl);
+            navigator.navigateToNewsDetails(item.key, item.imageUrl, item.title);
         }
     }
 

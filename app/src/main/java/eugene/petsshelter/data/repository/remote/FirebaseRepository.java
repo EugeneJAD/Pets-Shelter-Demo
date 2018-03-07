@@ -161,8 +161,6 @@ public class FirebaseRepository {
         };
         sheltersDatabaseRef.addListenerForSingleValueEvent(sheltersListener);
 
-        news.setValue(Resource.loading(null));
-
         ValueEventListener newsListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -269,11 +267,8 @@ public class FirebaseRepository {
                 mutableData.setValue(item);
                 return Transaction.success(mutableData);
             }
-
             @Override
-            public void onComplete(DatabaseError databaseError, boolean b, DataSnapshot dataSnapshot) {
-                Timber.d("newsTransaction:onComplete: %s", databaseError);
-            }
+            public void onComplete(DatabaseError databaseError, boolean b, DataSnapshot dataSnapshot) {}
         });
     }
 
@@ -304,6 +299,7 @@ public class FirebaseRepository {
     public void startListeningNewsItem(String key){
         if(!TextUtils.isEmpty(key))
             newsDatabaseRef.child(key).addValueEventListener(newsItemListener);}
+
     public void stopListeningNewsItem(String key) {
         if(!TextUtils.isEmpty(key)) {
             if (newsItemListener != null) newsDatabaseRef.child(key).removeEventListener(newsItemListener);

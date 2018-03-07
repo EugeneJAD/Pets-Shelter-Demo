@@ -5,6 +5,7 @@ import android.content.res.Configuration;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
@@ -36,6 +37,7 @@ import eugene.petsshelter.ui.base.BaseActivity;
 import eugene.petsshelter.utils.AppConstants;
 import eugene.petsshelter.utils.NetworkUtils;
 import eugene.petsshelter.utils.SnackbarUtils;
+import timber.log.Timber;
 
 public class MainActivity extends BaseActivity<ActivityMainBinding,MainViewModel>
         implements NavigationView.OnNavigationItemSelectedListener, HasSupportFragmentInjector,
@@ -59,6 +61,8 @@ public class MainActivity extends BaseActivity<ActivityMainBinding,MainViewModel
     private FirebaseUser user;
 
     private NavHeaderMainBinding navHeaderBinding;
+
+    private Menu menu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,9 +106,15 @@ public class MainActivity extends BaseActivity<ActivityMainBinding,MainViewModel
         viewModel.getFavorites().observe(this, favorites -> viewModel.repository.updateLocalFavoritePets(favorites));
     }
 
-    private void onSignedInInitialize() {viewModel.reloadUserData(user.getEmail());}
+    private void onSignedInInitialize() {
+        if(menu!=null)
+            menu.findItem(R.id.action_sign_out).setTitle(getString(R.string.sign_out));
+        viewModel.reloadUserData(user.getEmail());}
 
-    private void onSignedOutCleanup() {viewModel.reloadUserData(null);}
+    private void onSignedOutCleanup() {
+        if(menu!=null)
+            menu.findItem(R.id.action_sign_out).setTitle(getString(R.string.sign_in));
+        viewModel.reloadUserData(null);}
 
     private void signOut() {
 
@@ -160,6 +170,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding,MainViewModel
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
+        this.menu = menu;
         return true;
     }
 
@@ -170,7 +181,10 @@ public class MainActivity extends BaseActivity<ActivityMainBinding,MainViewModel
 
         switch (item.getItemId()){
             case R.id.action_sign_out:
-                signOut();
+                if(FirebaseAuth.getInstance().getCurrentUser()==null)
+                    navigator.navigateToLogin();
+                else
+                    signOut();
                 break;
             case android.R.id.home:
                 navigator.popUpBackStack();
@@ -229,7 +243,6 @@ public class MainActivity extends BaseActivity<ActivityMainBinding,MainViewModel
 
         if(getSupportActionBar()!=null)
             getSupportActionBar().setTitle(toolbarTitle);
-
     }
 
     private void setToolbarForDetailsFragment(){

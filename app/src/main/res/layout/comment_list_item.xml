@@ -1,0 +1,85 @@
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data><variable name="comment" type="eugene.petsshelter.data.models.Comment"/></data>
+
+    <android.support.constraint.ConstraintLayout style="@style/FullWidthView"
+        android:layout_margin="@dimen/screen_content_margin">
+
+
+        <View
+            android:id="@+id/view_devider"
+            android:layout_height="1dp"
+            android:layout_width="match_parent"
+            android:background="@color/divider_color"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/comment_user_image"
+            android:layout_width="@dimen/comment_image_size"
+            android:layout_height="@dimen/comment_image_size"
+            android:layout_marginBottom="@dimen/screen_edge_standard_margin"
+            android:layout_marginStart="@dimen/screen_edge_standard_margin"
+            android:layout_marginTop="@dimen/screen_edge_standard_margin"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0"
+            app:userImageUrl="@{comment.userImageURL}"
+            app:placeholder="@{@drawable/ic_person_24dp}"
+            />
+
+        <TextView
+            android:id="@+id/comment_username"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="@dimen/screen_edge_standard_margin"
+            android:layout_marginTop="@dimen/screen_edge_standard_margin"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+            android:textColor="@color/textDarkSecondary"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@+id/comment_date"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/comment_user_image"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="TextView"
+            android:text="@{comment.author}"/>
+
+        <TextView
+            android:id="@+id/comment_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/screen_edge_standard_margin"
+            android:layout_marginTop="@dimen/screen_edge_standard_margin"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+            android:textColor="@color/material_blue_grey_400"
+            tools:text="TextView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:text="@{comment.date}"/>
+
+        <TextView
+            android:id="@+id/comment_body"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/screen_edge_standard_margin"
+            android:layout_marginEnd="@dimen/screen_content_margin"
+            android:layout_marginStart="@dimen/screen_edge_standard_margin"
+            android:layout_marginTop="@dimen/screen_content_margin"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+            android:textColor="@color/textDarkSecondary"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/comment_user_image"
+            app:layout_constraintTop_toBottomOf="@+id/comment_username"
+            app:layout_constraintVertical_bias="0.0"
+            tools:text="TextView TextView TextView TextView TextView TextView"
+            android:text="@{comment.text}"/>
+    </android.support.constraint.ConstraintLayout>
+</layout>

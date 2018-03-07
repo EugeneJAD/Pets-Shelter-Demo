@@ -25,6 +25,7 @@ public class AppConstants {
 
     public static final String NEWS_ITEM_ID_KEY = "news_item_id";
     public static final String TOOLBAR_IMAGE_URL_KEY = "toolbar_image_url";
+    public static final String TOOLBAR_TITLE = "toolbar_title";
 
     //Firebase nodes
     public static final String DOGS = "dogs";

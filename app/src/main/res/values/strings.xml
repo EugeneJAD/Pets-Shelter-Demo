@@ -43,7 +43,8 @@
     <string name="sign_in_failed">Sign in failed</string>
     <string name="sign_in_successful">Sign in successful</string>
     <string name="signed_out">Signed out</string>
-    <string name="sign_out">Sign out</string>
+    <string name="sign_out">Sign Out</string>
+    <string name="sign_in">Sign In</string>
 
     <!--Donation -->
     <string name="donation">Donation</string>
@@ -90,6 +91,8 @@
 
     <!--Splash -->
     <string name="updating">Updating…</string>
+    <string name="add_comment">Add a public comment...</string>
+    <string name="comment">Comment</string>
 
 
 </resources>
