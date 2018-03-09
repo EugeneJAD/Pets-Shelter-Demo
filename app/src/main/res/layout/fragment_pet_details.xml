@@ -56,7 +56,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     tools:src="@drawable/ic_favorite_border_24dp"
                     android:src="@{pet.isFavorite? @drawable/ic_favorite_24dp : @drawable/ic_favorite_border_24dp}"
-                    android:tint="@{isUserLoggedIn? @color/material_pink_400 : @color/textLightDisabled}"
+                    android:tint="@{safeUnbox(isUserLoggedIn)? @color/material_pink_400 : @color/textLightDisabled}"
                     android:onClick="@{handler::onButtonClick}"/>
 
                 <TextView

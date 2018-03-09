@@ -54,5 +54,6 @@ public class ShelterDetailsFragment extends BaseFragment<FragmentShelterDetailsB
         int id = view.getId();
         if(id==binding.mapButton.getId()) navigator.navigateToMap();
         else if(id==binding.donateButton.getId()) navigator.navigateToDonation();
+        else if(id==binding.adoptionButton.getId()) navigator.navigateToAdoption(null);
     }
 }

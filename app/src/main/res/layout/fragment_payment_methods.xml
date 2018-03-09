@@ -34,13 +34,22 @@
                 android:textColor="@color/colorPrimary"
                 android:layout_gravity="center_horizontal"/>
 
+            <ImageView
+                android:id="@+id/button_google_pay"
+                style="@style/Button.CardStandard"
+                android:src="@drawable/googlepay_button_content"
+                android:padding="@dimen/screen_content_margin"
+                android:onClick="@{handler::onButtonClick}"
+                android:layout_marginTop="50dp"
+                android:layout_gravity="center_horizontal"/>
+
             <Button
                 android:id="@+id/button_pay_card"
                 android:text="@string/donate_with_card"
                 style="@style/Button.CardStandard"
+                android:layout_marginTop="@dimen/screen_content_margin"
                 android:drawableStart="@drawable/ic_pets_green_24dp"
                 android:onClick="@{handler::onButtonClick}"
-                android:layout_marginTop="@dimen/screen_left_edge_content_margin"
                 android:layout_gravity="center_horizontal"/>
 
         </LinearLayout>

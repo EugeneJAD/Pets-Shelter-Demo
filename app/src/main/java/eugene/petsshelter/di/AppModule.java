@@ -3,6 +3,7 @@ package eugene.petsshelter.di;
 import android.app.Application;
 import android.content.res.Resources;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 
 import javax.inject.Singleton;
@@ -16,6 +17,7 @@ import eugene.petsshelter.data.repository.remote.FirebaseRepository;
 import eugene.petsshelter.ui.adoption.AdoptionInfoViewModel;
 import eugene.petsshelter.ui.donation.CardDonationViewModel;
 import eugene.petsshelter.ui.donation.DonationActivityViewModel;
+import eugene.petsshelter.ui.donation.GooglePayViewModel;
 import eugene.petsshelter.ui.donation.PaymentMethodsViewModel;
 import eugene.petsshelter.ui.donation.SummaryDonationViewModel;
 import eugene.petsshelter.ui.main.MainViewModel;
@@ -56,6 +58,13 @@ class AppModule {
     @Singleton
     Repository provideRepository(DataRepository dataRepository){return dataRepository;}
 
+
+    @Provides
+    FirebaseAuth provideFirebaseAuth(){
+        return FirebaseAuth.getInstance();
+    }
+
+
     @Provides
     Class<MainViewModel> provideMainViewModel(){return MainViewModel.class;}
 
@@ -91,4 +100,7 @@ class AppModule {
 
     @Provides
     Class<SplashActivityViewModel> provideSplashActivityViewModel(){return SplashActivityViewModel.class;}
+
+    @Provides
+    Class<GooglePayViewModel> provideGooglePayViewModel(){return GooglePayViewModel.class;}
 }

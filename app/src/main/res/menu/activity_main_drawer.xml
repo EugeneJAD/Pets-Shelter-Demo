@@ -22,6 +22,14 @@
             android:icon="@drawable/ic_location_city_24dp"
             android:title="@string/shelter_fragment_title"/>
         <item
+            android:id="@+id/nav_adoption"
+            android:icon="@drawable/ic_assignment_24dp"
+            android:title="@string/adoption"/>
+        <item
+            android:id="@+id/nav_donation"
+            android:icon="@drawable/ic_shopping_basket_24dp"
+            android:title="@string/donation"/>
+        <item
             android:id="@+id/nav_tools"
             android:icon="@drawable/ic_menu_manage"
             android:title="Tools"/>

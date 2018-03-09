@@ -27,7 +27,6 @@ import eugene.petsshelter.ui.base.BaseFragment;
 import eugene.petsshelter.utils.AppConstants;
 import eugene.petsshelter.utils.NetworkUtils;
 import eugene.petsshelter.utils.SnackbarUtils;
-import timber.log.Timber;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -79,7 +78,7 @@ public class CardDonationFragment extends BaseFragment<FragmentCardDonationBindi
 
     private void navigateToSummary() {
         viewModel.resetStripeToken();
-        navigator.navigateToSummury();
+        navigator.navigateToSummary();
     }
 
     private Donation getDonationData() {
@@ -91,7 +90,7 @@ public class CardDonationFragment extends BaseFragment<FragmentCardDonationBindi
         return donation;
     }
 
-    public void onAmountSelected() {
+    private void onAmountSelected() {
 
         //set amount in cents
         if (binding.radioButton.isChecked()) {viewModel.setAmount(1000);
@@ -118,14 +117,14 @@ public class CardDonationFragment extends BaseFragment<FragmentCardDonationBindi
             return;
         }
 
-        //TODO use cardInputWidget
-//        Card cardSelected = binding.cardInputWidget.getCard();
-//        if (cardSelected == null) {
-//            SnackbarUtils.showSnackbar(binding.getRoot(),getString(R.string.invalid_card),SnackbarUtils.TYPE_ERROR);
-//            return;
-//        }
+        Card cardSelected = binding.cardInputWidget.getCard();
+        if (cardSelected == null) {
+            SnackbarUtils.showSnackbar(binding.getRoot(),getString(R.string.invalid_card),SnackbarUtils.TYPE_ERROR);
+            return;
+        }
 
-        viewModel.setSelectedCard(new Card(AppConstants.CANADA_TEST_CARD_NUMBER, 12,19, "123"));
+//        viewModel.setSelectedCard(new Card(AppConstants.CANADA_TEST_CARD_NUMBER, 12,19, "123"));
+        viewModel.setSelectedCard(cardSelected);
 
         if(viewModel.getSelectedCard().validateCard()) {
             activityViewModel.startLoading(getString(R.string.card_validation));

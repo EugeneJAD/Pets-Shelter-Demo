@@ -14,7 +14,7 @@ public class DateUtils {
     public static String getFormattedCurrentDate() {
 
         Date currentDate = Calendar.getInstance().getTime();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.CANADA);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         return dateFormat.format(currentDate);
     }
 

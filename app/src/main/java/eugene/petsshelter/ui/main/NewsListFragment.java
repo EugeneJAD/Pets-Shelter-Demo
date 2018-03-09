@@ -32,6 +32,9 @@ public class NewsListFragment extends BaseFragment<ListFragmentBinding,NewsViewM
         implements Injectable, OnItemClickListener<NewsItem>, FirebaseAuth.AuthStateListener {
 
     @Inject AppNavigator navigator;
+
+    @Inject FirebaseAuth firebaseAuth;
+
     private NewsRecyclerAdapter adapter;
     private LinearLayoutManager layoutManager;
 
@@ -83,14 +86,14 @@ public class NewsListFragment extends BaseFragment<ListFragmentBinding,NewsViewM
     @Override
     public void onStart() {
         super.onStart();
-        FirebaseAuth.getInstance().addAuthStateListener(this);
+        firebaseAuth.addAuthStateListener(this);
         viewModel.startListeningNews();
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        FirebaseAuth.getInstance().removeAuthStateListener(this);
+        firebaseAuth.removeAuthStateListener(this);
         viewModel.stopListeningNews();
     }
 

@@ -49,6 +49,8 @@ public class MainActivity extends BaseActivity<ActivityMainBinding,MainViewModel
 
     @Inject AppNavigator navigator;
 
+    @Inject FirebaseAuth firebaseAuth;
+
     public static final int TYPE_FRAGMENT_LIST_DOGS= 1000;
     public static final int TYPE_FRAGMENT_LIST_CATS= 1001;
     public static final int TYPE_FRAGMENT_DETAILS_PET = 1002;
@@ -89,7 +91,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding,MainViewModel
 
         if(savedInstanceState==null){
             navigator.navigateToNews();
-            user = FirebaseAuth.getInstance().getCurrentUser();
+            user = firebaseAuth.getCurrentUser();
             if(user==null)
                 navigator.navigateToLogin();
             else
@@ -118,7 +120,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding,MainViewModel
 
     private void signOut() {
 
-        if(FirebaseAuth.getInstance().getCurrentUser()==null)
+        if(firebaseAuth.getCurrentUser()==null)
             return;
 
         viewModel.repository.updateRemoteFavoritePets();
@@ -133,13 +135,13 @@ public class MainActivity extends BaseActivity<ActivityMainBinding,MainViewModel
     @Override
     protected void onResume() {
         super.onResume();
-        FirebaseAuth.getInstance().addAuthStateListener(this);
+        firebaseAuth.addAuthStateListener(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        FirebaseAuth.getInstance().removeAuthStateListener(this);
+        firebaseAuth.removeAuthStateListener(this);
     }
 
     @Override
@@ -181,7 +183,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding,MainViewModel
 
         switch (item.getItemId()){
             case R.id.action_sign_out:
-                if(FirebaseAuth.getInstance().getCurrentUser()==null)
+                if(firebaseAuth.getCurrentUser()==null)
                     navigator.navigateToLogin();
                 else
                     signOut();
@@ -205,6 +207,8 @@ public class MainActivity extends BaseActivity<ActivityMainBinding,MainViewModel
         else if (id == R.id.nav_cats) navigator.navigateToCats();
         else if (id == R.id.nav_shelter) navigator.navigateToShelter();
         else if (id == R.id.nav_news) navigator.navigateToNews();
+        else if (id == R.id.nav_adoption) {navigator.navigateToAdoption(null);}
+        else if (id == R.id.nav_donation) {navigator.navigateToDonation();}
         else if (id == R.id.nav_tools) {}
         else if (id == R.id.nav_share) {}
         else if (id == R.id.nav_send) {}
@@ -270,7 +274,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding,MainViewModel
             IdpResponse response = IdpResponse.fromResultIntent(data);
 
             if (resultCode == RESULT_OK) {
-                viewModel.reloadUserData(FirebaseAuth.getInstance().getCurrentUser().getUid());
+                viewModel.reloadUserData(firebaseAuth.getCurrentUser().getUid());
                 return;
             } else {
                 if (response == null) {

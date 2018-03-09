@@ -16,6 +16,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import javax.inject.Inject;
+
 import eugene.petsshelter.R;
 import eugene.petsshelter.data.models.Comment;
 import eugene.petsshelter.databinding.FragmentNewsDetailsBinding;
@@ -30,6 +32,10 @@ import eugene.petsshelter.utils.DateUtils;
  */
 public class NewsDetailsFragment extends BaseFragment<FragmentNewsDetailsBinding, NewsViewModel>
         implements Injectable, FirebaseAuth.AuthStateListener {
+
+    @Inject FirebaseDatabase firebaseDatabase;
+
+    @Inject FirebaseAuth firebaseAuth;
 
     private DatabaseReference commentsDatabaseReference;
     private String selectedNewsItemId;
@@ -66,7 +72,7 @@ public class NewsDetailsFragment extends BaseFragment<FragmentNewsDetailsBinding
 
         if(!TextUtils.isEmpty(selectedNewsItemId)) {
 
-            commentsDatabaseReference = FirebaseDatabase.getInstance().getReference().child("news-comments").child(selectedNewsItemId);
+            commentsDatabaseReference = firebaseDatabase.getReference().child("news-comments").child(selectedNewsItemId);
 
             LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL,
                     true);
@@ -100,14 +106,14 @@ public class NewsDetailsFragment extends BaseFragment<FragmentNewsDetailsBinding
     @Override
     public void onStart() {
         super.onStart();
-        FirebaseAuth.getInstance().addAuthStateListener(this);
+        firebaseAuth.addAuthStateListener(this);
         viewModel.startListeningNewsItem(selectedNewsItemId);
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        FirebaseAuth.getInstance().removeAuthStateListener(this);
+        firebaseAuth.removeAuthStateListener(this);
         viewModel.stopListeningNewsItem(selectedNewsItemId);
         if(commentsAdapter!=null) commentsAdapter.cleanupListener();
     }

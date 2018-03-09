@@ -46,6 +46,15 @@ public abstract class BaseLoadingViewModel extends ViewModel{
         setClickable();
     }
 
+    public boolean isLoading(){
+
+        if(loadingState.getValue()==null){
+            return false;
+        } else {
+            return loadingState.getValue().isRunning();
+        }
+    }
+
     private void setClickable(){
         if(this.button != null){
             this.button.setClickable(true);

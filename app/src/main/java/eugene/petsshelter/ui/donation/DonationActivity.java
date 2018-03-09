@@ -1,16 +1,15 @@
 package eugene.petsshelter.ui.donation;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
+import com.google.android.gms.wallet.AutoResolveHelper;
+import com.google.android.gms.wallet.PaymentData;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
+import com.stripe.android.model.Token;
 
 import javax.inject.Inject;
 
@@ -18,20 +17,21 @@ import dagger.android.AndroidInjector;
 import dagger.android.DispatchingAndroidInjector;
 import dagger.android.support.HasSupportFragmentInjector;
 import eugene.petsshelter.R;
+import eugene.petsshelter.data.models.Donation;
 import eugene.petsshelter.databinding.ActivityDonationBinding;
 import eugene.petsshelter.ui.base.AppNavigator;
 import eugene.petsshelter.ui.base.BaseActivity;
+import eugene.petsshelter.utils.DateUtils;
 import eugene.petsshelter.utils.NetworkUtils;
 import eugene.petsshelter.utils.SnackbarUtils;
+import timber.log.Timber;
 
 public class DonationActivity extends BaseActivity<ActivityDonationBinding,DonationActivityViewModel>
         implements HasSupportFragmentInjector{
 
     @Inject AppNavigator navigator;
-
-    @Inject
-    DispatchingAndroidInjector<Fragment> injector;
-
+    @Inject FirebaseAuth firebaseAuth;
+    @Inject DispatchingAndroidInjector<Fragment> injector;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +56,7 @@ public class DonationActivity extends BaseActivity<ActivityDonationBinding,Donat
                 } else if(apiResponse.code==500){
                     SnackbarUtils.showSnackbar(binding.getRoot(),getString(R.string.service_unavailable),SnackbarUtils.TYPE_ERROR);
                 } else {
-                    SnackbarUtils.showSnackbar(binding.getRoot(),getString(R.string.donation_failed),SnackbarUtils.TYPE_ERROR);
+                    SnackbarUtils.showSnackbar(binding.getRoot(),getString(R.string.unidentified_error),SnackbarUtils.TYPE_ERROR);
                 }
                 viewModel.getDonation().getValue().setConfirmed(false);
             }
@@ -71,25 +71,64 @@ public class DonationActivity extends BaseActivity<ActivityDonationBinding,Donat
                 if (!donation.isConfirmed()) {
                     donation.setDonator(getCurrentUser());
                     donation.setDonatory(viewModel.repository.getShelter().getValue().getTitle());
-                    donation.setDescription(donation.getDonator()+" donation " + getFormattedCurrentDate());
+                    donation.setDescription(donation.getDonator()+" donation " + DateUtils.getFormattedCurrentDate());
                 }
             }
         });
     }
 
-    private String getFormattedCurrentDate() {
-        Date currentDate = Calendar.getInstance().getTime();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-        return dateFormat.format(currentDate);
-    }
-
     private String getCurrentUser() {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        FirebaseUser user = firebaseAuth.getCurrentUser();
         return user!=null? user.getDisplayName() : getString(R.string.anonymous);
     }
 
     @Override
     public AndroidInjector<Fragment> supportFragmentInjector() {return injector;}
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(viewModel.isLoading())
+            viewModel.onCompleteLoading();
+
+        switch (requestCode) {
+            case GooglePayFragment.LOAD_PAYMENT_DATA_REQUEST_CODE:
+                switch (resultCode) {
+                    case RESULT_OK:
+                        PaymentData paymentData = PaymentData.getFromIntent(data);
+                        if(paymentData!=null) {
+                            // This is the raw JSON string version of Stripe token.
+                            String rawToken = paymentData.getPaymentMethodToken().getToken();
+                            // Stripe token object
+                            Token stripeToken = Token.fromString(rawToken);
+                            if (stripeToken != null) {
+                                Donation currentDonation = viewModel.getDonation().getValue();
+                                //the user's card last 4 digits
+                                currentDonation.setCardLastNumbers(paymentData.getCardInfo().getCardDetails());
+                                currentDonation.setStripeTokenId(stripeToken.getId());
+                                viewModel.setDonation(currentDonation);
+                                navigator.navigateToSummary();
+                            }
+                        }
+                        break;
+                    case RESULT_CANCELED:
+                        SnackbarUtils.showSnackbar(binding.getRoot(), getString(R.string.cancelled), SnackbarUtils.TYPE_INFO);
+                        break;
+                    case AutoResolveHelper.RESULT_ERROR:
+                        SnackbarUtils.showSnackbar(binding.getRoot(),getString(R.string.donation_failed),SnackbarUtils.TYPE_ERROR);
+                        break;
+                    default:
+                        // Do nothing.
+                }
+                break;
+                // Handle any other startActivityForResult calls.
+            default:
+                // Do nothing.
+        }
+
+    }
 
     @Override
     public void onBackPressed() {

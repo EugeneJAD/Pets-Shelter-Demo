@@ -4,6 +4,7 @@ import dagger.Module;
 import dagger.android.ContributesAndroidInjector;
 import eugene.petsshelter.ui.adoption.AdoptionInfoFragment;
 import eugene.petsshelter.ui.donation.CardDonationFragment;
+import eugene.petsshelter.ui.donation.GooglePayFragment;
 import eugene.petsshelter.ui.donation.PaymentMethodsFragment;
 import eugene.petsshelter.ui.donation.SummaryDonationFragment;
 import eugene.petsshelter.ui.main.NewsDetailsFragment;
@@ -41,4 +42,7 @@ public abstract class FragmentBuildersModule {
 
     @ContributesAndroidInjector
     abstract AdoptionInfoFragment contributeAdoptionInfoFragment();
+
+    @ContributesAndroidInjector
+    abstract GooglePayFragment contributeGooglePayFragment();
 }

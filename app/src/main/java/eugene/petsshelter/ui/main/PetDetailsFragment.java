@@ -29,6 +29,7 @@ public class PetDetailsFragment extends BaseFragment<FragmentPetDetailsBinding,P
         implements ButtonClickHandler, Injectable, FirebaseAuth.AuthStateListener {
 
     @Inject AppNavigator navigator;
+    @Inject FirebaseAuth firebaseAuth;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -43,7 +44,7 @@ public class PetDetailsFragment extends BaseFragment<FragmentPetDetailsBinding,P
                 && getArguments().containsKey(AppConstants.KEY_PET_TYPE))
             viewModel.setPetId(getArguments().getString(AppConstants.KEY_PET_ID), getArguments().getString(AppConstants.KEY_PET_TYPE));
 
-        binding.setIsUserLoggedIn(FirebaseAuth.getInstance().getCurrentUser()!=null);
+        binding.setIsUserLoggedIn(firebaseAuth.getCurrentUser()!=null);
         binding.setHandler(this);
 
         observeViewModel();
@@ -75,14 +76,14 @@ public class PetDetailsFragment extends BaseFragment<FragmentPetDetailsBinding,P
     @Override
     public void onStart() {
         super.onStart();
-        FirebaseAuth.getInstance().addAuthStateListener(this);
+        firebaseAuth.addAuthStateListener(this);
     }
 
     @Override
     public void onStop() {
         super.onStop();
         viewModel.repository.updateRemoteFavoritePets();
-        FirebaseAuth.getInstance().removeAuthStateListener(this);
+        firebaseAuth.removeAuthStateListener(this);
     }
 
     @Override

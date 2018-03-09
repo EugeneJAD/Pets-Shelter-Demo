@@ -33,10 +33,7 @@ public class CardDonationViewModel extends ViewModel{
     public void setAmount(int amount) {this.amount = amount;}
 
     public String getInputAmount() {return inputAmount;}
-    public void setInputAmount(String inputAmount) {
-        this.inputAmount = inputAmount;
-        Timber.d("setInputAmount= %s",inputAmount);
-    }
+    public void setInputAmount(String inputAmount) {this.inputAmount = inputAmount;}
 
     public void createStripeToken(Stripe stripe){
 

@@ -68,7 +68,7 @@
 
     <style name="Button.CardStandard" parent="FirebaseUI.Button.AccountChooser.GoogleButton">
         <item name="android:layout_width">@dimen/button_card_width</item>
-        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_height">@dimen/button_card_height</item>
     </style>
 
 </resources>

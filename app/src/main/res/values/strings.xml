@@ -77,10 +77,15 @@
     <string name="card_validation">Card validation…</string>
     <string name="anonymous">Anonymous</string>
     <string name="cancelled">Cancelled</string>
+    <string name="google_pay_not_available">Google Pay not available</string>
+    <string name="set_up_payment_methods">Setting up payment methods…</string>
+    <string name="unidentified_error">Oops something went wrong, please try again.</string>
+    <string name="connecting_to_google_pay">Connecting to Google Pay…</string>
 
     <!--News -->
     <string name="image_credits">Image credits:</string>
     <string name="article">Article</string>
+    <string name="comment">Comment</string>
 
     <!--Adoption -->
     <string name="adoption_service">Adoption Service</string>
@@ -91,8 +96,7 @@
 
     <!--Splash -->
     <string name="updating">Updating…</string>
-    <string name="add_comment">Add a public comment...</string>
-    <string name="comment">Comment</string>
+    <string name="add_comment">Add a public comment…</string>
 
 
 </resources>

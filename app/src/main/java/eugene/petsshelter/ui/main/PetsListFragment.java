@@ -31,6 +31,8 @@ public class PetsListFragment extends BaseFragment<ListFragmentBinding,PetsViewM
 
     @Inject AppNavigator navigator;
 
+    @Inject FirebaseAuth firebaseAuth;
+
     private PetsRecyclerAdapter adapter;
 
     @Override
@@ -96,14 +98,14 @@ public class PetsListFragment extends BaseFragment<ListFragmentBinding,PetsViewM
     @Override
     public void onResume() {
         super.onResume();
-        FirebaseAuth.getInstance().addAuthStateListener(this);
+        firebaseAuth.addAuthStateListener(this);
     }
 
     @Override
     public void onPause() {
         super.onPause();
         viewModel.repository.updateRemoteFavoritePets();
-        FirebaseAuth.getInstance().removeAuthStateListener(this);
+        firebaseAuth.removeAuthStateListener(this);
     }
 
     @Override

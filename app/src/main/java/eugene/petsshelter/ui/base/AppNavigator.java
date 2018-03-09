@@ -16,6 +16,7 @@ import eugene.petsshelter.ui.adoption.AdoptionActivity;
 import eugene.petsshelter.ui.adoption.AdoptionInfoFragment;
 import eugene.petsshelter.ui.donation.CardDonationFragment;
 import eugene.petsshelter.ui.donation.DonationActivity;
+import eugene.petsshelter.ui.donation.GooglePayFragment;
 import eugene.petsshelter.ui.donation.PaymentMethodsFragment;
 import eugene.petsshelter.ui.donation.SummaryDonationFragment;
 import eugene.petsshelter.ui.main.MainActivity;
@@ -117,16 +118,22 @@ public class AppNavigator {
                 R.anim.slide_to_left,R.anim.slide_from_left,R.anim.slide_to_right);
     }
 
-    public void navigateToSummury() {
+    public void navigateToSummary() {
         navigation.replaceFragmentBackStack(R.id.donation_fragment_container,new SummaryDonationFragment(),
                 SummaryDonationFragment.class.getSimpleName(),null,null,R.anim.slide_from_right,
                 R.anim.slide_to_left,R.anim.slide_from_left,R.anim.slide_to_right);
     }
 
+    public void navigateToGooglePayDonation() {
+        navigation.replaceFragmentBackStack(R.id.donation_fragment_container,new GooglePayFragment(),
+                GooglePayFragment.class.getSimpleName(),null,null,R.anim.slide_from_right,
+                R.anim.slide_to_left,R.anim.slide_from_left,R.anim.slide_to_right);
+    }
 
     //Adoption Activity Navigation
 
     public void navigateToAdoptionInfo(Bundle args) {
         navigation.replaceFragment(R.id.adoption_fragment_container, new AdoptionInfoFragment(), args);
     }
+
 }

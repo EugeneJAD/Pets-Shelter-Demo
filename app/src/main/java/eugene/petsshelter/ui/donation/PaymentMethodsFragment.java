@@ -9,6 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import javax.inject.Inject;
 
 import eugene.petsshelter.R;
@@ -19,7 +21,6 @@ import eugene.petsshelter.ui.base.AppNavigator;
 import eugene.petsshelter.ui.base.BaseFragment;
 import eugene.petsshelter.utils.NetworkUtils;
 import eugene.petsshelter.utils.SnackbarUtils;
-import timber.log.Timber;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -28,6 +29,7 @@ public class PaymentMethodsFragment extends BaseFragment<FragmentPaymentMethodsB
         implements Injectable, ButtonClickHandler{
 
     @Inject AppNavigator navigator;
+    @Inject FirebaseAuth firebaseAuth;
 
     private boolean isLoading = false;
 
@@ -42,10 +44,6 @@ public class PaymentMethodsFragment extends BaseFragment<FragmentPaymentMethodsB
 
         binding.setHandler(this);
 
-        if(!NetworkUtils.isConnected(getContext())){
-            SnackbarUtils.showSnackbar(binding.getRoot(),getString(R.string.no_internet_connection), SnackbarUtils.TYPE_ERROR);
-        }
-
         observeActivityViewModel();
     }
 
@@ -54,7 +52,6 @@ public class PaymentMethodsFragment extends BaseFragment<FragmentPaymentMethodsB
         DonationActivityViewModel activityViewModel = ViewModelProviders.of(getActivity()).get(DonationActivityViewModel.class);
 
         activityViewModel.getLoadingState().observe(this, loadingState -> {
-            Timber.d("activityViewModel.getLoadingState().observe");
             if(loadingState!=null)
                 isLoading = loadingState.isRunning();
         });
@@ -63,11 +60,18 @@ public class PaymentMethodsFragment extends BaseFragment<FragmentPaymentMethodsB
     @Override
     public void onButtonClick(View view) {
 
-        Timber.d("onButtonClick");
+        if(!NetworkUtils.isConnected(getContext())){
+            SnackbarUtils.showSnackbar(binding.getRoot(),getString(R.string.no_internet_connection), SnackbarUtils.TYPE_ERROR);
+            return;
+        }
 
         if(isLoading) return;
 
-        if(view.getId()==binding.buttonPayCard.getId()){navigator.navigateToCardDonation();}
+        if(view.getId()==binding.buttonPayCard.getId()){
+            navigator.navigateToCardDonation();
+        } else if(view.getId()==binding.buttonGooglePay.getId()){
+            navigator.navigateToGooglePayDonation();
+        }
 
     }
 }

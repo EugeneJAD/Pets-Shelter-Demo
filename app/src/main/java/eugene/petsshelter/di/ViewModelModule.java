@@ -9,6 +9,7 @@ import dagger.multibindings.IntoMap;
 import eugene.petsshelter.ui.adoption.AdoptionInfoViewModel;
 import eugene.petsshelter.ui.donation.CardDonationViewModel;
 import eugene.petsshelter.ui.donation.DonationActivityViewModel;
+import eugene.petsshelter.ui.donation.GooglePayViewModel;
 import eugene.petsshelter.ui.donation.PaymentMethodsViewModel;
 import eugene.petsshelter.ui.donation.SummaryDonationViewModel;
 import eugene.petsshelter.ui.main.MainViewModel;
@@ -81,6 +82,11 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(SplashActivityViewModel.class)
     abstract ViewModel bindSplashActivityViewModel(SplashActivityViewModel splashActivityViewModel);
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(GooglePayViewModel.class)
+    abstract ViewModel bindGooglePayViewModel(GooglePayViewModel googlePayViewModel);
 
     @Binds
     abstract ViewModelProvider.Factory bindViewModelFactory(PetsShelterViewModelFactory factory);
